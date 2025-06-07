@@ -1,18 +1,23 @@
 #load packages
 install.packages("plotrix")
-library(lme4)
-library(readr)
-library (car)
-library(emmeans)
-library(boot)
-library(esquisse)
-library(dplyr)
-library(nlme)
-library(car)
-library(ggplot2)
-library(plotrix) #for standard error
+install.packages("performance")
+install.packages("lmtest")
 
-#growth and N content
+library(lme4) #for linear mixed effects model
+library(readr) #to read in data
+library(emmeans) #for post hocs
+library(esquisse) #interface for building plots
+library(dplyr) #for data wrangling
+library(nlme) #for linear mixed effects model
+library(car) #for the Levene test
+library(ggplot2) #for graphs
+library(plotrix) #for standard error
+library(performance) #model testing
+library(lmtest) #another option than levene test for variance
+
+R.version.string
+citation("lme4")
+
 #Read in dataset, set column types
 getwd()
 setwd("/Users/sophiemontague/Desktop/MontagueORCC/Oyster Weight Data")
@@ -27,7 +32,11 @@ Growth_Data_forR <- read_csv("/Users/sophiemontague/Desktop/MontagueORCC/Oyster 
                                               Ratio_tissue_shell_mg = col_double(),
                                               Phase1_Phase2_rep = col_factor(),
                                               Phase_1_treat = col_factor(),
-                                              Phase_2_treat = col_factor()))
+                                              Phase_2_treat = col_factor(),
+                                              Phase_2_rep_R = col_factor(),
+                                              Phase_1_rep_R = col_factor()))
+
+#check levels
 str(Growth_Data_forR)
 levels(Growth_Data_forR$Phase_1_DO)
 levels(Growth_Data_forR$Phase_1_temp)
@@ -36,299 +45,158 @@ levels(Growth_Data_forR$Phase_2.1_temp)
 levels(Growth_Data_forR$Phase_1_treat)
 levels(Growth_Data_forR$Phase_2_treat)
 
-
 #set contrasts ALWAYS RUN
-options(contrasts = c("contr.sum","contr.poly")) #could also be contr.treatment for unequal groups
+options(contrasts = c("contr.sum","contr.poly")) #could also be contr.treatment for unequal groups sum
 getOption("contrasts") 
 
-#filter out rows with NA in Actual_tissue_growth_mg only to not include data from dead oysters in analysis
-Growth_Data_forR_clean <- Growth_Data_forR[!is.na(Growth_Data_forR$Actual_tissue_growth_mg), ]
-View(Growth_Data_forR_clean)
-summary(Growth_Data_forR_clean) #check data
+#filter to not include data from dead oysters/ doubles in analysis
+  #pre excludes doubles but keeps oysters that died in the second phase, as all oysters were alive for first measurements
+  #full excludes doubles and dead oysters
+Growth_Data_forR_pre <- Growth_Data_forR %>%
+  filter(Exclude_pre_analysis != "Y" | is.na(Exclude_pre_analysis)) %>%
+  mutate(prop_tissue_growth = Actual_tissue_growth_mg / Actual_tissue_pre_mg,
+         prop_shell_growth = Actual_shell_growth_mg / Actual_shell_pre_mg)
+View(Growth_Data_forR_pre)
+table(Growth_Data_forR$Exclude_pre_analysis, useNA = "ifany")
+nrow(Growth_Data_forR_pre)
 
-# Filter to remove NA values in Actual_tissue_growth_mg and see if results change with middle size range
-mean(Growth_Data_forR_clean$Ratio_tissue_shell_mg) #mean
-sd(Growth_Data_forR_clean$Ratio_tissue_shell_mg)/sqrt(length((Growth_Data_forR_clean$Ratio_tissue_shell_mg))) #se
-sd(Growth_Data_forR_clean$Ratio_tissue_shell_mg)
-
-Growth_Data_forR_test <- Growth_Data_forR %>%
-  filter(!is.na(Actual_tissue_growth_mg) & Ratio_tissue_shell_mg < 1.080456 & Ratio_tissue_shell_mg > -1.01848)
-View (Growth_Data_forR_test)
-
-#mean and standard error calculations
-0.03098755+1.049468
-0.03098755-1.049468
-
-#start model selection pg. 75 in Zuur et al, not used for actual running model
-#tissue data
-#no random effects included yet, this runs
-Test1 <- lm(Actual_tissue_growth_mg ~ Phase_1_DO * Phase_1_temp * Phase_2.1_DO * Phase_2.1_temp, data=Growth_Data_forR_clean)
-anova(Test1)
-
-#trying to figure out proportional variances to treatments, if variances are homogeneous in treatments, not working
-vf1Fixed <- varFixed(~Actual_shell_pre_mg) ## have also tried this being Phase1_Phase2_treat
-Test1 <- gls(Actual_tissue_growth_mg ~ Phase_1_DO * Phase_1_temp * Phase_2.1_DO * Phase_2.1_temp, weights = vf1Fixed, data=Growth_Data_forR_clean)
-plot(Test1, which = c(1), col = 1, add.smooth = FALSE, caption = "")
-
-vf2Fixed <- varIdent(form = ~1 | Phase1_Phase2_treat)
-Test1 <- gls(Actual_tissue_growth_mg ~ Phase_1_DO * Phase_1_temp * Phase_2.1_DO * Phase_2.1_temp, weights = vf2Fixed, data=Growth_Data_forR_clean)
-
-vf1DO=varIdent(form=~1|Phase_1_DO)#1
-vf1T=varIdent(form=~1|Phase_1_temp)#2
-vf2DO=varIdent(form=~1|Phase_2.1_DO)#3
-vf2T=varIdent(form=~1|Phase_2.1_temp)#4
-vf1DO1T=varIdent(form=~1|Phase_1_DO*Phase_1_temp)#5
-vf1DO2DO=varIdent(form=~1|Phase_1_DO*Phase_2.1_DO)#6
-vf1T2DO=varIdent(form=~1|Phase_1_temp*Phase_2.1_DO)#7
-vf1DO2T=varIdent(form=~1|Phase_1_DO*Phase_2.1_temp)#8
-vf1T2T=varIdent(form=~1|Phase_1_temp*Phase_2.1_temp)#9
-vf2DO2T=varIdent(form=~1|Phase_2.1_DO*Phase_2.1_temp)#10
-vf1DO1T2DO=varIdent(form=~1|Phase_1_DO*Phase_1_temp*Phase_2.1_DO)#11
-vf1DO1T2T=varIdent(form=~1|Phase_1_DO*Phase_1_temp*Phase_2.1_temp)#12
-vf1DO2DO2T=varIdent(form=~1|Phase_1_DO*Phase_2.1_DO*Phase_2.1_temp)#13
-vf1T2DO2T=varIdent(form=~1|Phase_1_temp*Phase_2.1_DO*Phase_2.1_temp)#14
-vf4=varIdent(form=~1|Phase_1_DO*Phase_1_temp*Phase_2.1_DO*Phase_2.1_temp)#15
-
-  #tissue weights model, 4 way interaction is the best weight for model
-gls1 <- gls(Actual_tissue_growth_mg ~ Phase_1_DO * Phase_1_temp * Phase_2.1_DO * Phase_2.1_temp, data = Growth_Data_forR_clean, weights = vf1DO)
-gls2 <- gls(Actual_tissue_growth_mg ~ Phase_1_DO * Phase_1_temp * Phase_2.1_DO * Phase_2.1_temp, data = Growth_Data_forR_clean, weights = vf1T)
-gls3 <- gls(Actual_tissue_growth_mg ~ Phase_1_DO * Phase_1_temp * Phase_2.1_DO * Phase_2.1_temp, data = Growth_Data_forR_clean, weights = vf2DO)
-gls4 <- gls(Actual_tissue_growth_mg ~ Phase_1_DO * Phase_1_temp * Phase_2.1_DO * Phase_2.1_temp, data = Growth_Data_forR_clean, weights = vf2T)
-gls5 <- gls(Actual_tissue_growth_mg ~ Phase_1_DO * Phase_1_temp * Phase_2.1_DO * Phase_2.1_temp, data = Growth_Data_forR_clean, weights = vf1DO1T)
-gls6 <- gls(Actual_tissue_growth_mg ~ Phase_1_DO * Phase_1_temp * Phase_2.1_DO * Phase_2.1_temp, data = Growth_Data_forR_clean, weights = vf1DO2DO)
-gls7 <- gls(Actual_tissue_growth_mg ~ Phase_1_DO * Phase_1_temp * Phase_2.1_DO * Phase_2.1_temp, data = Growth_Data_forR_clean, weights = vf1T2DO)
-gls8 <- gls(Actual_tissue_growth_mg ~ Phase_1_DO * Phase_1_temp * Phase_2.1_DO * Phase_2.1_temp, data = Growth_Data_forR_clean, weights = vf1DO2T)
-gls9 <- gls(Actual_tissue_growth_mg ~ Phase_1_DO * Phase_1_temp * Phase_2.1_DO * Phase_2.1_temp, data = Growth_Data_forR_clean, weights = vf1T2T)
-gls10 <- gls(Actual_tissue_growth_mg ~ Phase_1_DO * Phase_1_temp * Phase_2.1_DO * Phase_2.1_temp, data = Growth_Data_forR_clean, weights = vf2DO2T)
-gls11 <- gls(Actual_tissue_growth_mg ~ Phase_1_DO * Phase_1_temp * Phase_2.1_DO * Phase_2.1_temp, data = Growth_Data_forR_clean, weights = vf1DO1T2DO)
-gls12 <- gls(Actual_tissue_growth_mg ~ Phase_1_DO * Phase_1_temp * Phase_2.1_DO * Phase_2.1_temp, data = Growth_Data_forR_clean, weights = vf1DO1T2T)
-gls13 <- gls(Actual_tissue_growth_mg ~ Phase_1_DO * Phase_1_temp * Phase_2.1_DO * Phase_2.1_temp, data = Growth_Data_forR_clean, weights = vf1DO2DO2T)
-gls14 <- gls(Actual_tissue_growth_mg ~ Phase_1_DO * Phase_1_temp * Phase_2.1_DO * Phase_2.1_temp, data = Growth_Data_forR_clean, weights = vf1T2DO2T)
-gls15 <- gls(Actual_tissue_growth_mg ~ Phase_1_DO * Phase_1_temp * Phase_2.1_DO * Phase_2.1_temp, data = Growth_Data_forR_clean, weights = vf4)
-gls16 <- gls(Actual_tissue_growth_mg ~ Phase_1_DO * Phase_1_temp * Phase_2.1_DO * Phase_2.1_temp, data = Growth_Data_forR_clean, weights = vf2Fixed)
-  
-  #shell weights model, 4 way interaction is the best weight for model
-gls1 <- gls(Actual_shell_growth_mg ~ Phase_1_DO * Phase_1_temp * Phase_2.1_DO * Phase_2.1_temp, data = Growth_Data_forR_clean, weights = vf1DO)
-gls2 <- gls(Actual_shell_growth_mg ~ Phase_1_DO * Phase_1_temp * Phase_2.1_DO * Phase_2.1_temp, data = Growth_Data_forR_clean, weights = vf1T)
-gls3 <- gls(Actual_shell_growth_mg ~ Phase_1_DO * Phase_1_temp * Phase_2.1_DO * Phase_2.1_temp, data = Growth_Data_forR_clean, weights = vf2DO)
-gls4 <- gls(Actual_shell_growth_mg ~ Phase_1_DO * Phase_1_temp * Phase_2.1_DO * Phase_2.1_temp, data = Growth_Data_forR_clean, weights = vf2T)
-gls5 <- gls(Actual_shell_growth_mg ~ Phase_1_DO * Phase_1_temp * Phase_2.1_DO * Phase_2.1_temp, data = Growth_Data_forR_clean, weights = vf1DO1T)
-gls6 <- gls(Actual_shell_growth_mg ~ Phase_1_DO * Phase_1_temp * Phase_2.1_DO * Phase_2.1_temp, data = Growth_Data_forR_clean, weights = vf1DO2DO)
-gls7 <- gls(Actual_shell_growth_mg ~ Phase_1_DO * Phase_1_temp * Phase_2.1_DO * Phase_2.1_temp, data = Growth_Data_forR_clean, weights = vf1T2DO)
-gls8 <- gls(Actual_shell_growth_mg ~ Phase_1_DO * Phase_1_temp * Phase_2.1_DO * Phase_2.1_temp, data = Growth_Data_forR_clean, weights = vf1DO2T)
-gls9 <- gls(Actual_shell_growth_mg ~ Phase_1_DO * Phase_1_temp * Phase_2.1_DO * Phase_2.1_temp, data = Growth_Data_forR_clean, weights = vf1T2T)
-gls10 <- gls(Actual_shell_growth_mg ~ Phase_1_DO * Phase_1_temp * Phase_2.1_DO * Phase_2.1_temp, data = Growth_Data_forR_clean, weights = vf2DO2T)
-gls11 <- gls(Actual_shell_growth_mg ~ Phase_1_DO * Phase_1_temp * Phase_2.1_DO * Phase_2.1_temp, data = Growth_Data_forR_clean, weights = vf1DO1T2DO)
-gls12 <- gls(Actual_shell_growth_mg ~ Phase_1_DO * Phase_1_temp * Phase_2.1_DO * Phase_2.1_temp, data = Growth_Data_forR_clean, weights = vf1DO1T2T)
-gls13 <- gls(Actual_shell_growth_mg ~ Phase_1_DO * Phase_1_temp * Phase_2.1_DO * Phase_2.1_temp, data = Growth_Data_forR_clean, weights = vf1DO2DO2T)
-gls14 <- gls(Actual_shell_growth_mg ~ Phase_1_DO * Phase_1_temp * Phase_2.1_DO * Phase_2.1_temp, data = Growth_Data_forR_clean, weights = vf1T2DO2T)
-gls15 <- gls(Actual_shell_growth_mg ~ Phase_1_DO * Phase_1_temp * Phase_2.1_DO * Phase_2.1_temp, data = Growth_Data_forR_clean, weights = vf4)
-gls16 <- gls(Actual_shell_growth_mg ~ Phase_1_DO * Phase_1_temp * Phase_2.1_DO * Phase_2.1_temp, data = Growth_Data_forR_clean, weights = vf2Fixed)
-
-#tissue:shell weights model, 4 way interaction is the best weight for model
-gls1 <- gls(Ratio_tissue_shell_mg ~ Phase_1_DO * Phase_1_temp * Phase_2.1_DO * Phase_2.1_temp, data = Growth_Data_forR_clean, weights = vf1DO)
-gls2 <- gls(Ratio_tissue_shell_mg ~ Phase_1_DO * Phase_1_temp * Phase_2.1_DO * Phase_2.1_temp, data = Growth_Data_forR_clean, weights = vf1T)
-gls3 <- gls(Ratio_tissue_shell_mg ~ Phase_1_DO * Phase_1_temp * Phase_2.1_DO * Phase_2.1_temp, data = Growth_Data_forR_clean, weights = vf2DO)
-gls4 <- gls(Ratio_tissue_shell_mg ~ Phase_1_DO * Phase_1_temp * Phase_2.1_DO * Phase_2.1_temp, data = Growth_Data_forR_clean, weights = vf2T)
-gls5 <- gls(Ratio_tissue_shell_mg ~ Phase_1_DO * Phase_1_temp * Phase_2.1_DO * Phase_2.1_temp, data = Growth_Data_forR_clean, weights = vf1DO1T)
-gls6 <- gls(Ratio_tissue_shell_mg ~ Phase_1_DO * Phase_1_temp * Phase_2.1_DO * Phase_2.1_temp, data = Growth_Data_forR_clean, weights = vf1DO2DO)
-gls7 <- gls(Ratio_tissue_shell_mg ~ Phase_1_DO * Phase_1_temp * Phase_2.1_DO * Phase_2.1_temp, data = Growth_Data_forR_clean, weights = vf1T2DO)
-gls8 <- gls(Ratio_tissue_shell_mg ~ Phase_1_DO * Phase_1_temp * Phase_2.1_DO * Phase_2.1_temp, data = Growth_Data_forR_clean, weights = vf1DO2T)
-gls9 <- gls(Ratio_tissue_shell_mg ~ Phase_1_DO * Phase_1_temp * Phase_2.1_DO * Phase_2.1_temp, data = Growth_Data_forR_clean, weights = vf1T2T)
-gls10 <- gls(Ratio_tissue_shell_mg ~ Phase_1_DO * Phase_1_temp * Phase_2.1_DO * Phase_2.1_temp, data = Growth_Data_forR_clean, weights = vf2DO2T)
-gls11 <- gls(Ratio_tissue_shell_mg ~ Phase_1_DO * Phase_1_temp * Phase_2.1_DO * Phase_2.1_temp, data = Growth_Data_forR_clean, weights = vf1DO1T2DO)
-gls12 <- gls(Ratio_tissue_shell_mg ~ Phase_1_DO * Phase_1_temp * Phase_2.1_DO * Phase_2.1_temp, data = Growth_Data_forR_clean, weights = vf1DO1T2T)
-gls13 <- gls(Ratio_tissue_shell_mg ~ Phase_1_DO * Phase_1_temp * Phase_2.1_DO * Phase_2.1_temp, data = Growth_Data_forR_clean, weights = vf1DO2DO2T)
-gls14 <- gls(Ratio_tissue_shell_mg ~ Phase_1_DO * Phase_1_temp * Phase_2.1_DO * Phase_2.1_temp, data = Growth_Data_forR_clean, weights = vf1T2DO2T)
-gls15 <- gls(Ratio_tissue_shell_mg ~ Phase_1_DO * Phase_1_temp * Phase_2.1_DO * Phase_2.1_temp, data = Growth_Data_forR_clean, weights = vf4)
-gls16 <- gls(Ratio_tissue_shell_mg ~ Phase_1_DO * Phase_1_temp * Phase_2.1_DO * Phase_2.1_temp, data = Growth_Data_forR_clean, weights = vf2Fixed)
-
-AIC(gls1,gls2,gls3,gls4,gls5,gls6,gls7,gls8,gls9,gls10,gls11,gls12,gls13,gls14,gls15) #lowest AIC score is best model
-AIC(gls16)
+Growth_Data_forR_full <- Growth_Data_forR %>%
+  filter(Exclude_all != "Y" | is.na(Exclude_all)) %>%
+  mutate(prop_tissue_growth = Actual_tissue_growth_mg / Actual_tissue_pre_mg,
+    prop_shell_growth = Actual_shell_growth_mg / Actual_shell_pre_mg, 
+    tissuegrowthratio = Actual_tissue_post_mg/Actual_tissue_pre_mg,
+    shellgrowthratio = Actual_shell_post_mg/Actual_shell_pre_mg,
+    log_shell_growth_mg = log(Actual_shell_growth_mg))
 
 
-#working model with variances and random effects
-#save variance to use in model, model did not pass lavene test without this
-vf2Fixed <- varIdent(form = ~1 | Phase1_Phase2_treat)
-vf_1 <- varIdent(form = ~1 | Phase_1_treat) #test running separately
-vf_2 <- varIdent(form = ~1 | Phase_2_treat) #test running separately
+table(Growth_Data_forR$Exclude_all, useNA = "ifany")
+table(Growth_Data_forR$Exclude_pre_analysis, useNA = "ifany")
+View(Growth_Data_forR_full)
+nrow(Growth_Data_forR_full)
 
-a <- varIdent(form = ~1 | Phase_1_DO)
-Mlmea <- lme(Actual_tissue_growth_mg ~ Phase_1_DO * Phase_1_temp * Phase_2.1_DO * Phase_2.1_temp+ Actual_shell_pre_mg,
-             method = "REML", 
-             #is there a way to make the fixed effects nested? use ML instead of REML if yes pg. 122
-             weights = a, 
-             random = list(~1 | Phase_2_rep_R, ~1 | Phase_1_rep_R, ~1 | Phase1_Phase2_rep), data = Growth_Data_forR_clean)
-b <- varIdent(form = ~1 | Phase_1_temp)
-Mlmeb <- lme(Actual_tissue_growth_mg ~ Phase_1_DO * Phase_1_temp * Phase_2.1_DO * Phase_2.1_temp+ Actual_shell_pre_mg,
-             method = "REML", 
-             weights = b, 
-             random = list(~1 | Phase_2_rep_R, ~1 | Phase_1_rep_R, ~1 | Phase1_Phase2_rep), data = Growth_Data_forR_clean)
-c <- varIdent(form = ~1 | Phase_2.1_DO)
+colnames(Growth_Data_forR_full)
 
-AIC(Mlmea, Mlmeb)
 
-#tissue growth models
+#check the effect of phase 1 at the start of phase 2
+#not excluding any replicates
+##tissue growth (mg)
+#Tm1
+Tm1 <- lmer(log(Actual_tissue_pre_mg)~ Phase_1_DO*Phase_1_temp +
+              (1|Phase_1_rep_R), data = Growth_Data_forR_pre, REML=TRUE)
+Anova(Tm1, test="F", type="III")
 
-  #diagnostics
-leveneTest(Actual_tissue_growth_mg~Phase1_Phase2_treat, Growth_Data_forR_clean) #passes but still added varIdent for unequal variances
-m1.e <- residuals(Mlme1) 
-qqnorm(m1.e) #fairly normal, anova is robust to non-normality
-
-  #model using lme
-Mlme1 <- lme(Actual_tissue_growth_mg ~ Phase_1_DO * Phase_1_temp * Phase_2.1_DO * Phase_2.1_temp+ Actual_shell_pre_mg,
-             method = "REML", 
-             #is there a way to make the fixed effects nested? use ML instead of REML if yes pg. 122
-             weights = varIdent(vf2Fixed), 
-             random = list(~1 | Phase_2_rep_R, ~1 | Phase_1_rep_R, ~1 | Phase1_Phase2_rep), data = Growth_Data_forR_clean)
-anova(Mlme1, type = "m")
-  #testing AIC of model to compare to others
-AIC(Mlme1)
-
-  #posthocs
-emm1 <- emmeans(Mlme1,specs = pairwise ~ Phase_2.1_DO, adjust = "none") 
+  #post hocs
+emm1 <- emmeans(Tm1,specs = pairwise ~ Phase_1_DO, adjust = "none") 
 emm1$emmeans 
 emm1$contrasts
 
-  #just phase 1, TEST
-MlmeA <- lme(Actual_tissue_growth_mg ~ Phase_1_DO * Phase_1_temp + Actual_shell_pre_mg,
-             method = "REML", 
-             weights = varIdent(vf_1), 
-             random = ~1 | Phase_1_rep_R, data = Growth_Data_forR_clean)
-anova(MlmeA, type = "m")
-  #just phase 2, TEST
-MlmeB <- lme(Actual_tissue_growth_mg ~ Phase_2.1_DO * Phase_2.1_temp+ Actual_shell_pre_mg,
-             method = "REML", 
-             weights = varIdent(vf_2), 
-             random = ~1 | Phase_2_rep_R, data = Growth_Data_forR_clean)
-anova(MlmeB, type = "m")
-
-
-#shell growth models
+  #actual value 
+exp(5.25) #hyp
+exp(5.37) #norm
+(214.8629-190.5663)/214.8629
 
   #diagnostics
-leveneTest(Actual_shell_growth_mg~Phase1_Phase2_treat, Growth_Data_forR_clean) #doesn't pass so added varIdent for unequal variances
-m2.e <- residuals(Mlme2) 
-qqnorm(m2.e) #looks good
+leveneTest(log(Actual_tissue_pre_mg)~Phase_1_DO*Phase_1_temp, Growth_Data_forR_pre)
+m1.e <- residuals(Tm1) 
+qqnorm(m1.e)
+qqline(m1.e)
 
-  #model using lme
-Mlme2 <- lme(Actual_shell_growth_mg ~ Phase_1_DO * Phase_1_temp * Phase_2.1_DO * Phase_2.1_temp + Actual_shell_pre_mg, 
-             method = "REML", 
-             weights = varIdent(vf2Fixed), 
-             random = list(~1 | Phase_2_rep_R, ~1 | Phase_1_rep_R, ~1 | Phase1_Phase2_rep), data = Growth_Data_forR_clean)
-anova(Mlme2, type = "m")
+plot(resid(Tm1), log(Growth_Data_forR_pre$Actual_tissue_pre_mg))
+
+ggplot(Growth_Data_forR_pre) +
+  aes(x = log(Actual_tissue_pre_mg)) +
+  geom_histogram(bins = 30L, fill = "#112446") +
+  theme_classic()
+
+  #posthocs
+emm1 <- emmeans(Tm1,specs = pairwise ~ Phase_1_DO, adjust = "none") 
+emm1$emmeans 
+emm1$contrasts
+
+##shell growth (mg)
+Sm1 <- lmer(log(Actual_shell_pre_mg)~ Phase_1_DO*Phase_1_temp +
+                (1|Phase_1_rep_R), data = Growth_Data_forR_pre, REML=TRUE)
+Anova(Sm1, test="F", type="III")
+
+  #diagnostics
+leveneTest(log(Actual_shell_pre_mg)~Phase_1_treat, Growth_Data_forR_pre)
+leveneTest(Actual_shell_pre_mg~Phase_1_treat, Growth_Data_forR_pre)
+m1.e <- residuals(Sm1) 
+qqnorm(m1.e)
+qqline(m1.e)
+ggplot(Growth_Data_forR_pre) +
+  aes(x = log(Actual_shell_pre_mg)) +
+  geom_histogram(bins = 30L, fill = "#112446") +
+  theme_classic()
+Sm1 <- lmer(Actual_shell_pre_mg~ Phase_1_DO*Phase_1_temp +
+              (1|Phase_1_rep_R), data = Growth_Data_forR_pre, REML=TRUE)
+Anova(Sm1, test="F", type="III")
+
+  #posthocs
+emm2 <- emmeans(Sm1,specs = pairwise ~ Phase_1_DO, adjust = "none") 
+emm2$emmeans 
+emm2$contrasts
+  #actual value 
+exp(5.72) #hyp
+exp(5.87) #norm
+(354.249-304.9049)/354.249
+
+
+##tissue:shell growth (mg)
+colnames(Growth_Data_forR_pre)
+TSm1 <- lmer(Ratio_tissue_shell_pre_mg~ Phase_1_DO*Phase_1_temp +
+              (1|Phase_1_rep_R), data = Growth_Data_forR_pre, REML=TRUE)
+Anova(TSm1, test="F", type="III")
+  #diagnostics
+leveneTest(Ratio_tissue_shell_pre_mg~Phase_1_treat, Growth_Data_forR_pre)
+m1.e <- residuals(TSm1) 
+qqnorm(m1.e)
+qqline(residuals(TSm1))
+AIC(TSm1)
+
+leveneTest(Ratio_tissue_shell_pre_mg~Phase1_Phase2_treat, Growth_Data_forR_pre)
+m1.e <- residuals(TSm1) 
+qqnorm(m1.e)
+qqline(m1.e)
+  #posthocs
+emmeans(TSm1, specs = pairwise ~ Phase_1_temp, adjust = "none") 
+(0.643-0.618) /0.643
+
+emmeans(TSm1, specs = pairwise ~ Phase_1_DO, adjust = "none")
+(0.641-0.620) /0.641
+
+##wet tissue weight / total weight = meat yield
+Growth_Data_forR_pre%>%
+  mutate(meat_yield = (Actual_tissue_pre_mg/(Actual_tissue_pre_mg+Actual_shell_pre_mg))) -> Growth_Data_forR_pre_my
+
+colnames(Growth_Data_forR_pre_my)
+
+qqnorm(Growth_Data_forR_pre$Ratio_tissue_shell_pre_mg)
+
+TSm2 <- lmer(meat_yield ~ Phase_1_DO*Phase_1_temp +
+               (1|Phase_1_rep_R), data = Growth_Data_forR_pre_my, REML=TRUE)
+Anova(TSm2, test="F", type="III")
+#diagnostics
+leveneTest(meat_yield~Phase_1_treat, Growth_Data_forR_pre_my)
+m1.e <- residuals(TSm2) 
+qqnorm(m1.e)
+qqline(residuals(TSm2))
+AIC(TSm2)
 
 #posthocs
-emm2 <- emmeans(Mlme2,specs = pairwise ~ Phase_2.1_DO, adjust = "none") 
-emm2$emmeans
-emm2$contrasts
+emm3 <- emmeans(TSm2, specs = pairwise ~ Phase_1_temp, adjust = "none") 
+emm3$emmeans 
+emm3$contrasts
 
-  #just phase 1
-MlmeC <- lme(Actual_shell_growth_mg ~ Phase_1_DO * Phase_1_temp + Actual_shell_pre_mg,
-             method = "REML", 
-             weights = varIdent(vf_1), 
-             random = ~1 | Phase_1_rep_R, data = Growth_Data_forR_clean)
-anova(MlmeC, type = "m")
-  #just phase 2
-MlmeD <- lme(Actual_shell_growth_mg ~ Phase_2.1_DO * Phase_2.1_temp+ Actual_shell_pre_mg,
-             method = "REML", 
-             weights = varIdent(vf_2), 
-             random = ~1 | Phase_2_rep_R, data = Growth_Data_forR_clean)
-anova(MlmeD, type = "m")
+emmeans(TSm2, specs = pairwise ~ Phase_1_DO, adjust = "none") 
 
 
-#Tissue:shell growth
-
-  #diagnostics
-leveneTest(Ratio_tissue_shell_mg~Phase1_Phase2_treat, Growth_Data_forR_clean) #passes but still added varIdent for unequal variances
-m3.e <- residuals(Mlme3) 
-qqnorm(m3.e) #looks good in the middle, trails off towards the higher end
-
-  #model using lme
-Mlme3 <- lme(Ratio_tissue_shell_mg ~ Phase_1_DO * Phase_1_temp * Phase_2.1_DO * Phase_2.1_temp + Actual_shell_pre_mg, 
-             method = "REML", 
-             random = list(~1 | Phase_2_rep_R, ~1 | Phase_1_rep_R, ~1 | Phase1_Phase2_rep), data = Growth_Data_forR_test)
-anova(Mlme3, type = "m")
-
-AIC(Mlme3)
-
-#test model to compare Phase_1_treat and Phase_2_treat effects
-Mlme4 <- lme(Ratio_tissue_shell_mg ~ Phase_1_treat * Phase_2_treat + Actual_shell_pre_mg, 
-             method = "REML", 
-             random = list(~1 | Phase_2_rep_R, ~1 | Phase_1_rep_R, ~1 | Phase1_Phase2_rep), data = Growth_Data_forR_clean)
-anova(Mlme4, type = "m")
-
-
-#Doing analysis on initial tissue and shell mass (not growth) at start of phase 2 -- effects of phase 1 (no phase 2 in model)
-  #tissue
-leveneTest(Actual_tissue_pre_mg~Phase_1_treat, Growth_Data_forR_clean) #passes but still added varIdent for unequal variances
-m3.e <- residuals(Mlme3) 
-qqnorm(m3.e)
-
-Mlme_i1 <- lme( Actual_tissue_pre_mg ~ Phase_1_DO * Phase_1_temp + Actual_shell_pre_mg, 
-             method = "REML", 
-             weights = varIdent(vf_1), 
-             random = list( ~1 | Phase_1_rep_R), data = Growth_Data_forR_clean)
-anova(Mlme_i1, type = "m")
-emmi1 <- emmeans(Mlme_i1, specs = pairwise ~ Phase_1_DO*Phase_1_temp, adjust="none")
-emmi1$emmeans
-emmi1$contrasts 
-
-  #shell
-Mlme_i2 <- lme( Actual_shell_pre_mg ~ Phase_1_DO * Phase_1_temp + Actual_tissue_pre_mg, 
-                method = "REML", 
-                weights = varIdent(vf_1), 
-                random = list( ~1 | Phase_1_rep_R), data = Growth_Data_forR_clean)
-anova(Mlme_i2, type = "m")
-
-emmi2 <- emmeans(Mlme_i2, specs = pairwise ~ Phase_1_DO*Phase_1_temp, adjust="none")
-emmi2$emmeans
-emmi2$contrasts 
-
-emmi3 <- emmeans(Mlme_i2, specs = pairwise ~ Phase_1_DO, adjust="none")
-emmi3$emmeans
-emmi3$contrasts 
-  #t:s
-Mlme_i3 <- lme( (Actual_tissue_pre_mg/Actual_shell_pre_mg) ~ Phase_1_DO * Phase_1_temp + Actual_tissue_pre_mg, 
-                method = "REML", 
-                weights = varIdent(vf_1), 
-                random = list( ~1 | Phase_1_rep_R), data = Growth_Data_forR_clean)
-anova(Mlme_i3, type = "m")
-
-emmi4 <- emmeans(Mlme_i3, specs = pairwise ~ Phase_1_DO, adjust="none")
-emmi4$emmeans
-emmi4$contrasts 
-
-emmi5 <- emmeans(Mlme_i3, specs = pairwise ~ Phase_1_temp, adjust="none")
-emmi5$emmeans
-emmi5$contrasts 
-
-#check variance of models
-plot(Mlme_i3, which = c(1), col = 1, add.smooth = FALSE, caption = "")
-
-#shell growth
-vf2Fixed <- varIdent(form = ~1 | Phase1_Phase2_treat)
-Mlme2 <- lme(Actual_shell_growth_mg ~ Phase_1_DO * Phase_1_temp * Phase_2.1_DO * Phase_2.1_temp, method = "REML",
-             weights = varIdent(Actual_shell_growth_mg), #this model works because the variances are numeric
-             random = ~1 | Phase_2_rep_R / Phase_1_rep_R, data = Growth_Data_forR_clean)
-anova(Mlme2)
-AIC(Mlme2)
-
-#check variance of models
-plot(Mlme2, which = c(1), col = 1, add.smooth = FALSE, caption = "")
-
-####LMER MODELS####
+#### FULL LMER MODELS ####
 
 ##tissue growth (mg)
-m1 <- lmer(Actual_tissue_growth_mg~ Phase_1_DO*Phase_1_temp*Phase_2.1_temp*Phase_2.1_DO+Actual_shell_pre_mg+
+m1 <- lmer(Actual_tissue_growth_mg~ Phase_1_DO*Phase_1_temp*Phase_2.1_temp*Phase_2.1_DO+Actual_tissue_pre_mg+
              (1|Phase_2_rep_R)+(1|Phase_1_rep_R)+
-             (1|Phase_2_rep_R:Phase_1_DO)+(1|Phase_2_rep_R:Phase_1_temp)+(1|Phase_2_rep_R:Phase_1_DO:Phase_1_temp), data = Growth_Data_forR_clean, REML=TRUE)
-Anova(m1, test="F", type="III")
-
-#testing
-m1 <- lmer(Actual_tissue_growth_mg~ Phase_1_DO*Phase_1_temp*Phase_2.1_DO*Phase_2.1_temp+Actual_shell_pre_mg+
-             (1|Phase_2_rep_R)+(1|Phase_1_rep_R)+
-             (1|Phase1_Phase2_rep), data = Growth_Data_forR_clean, REML=TRUE)
+             (1|Phase_2_rep_R:Phase_1_DO)+(1|Phase_2_rep_R:Phase_1_temp)+(1|Phase_2_rep_R:Phase_1_DO:Phase_1_temp), data = Growth_Data_forR_full, REML=TRUE)
 Anova(m1, test="F", type="III")
 
 #posthocs
@@ -336,380 +204,324 @@ emm1 <- emmeans(m1,specs = pairwise ~ Phase_2.1_DO, adjust = "none")
 emm1$emmeans 
 emm1$contrasts
 
+(119.3-95.5)/119.3
+
 #diagnostics
-leveneTest(Actual_tissue_growth_mg~Phase1_Phase2_treat, Growth_Data_forR_clean) 
+leveneTest(Actual_tissue_growth_mg~Phase1_Phase2_treat, Growth_Data_forR_full) 
 m1.e <- residuals(m1) 
-qqnorm(m1.e) #not quite normal but ancova is robust to non-normality
+qqnorm(m1.e)
+qqline(m1.e)
 
 
 ##shell growth (mg)
-m2 <- lmer(Actual_shell_growth_mg~ Phase_1_DO*Phase_1_temp*Phase_2.1_DO*Phase_2.1_temp+Actual_shell_pre_mg+
+
+#m2 <- lmer(Actual_shell_growth_mg~ Phase_1_temp*Phase_1_DO*Phase_2.1_DO*Phase_2.1_temp+Actual_shell_pre_mg+
              (1|Phase_2_rep_R)+(1|Phase_1_rep_R)+
-             (1|Phase_2_rep_R:Phase_1_DO)+(1|Phase_2_rep_R:Phase_1_temp)+(1|Phase_2_rep_R:Phase_1_DO:Phase_1_temp), data = Growth_Data_forR_clean, REML=TRUE)
-oneway.test(Actual_tissue_growth_mg ~ Phase1_Phase2_treat, data = Growth_Data_forR_clean, var.equal = FALSE)
-Anova(m2, test="F", type="III")
+             (1|Phase_2_rep_R:Phase_1_DO)+(1|Phase_2_rep_R:Phase_1_temp)+(1|Phase_2_rep_R:Phase_1_DO:Phase_1_temp), data = Growth_Data_forR_full, REML=TRUE)
+#Anova(m2, test="F", type="III")
+#leveneTest(Actual_shell_growth_mg~Phase1_Phase2_treat, Growth_Data_forR_full)
+#m3.e <- residuals(m2) 
+#qqnorm(m3.e)
+#qqline(m3.e)
 
 #posthocs
-emm2 <- emmeans(m2,specs = pairwise ~ Phase_2.1_DO, adjust = "none") 
-emm2$emmeans #More shell growth in normoxic conditions than in hypoxic conditions
-emm2$contrasts
+#emmeans(m2,specs = pairwise ~ Phase_2.1_DO, adjust = "none") 
+(289-225)/289
 
-#diagnostics
-leveneTest(Actual_shell_growth_mg~Phase1_Phase2_treat, Growth_Data_forR_clean) #failed
-oneway.test(Actual_shell_growth_mg~Phase1_Phase2_treat, data = Growth_Data_forR_clean, var.equal = FALSE)
-m2.e <- residuals(m2) 
-qqnorm(m2.e) #not quite normal but ancova is robust to non-normality
+#log
+Lm2 <- lmer(log_shell_growth_mg~ Phase_1_DO*Phase_1_temp*Phase_2.1_DO*Phase_2.1_temp+Actual_shell_pre_mg+
+              (1|Phase_2_rep_R)+(1|Phase_1_rep_R)+
+              (1|Phase_2_rep_R:Phase_1_DO)+(1|Phase_2_rep_R:Phase_1_temp)+(1|Phase_2_rep_R:Phase_1_DO:Phase_1_temp), data = Growth_Data_forR_full, REML=TRUE)
+Anova(Lm2, test="F", type="III")
+leveneTest(log_shell_growth_mg~Phase1_Phase2_treat, Growth_Data_forR_full)
+m3.e <- residuals(Lm2)
+qqnorm(m3.e)
+qqline(m3.e)
+emmeans(Lm2,specs = pairwise ~ Phase_2.1_DO, adjust = "none")
+exp(5.23)
+exp(5.51)
+(247.1511-186.7928)/247.1511
+emmeans(Lm2,specs = pairwise ~ Phase_1_DO*Phase_1_temp, adjust = "none")
+exp(5.41)
+exp(5.34)
+(223.6316- 208.5127)/223.6316
+exp(5.34)
+exp(5.41)
+(223.6316- 208.5127)/223.6316
+emmeans(Lm2,specs = pairwise ~ Phase_1_temp*Phase_2.1_DO, adjust = "none")
+
 
 ##tissue:shell growth 
-m3 <- lmer(Ratio_tissue_shell_mg~ Phase_1_DO*Phase_1_temp*Phase_2.1_DO*Phase_2.1_temp+Actual_shell_pre_mg+
+m3 <- lmer(Ratio_tissue_shell_mg~ Phase_1_DO*Phase_1_temp*Phase_2.1_DO*Phase_2.1_temp+
              (1|Phase_2_rep_R)+(1|Phase_1_rep_R)+
-             (1|Phase_2_rep_R:Phase_1_DO:Phase_1_temp), data = Growth_Data_forR_clean, REML=TRUE)
+             (1|Phase_2_rep_R:Phase_1_DO:Phase_1_temp), data = Growth_Data_forR_full, REML=TRUE)
 Anova(m3, test="F", type="III")
 
 #posthocs
-emm3 <- emmeans(m3,specs = pairwise ~ Phase_1_DO*Phase_2.1_DO*Phase_2.1_temp , adjust="none")
-emm3$emmeans
-emm3$contrasts #none are significant
+emmeans(m3,specs = pairwise ~ Phase_1_temp:Phase_2.1_DO, adjust="none")
+emmeans(m3,specs = pairwise ~ Phase_1_DO:Phase_1_temp:Phase_2.1_DO:Phase_2.1_temp, adjust="none")
 
-emm3 <- emmeans(m3,specs = pairwise ~ Phase_1_DO, adjust="none")
-emm3$emmeans 
-emm3$contrasts #no significant difference between Hyp and Norm
+View(Growth_Data_forR)
 
 #diagnostics
-leveneTest(Ratio_tissue_shell_mg~Phase1_Phase2_treat, Growth_Data_forR_clean) 
+leveneTest(Ratio_tissue_shell_mg~Phase1_Phase2_treat, Growth_Data_forR_full) 
 m3.e <- residuals(m3) 
 qqnorm(m3.e) #not quite normal but ancova is robust to non-normality
 
 
-#try other adjustments Dunnett’s test is used when comparing each treatment level to a control group
-emm3 <- emmeans(m3,specs = pairwise ~ Phase_1_DO, adjust="dunnett", Phase_1_treat = "Cont")
-emm3$emmeans
-emm3$contrasts #literally doesn't change anything
-
-#Sidák Adjustment (for fewer comparisons)
-
-emm3 <- emmeans(m3,specs = pairwise ~ Phase_1_DO, adjust="sidak")
-emm3$emmeans
-emm3$contrasts #literally doesn't change anything
-
-
-
-####SIZE CLASSES####
-min(Growth_Data_forR_clean$Actual_tissue_pre_mg)
-max(Growth_Data_forR_clean$Actual_tissue_pre_mg)
-
-positive1 <- Growth_Data_forR_clean[Growth_Data_forR_clean$Actual_tissue_pre_mg >= 0 & 
-                                     Growth_Data_forR_clean$Actual_tissue_pre_mg <= 100, ]
-
-nrow(positive1)
-
-m4 <- lmer(Actual_tissue_growth_mg~ Phase_1_DO*Phase_1_temp*Phase_2.1_DO*Phase_2.1_temp+Actual_shell_pre_mg+
-             (1|Phase_2_rep_R)+(1|Phase_1_rep_R)+
-             (1|Phase_2_rep_R:Phase_1_DO)+(1|Phase_2_rep_R:Phase_1_temp)+(1|Phase_2_rep_R:Phase_1_DO:Phase_1_temp), data = positive1, REML=TRUE)
-Anova(m4, test="F", type="III")
-
-
-positive2 <- Growth_Data_forR_clean[Growth_Data_forR_clean$Actual_tissue_pre_mg >= 100 & 
-                                     Growth_Data_forR_clean$Actual_tissue_pre_mg <= 200, ]
-nrow(positive2)
-
-m5 <- lmer(Actual_tissue_growth_mg~ Phase_1_DO*Phase_1_temp*Phase_2.1_DO*Phase_2.1_temp+Actual_shell_pre_mg+
-             (1|Phase_2_rep_R)+(1|Phase_1_rep_R)+
-             (1|Phase_2_rep_R:Phase_1_DO)+(1|Phase_2_rep_R:Phase_1_temp)+(1|Phase_2_rep_R:Phase_1_DO:Phase_1_temp), data = positive2, REML=TRUE)
-Anova(m5, test="F", type="III")
-
-positive3 <- Growth_Data_forR_clean[Growth_Data_forR_clean$Actual_tissue_pre_mg >= 200 & 
-                                      Growth_Data_forR_clean$Actual_tissue_pre_mg <= 300, ]
-nrow(positive3)
-
-m6 <- lmer(Actual_tissue_growth_mg~ Phase_1_DO*Phase_1_temp*Phase_2.1_DO*Phase_2.1_temp+Actual_shell_pre_mg+
-             (1|Phase_2_rep_R)+(1|Phase_1_rep_R)+
-             (1|Phase_2_rep_R:Phase_1_DO)+(1|Phase_2_rep_R:Phase_1_temp)+(1|Phase_2_rep_R:Phase_1_DO:Phase_1_temp), data = positive3, REML=TRUE)
-Anova(m6, test="F", type="III")
-
-
-positive4 <- Growth_Data_forR_clean[Growth_Data_forR_clean$Actual_tissue_pre_mg >= 300 & 
-                                      Growth_Data_forR_clean$Actual_tissue_pre_mg <= 400, ]
-nrow(positive4)
-
-m7 <- lmer(Actual_tissue_growth_mg~ Phase_1_DO*Phase_1_temp*Phase_2.1_DO*Phase_2.1_temp+Actual_shell_pre_mg+
-             (1|Phase_2_rep_R)+(1|Phase_1_rep_R)+
-             (1|Phase_2_rep_R:Phase_1_DO)+(1|Phase_2_rep_R:Phase_1_temp)+(1|Phase_2_rep_R:Phase_1_DO:Phase_1_temp), data = positive4, REML=TRUE)
-Anova(m7, test="F", type="III")
-
-
-positive5 <- Growth_Data_forR_clean[Growth_Data_forR_clean$Actual_tissue_pre_mg >= 400 & 
-                                      Growth_Data_forR_clean$Actual_tissue_pre_mg <= 500, ]
-nrow(positive5)
-
-m8 <- lmer(Actual_tissue_growth_mg~ Phase_1_DO*Phase_1_temp*Phase_2.1_DO*Phase_2.1_temp+Actual_shell_pre_mg+
-             (1|Phase_2_rep_R)+(1|Phase_1_rep_R)+
-             (1|Phase_2_rep_R:Phase_1_DO)+(1|Phase_2_rep_R:Phase_1_temp)+(1|Phase_2_rep_R:Phase_1_DO:Phase_1_temp), data = positive5, REML=TRUE)
-Anova(m8, test="F", type="III")
-
-
-
-positive6 <- Growth_Data_forR_clean[Growth_Data_forR_clean$Actual_tissue_pre_mg >= 700 & 
-                                      Growth_Data_forR_clean$Actual_tissue_pre_mg <= 800, ]
-nrow(positive6)
-
-m9 <- lmer(Actual_tissue_growth_mg~ Phase_1_DO*Phase_1_temp*Phase_2.1_DO*Phase_2.1_temp+Actual_shell_pre_mg+
-             (1|Phase_2_rep_R)+(1|Phase_1_rep_R)+
-             (1|Phase_2_rep_R:Phase_1_DO)+(1|Phase_2_rep_R:Phase_1_temp)+(1|Phase_2_rep_R:Phase_1_DO:Phase_1_temp), data = positive6, REML=TRUE)
-Anova(m9, test="F", type="III")
-
-#diagnostics
-leveneTest(Ratio_tissue_shell_mg~Phase1_Phase2_treat, positive1) 
-m5.e <- residuals(m5) 
-qqnorm(m3.e) #not quite normal but ancova is robust to non-normality
-
-#post hoc
-emm5 <- emmeans(m5,specs = pairwise ~ Phase_1_DO , adjust="none")
-emm3$emmeans
-emm3$contrasts #none are significant
-
-positive2 <- Growth_Data_forR_clean[Growth_Data_forR_clean$Actual_tissue_growth_mg >= 200 & 
-                                      Growth_Data_forR_clean$Actual_tissue_growth_mg <= 400, ]
-
-m6 <- lmer(Actual_tissue_growth_mg~ Phase_1_DO*Phase_1_temp*Phase_2.1_DO*Phase_2.1_temp+Actual_shell_pre_mg+
-             (1|Phase_2_rep)+(1|Phase_1_rep)+
-             (1|Phase_2_rep:Phase_1_DO)+(1|Phase_2_rep:Phase_1_temp)+(1|Phase_2_rep:Phase_1_DO:Phase_1_temp), data = positive2, REML=TRUE)
-Anova(m6, test="F", type="III")
-
-positive3 <- Growth_Data_forR_clean[Growth_Data_forR_clean$Actual_tissue_growth_mg >= 400 & 
-                                      Growth_Data_forR_clean$Actual_tissue_growth_mg <= 600, ]
-
-m7 <- lmer(Actual_tissue_growth_mg~ Phase_1_DO*Phase_1_temp*Phase_2.1_DO*Phase_2.1_temp+Actual_shell_pre_mg+
-             (1|Phase_2_rep)+(1|Phase_1_rep)+
-             (1|Phase_2_rep:Phase_1_DO)+(1|Phase_2_rep:Phase_1_temp)+(1|Phase_2_rep:Phase_1_DO:Phase_1_temp), data = positive3, REML=TRUE)
-Anova(m7, test="F", type="III") ##There aren't enough oysters
 
 
 
 
 
-second_m1 <- lmer(Actual_tissue_growth_mg~ Phase_1_DO*Phase_1_temp*Phase_2.1_DO*Phase_2.1_temp+Actual_shell_pre_mg+
-             (1|Phase_2_rep)+(1|Phase_1_rep)+
-             (1|Phase_2_rep:Phase_1_DO)+(1|Phase_2_rep:Phase_1_temp)+(1|Phase_2_rep:Phase_1_DO:Phase_1_temp), data = Growth_Data_clean, REML=TRUE)
-Anova(second_m1, test="F", type="III")
+####Standardize Initial Size####
+#means for each rep calculated in GrowthAnalysisSizeClass.R
+#second attempt works better to equalize size at the start of phase 2, this one works with no covariate
+Growth_Data_filtered <- Growth_Data_forR_full %>%
+  filter(Phase_1_rep_R != "Cont01") %>%
+  filter(Phase_1_rep_R != "Both02") %>%
+  filter(Phase_1_rep_R != "Hyp06") %>%
+  filter(Phase_1_rep_R != "Warm02") #works
 
- second_m2 <- lmer(Actual_shell_growth_mg~ Phase_1_DO*Phase_1_temp*Phase_2.1_DO*Phase_2.1_temp+Actual_shell_pre_mg+
-             (1|Phase_2_rep)+(1|Phase_1_rep)+
-             (1|Phase_2_rep:Phase_1_DO)+(1|Phase_2_rep:Phase_1_temp)+(1|Phase_2_rep:Phase_1_DO:Phase_1_temp), data = Growth_Data_clean, REML=TRUE)
-Anova(second_m2, test="F", type="III")
+Growth_Data_filtered <- Growth_Data_forR_full %>%
+  filter(Phase_1_rep_R != "Cont01") %>%
+  filter(Phase_1_rep_R != "Both02") %>%
+  filter(Phase_1_rep_R != "Hyp05") %>%
+  filter(Phase_1_rep_R != "Warm02") #better
 
-second_m3 <- lmer(Ratio_tissue_shell_mg~ Phase_1_DO*Phase_1_temp*Phase_2.1_DO*Phase_2.1_temp+Actual_shell_pre_mg+
-             (1|Phase_2_rep)+(1|Phase_1_rep)+
-             (1|Phase_2_rep:Phase_1_DO)+(1|Phase_2_rep:Phase_1_temp)+(1|Phase_2_rep:Phase_1_DO:Phase_1_temp), data = Growth_Data_clean, REML=TRUE)
-Anova(second_m3, test="F", type="III")
+View(Growth_Data_filtered)
+Growth_Data_filtered_pre <- Growth_Data_forR_pre %>%
+  filter(!Phase_1_rep_R %in% c("Cont05", "Cont06"))%>%
+  filter(!Phase_1_rep_R %in% c("Both02", "Both04"))%>%
+  filter(!Phase_1_rep_R %in% c("Hyp05", "Hyp06"))%>%
+  filter(!Phase_1_rep_R %in% c("Warm01", "Warm02"))
+Growth_Data_filtered <- Growth_Data_forR_full %>%
+  filter(!Phase_1_rep_R %in% c("Cont05", "Cont06"))%>%
+  filter(!Phase_1_rep_R %in% c("Both02", "Both04"))%>%
+  filter(!Phase_1_rep_R %in% c("Hyp05", "Hyp06"))%>%
+  filter(!Phase_1_rep_R %in% c("Warm01", "Warm02"))
+
+
+colnames(Growth_Data_forR_pre)
 
 
 
+#check the effect of phase 1 at the start of phase 2
+# excluding replicates
 ##tissue growth (mg)
-m1 <- lmer(Actual_tissue_growth_mg~ Phase_1_DO*Phase_1_temp*Phase_2.1_DO*Phase_2.1_temp+Actual_shell_pre_mg+
-             (1|Phase_2_rep)+(1|Phase_1_rep)+
-             (1|Phase_2_rep:Phase_1_DO)+(1|Phase_2_rep:Phase_1_temp)+(1|Phase_2_rep:Phase_1_DO:Phase_1_temp), data = Growth_Data_forR, REML=TRUE)
-Anova(m1, test="F", type="III")
-
+Tm2 <- lmer(log(Actual_tissue_pre_mg)~ Phase_1_DO*Phase_1_temp +
+              (1|Phase_1_rep_R), data = Growth_Data_filtered_pre, REML=TRUE)
+Anova(Tm2, test="F", type="III")
 #diagnostics
-leveneTest(TissueGrowthmg~OverallTreatmentCombination, Growth_Data_forR) 
-m1.e <- residuals(m1) 
-qqnorm(m1.e) #not quite normal but ancova is robust to non-normality
-
-#posthocs
-emm1 <- emmeans(m1,specs = pairwise ~ Phase_1_temp, adjust = "none") 
-emm1$emmeans
-emm1$contrasts
-
+leveneTest(log(Actual_tissue_pre_mg)~Phase1_Phase2_treat, Growth_Data_filtered_pre)
+m1.e <- residuals(Tm2) 
+qqnorm(m1.e)
+qqline(m1.e)
 
 ##shell growth (mg)
-m2 <- lmer(Actual_shell_growth_mg~ Phase_1_DO*Phase_1_temp*Phase_2.1_DO*Phase_2.1_temp+Actual_shell_pre_mg+
-             (1|Phase_2_rep)+(1|Phase_1_rep)+
-             (1|Phase_2_rep:Phase_1_DO)+(1|Phase_2_rep:Phase_1_temp)+(1|Phase_2_rep:Phase_1_DO:Phase_1_temp), data = Growth_Data_forR, REML=TRUE)
-Anova(m2, test="F", type="III")
-
+Sm2 <- lmer(log(Actual_shell_pre_mg)~ Phase_1_DO*Phase_1_temp + 
+              (1|Phase_1_rep_R), data = Growth_Data_filtered_pre, REML=TRUE)
+Anova(Sm2, test="F", type="III")
 #diagnostics
-leveneTest(ShellGrowthmg~OverallTreatmentCombination, Growth_Data_forR) 
-m2.e <- residuals(m2)
-qqnorm(m2.e) #not quite normal but ancova is robust to non-normality
+leveneTest(log(Actual_shell_pre_mg)~Phase1_Phase2_treat, Growth_Data_filtered)
+m1.e <- residuals(Sm2) 
+qqnorm(m1.e)
+qqline(m1.e)
+
+##tissue:shell growth (mg)
+TSm2 <- lmer(log(Ratio_tissue_shell_pre_mg)~ Phase_1_DO*Phase_1_temp +
+               (1|Phase_1_rep_R), data = Growth_Data_filtered_pre, REML=TRUE)
+Anova(TSm2, test="F", type="III")
+#diagnostics
+leveneTest(log(Ratio_tissue_shell_pre_mg)~Phase1_Phase2_treat, Growth_Data_filtered)
+m1.e <- residuals(TSm2) 
+qqnorm(m1.e)
+qqline(m1.e)
+
+
+
+#run tissue model excluding replicates from phase 1 treatments
+m1_rep <- lmer(Actual_tissue_growth_mg~ Phase_1_DO*Phase_1_temp*Phase_2.1_temp*Phase_2.1_DO+Actual_tissue_pre_mg+
+                 (1|Phase_2_rep_R)+(1|Phase_1_rep_R)+
+                 (1|Phase_2_rep_R:Phase_1_DO)+(1|Phase_2_rep_R:Phase_1_temp)+(1|Phase_2_rep_R:Phase_1_DO:Phase_1_temp), data = Growth_Data_filtered, REML=TRUE)
+Anova(m1_rep, test="F", type="III")
 
 #posthocs
-emm2 <- emmeans(second_m2,specs = pairwise ~ Phase_2.1_DO, adjust = "none") 
-emm2$emmeans
-emm2$contrasts
+emmeans(m1_rep,specs = pairwise ~ Phase_2.1_DO, adjust="none")
+(118.5 - 96.9)/118.5
 
+emmeans(m1_rep,specs = pairwise ~ Phase_2.1_temp*Phase_2.1_DO, adjust="none")
+(126.0 - 86.1)/126.0
 
-##tissue:shell growth 
-m3 <- lmer(na.omit(Ratio_tissue_shell_mg)~ Phase_1_DO*Phase_1_temp*Phase_2.1_DO*Phase_2.1_temp+Actual_shell_pre_mg+
-             (1|Phase_2_rep)+(1|Phase_1_rep)+
-             (1|Phase_2_rep:Phase_1_DO)+(1|Phase_2_rep:Phase_1_temp)+(1|Phase_2_rep:Phase_1_DO:Phase_1_temp), data = Growth_Data_forR, REML=TRUE)
-Anova(m3, test="F", type="III")
+emmeans(m1_rep,specs = pairwise ~ Phase_1_DO*Phase_1_temp*Phase_2.1_temp, adjust="none")
 
 #diagnostics
-leveneTest(TissueShellGrowth~OverallTreatmentCombination, Growth_Data_forR) 
-m3.e <- residuals(m3) 
-qqnorm(m3.e) #not quite normal but ancova is robust to non-normality
+leveneTest(Actual_tissue_growth_mg~Phase1_Phase2_treat, Growth_Data_filtered) #passes
+m1.e <- residuals(m1_rep) 
+qqnorm(m1.e)
+
+
+#run shell model excluding replicates from phase 1 treatments
+Lm2_rep <- lmer(log(Actual_shell_growth_mg)~ Phase_1_DO*Phase_1_temp*Phase_2.1_temp*Phase_2.1_DO+Actual_shell_pre_mg+
+                  (1|Phase_2_rep_R)+(1|Phase_1_rep_R)+
+                  (1|Phase_2_rep_R:Phase_1_DO)+(1|Phase_2_rep_R:Phase_1_temp)+(1|Phase_2_rep_R:Phase_1_DO:Phase_1_temp), data = Growth_Data_filtered, REML=TRUE)
+Anova(Lm2_rep, test="F", type="III")
+
+#posthocs
+emm1 <- emmeans(Lm2_rep,specs = pairwise ~ Phase_2.1_DO, adjust="none")
+emm1$emmeans 
+emm1$contrasts 
+
+(286-226)/286
+
+#diagnostics
+leveneTest(Actual_shell_growth_mg~Phase1_Phase2_treat, Growth_Data_filtered) 
+m1.e <- residuals(Lm2_rep)
+qqnorm(m1.e)
+qqline(m1.e)
+
+View(Growth_Data_filtered)
+
+#T:S model
+Lm3_rep <- lmer(Ratio_tissue_shell_mg~ Phase_1_DO*Phase_1_temp*Phase_2.1_temp*Phase_2.1_DO+ 
+                  (1|Phase_2_rep_R)+(1|Phase_1_rep_R)+
+                  (1|Phase_2_rep_R:Phase_1_DO)+(1|Phase_2_rep_R:Phase_1_temp)+(1|Phase_2_rep_R:Phase_1_DO:Phase_1_temp), data = Growth_Data_filtered, REML=TRUE)
+Anova(Lm3_rep, test="F", type="III")
+
+
+#posthocs
+emmeans(Lm3_rep,specs = pairwise ~ Phase_1_DO*Phase_1_temp*Phase_2.1_temp*Phase_2.1_DO, adjust = "none") 
+#More tissue:shell growth in hypoxic conditions than in normoxic conditions
+
+
+#diagnostics
+leveneTest(Ratio_tissue_shell_mg~Phase1_Phase2_treat, Growth_Data_filtered) #passes
+m1.e <- residuals(Lm3_rep) 
+qqnorm(m1.e)
 
 
 
+#why is there a weird pattern in phase 1 both, phase 2 hypoxic Tissue:Shell
+colnames(Growth_Data_forR)
+both_hyp <- Growth_Data_forR %>%
+  filter(Phase_1_treat != "Both") %>%
+  filter(Phase_2_treat != "Hyp")
 
-
-#create mean and standard error plots
-
-# Calculate means and standard deviations for each Phase_1_treat and Phase_2_treat group
-  #tissue growth
-summary_stats_t <- Growth_Data_forR_clean %>%
-  group_by(Phase_1_treat, Phase_2_treat) %>%
-  summarise(mean_growth = mean(Actual_tissue_growth_mg, na.rm = TRUE),
-    se_growth = std.error(Actual_tissue_growth_mg, na.rm = TRUE))
-View(summary_stats_t)
-
-  #shell growth
-summary_stats_s <- Growth_Data_forR_clean %>%
-  group_by(Phase_1_treat, Phase_2_treat) %>%
-  summarise(mean_growth = mean(Actual_shell_growth_mg, na.rm = TRUE),
-            se_growth = std.error(Actual_shell_growth_mg, na.rm = TRUE))
-
-#tissue:shell growth
-summary_stats_t_s <- Growth_Data_forR_clean %>%
-  group_by(Phase_1_treat, Phase_2_treat) %>%
-  summarise(mean_growth = mean(Ratio_tissue_shell_mg, na.rm = TRUE),
-            se_growth = std.error(Ratio_tissue_shell_mg, na.rm = TRUE))
-
-
-
-  #11.19.24
-  #plot the figure with points
-# Reorder Phase_1_treat and Phase_2_treat
-summary_stats_t$Phase_1_treat <- factor(summary_stats_t$Phase_1_treat, 
-                                        levels = c("Cont", "Warm","Hyp", "Both"))
-summary_stats_t$Phase_2_treat <- factor(summary_stats_t$Phase_2_treat, 
-                                        levels = c("Cont", "Warm","Hyp", "Both"))
-summary_stats_s$Phase_1_treat <- factor(summary_stats_s$Phase_1_treat, 
-                                        levels = c("Cont", "Warm","Hyp",  "Both"))
-summary_stats_s$Phase_2_treat <- factor(summary_stats_s$Phase_2_treat, 
-                                        levels = c("Cont", "Warm","Hyp",  "Both"))
-summary_stats_t_s$Phase_1_treat <- factor(summary_stats_t_s$Phase_1_treat, 
-                                        levels = c("Cont", "Warm","Hyp",  "Both"))
-summary_stats_t_s$Phase_2_treat <- factor(summary_stats_t_s$Phase_2_treat, 
-                                        levels = c("Cont", "Warm","Hyp",  "Both"))
-
-#Tissue plot with mean and SD
-ggplot(summary_stats_t, aes(x = Phase_1_treat, y = mean_growth, color = Phase_1_treat)) +
-  geom_point(size = 4, position = position_dodge(0.9)) + # Plot means as points
-  geom_errorbar(aes(ymin = mean_growth - se_growth, ymax = mean_growth + se_growth), 
-                width = 0.2, position = position_dodge(0.9)) + # Error bars for SD
-  theme_classic() +
-  guides(color = "none") + # Remove legend for color
-  facet_wrap(vars(Phase_2_treat), scales = "fixed", nrow = 1) + # Facet by Phase_2_treat
-  scale_color_brewer(palette = "Set2") + # Use color palette for points
-  labs(x = "Phase 1 Treatment", y = "Mean Tissue Growth (mg)") +
-  theme(legend.position = "none") # Remove legend
-
-#Shell plot with mean and SD
-ggplot(summary_stats_s, aes(x = Phase_1_treat, y = mean_growth, color = Phase_1_treat)) +
-  geom_point(size = 4, position = position_dodge(0.9)) + # Plot means as points
-  geom_errorbar(aes(ymin = mean_growth - se_growth, ymax = mean_growth + se_growth), 
-                width = 0.2, position = position_dodge(0.9)) + # Error bars for SD
-  theme_classic() +
-  guides(color = "none") + # Remove legend for color
-  facet_wrap(vars(Phase_2_treat), scales = "fixed", nrow = 1) + # Facet by Phase_2_treat
-  scale_color_brewer(palette = "Set2") + # Use color palette for points
-  labs(x = "Phase 1 Treatment", y = "Mean Shell Growth (mg)") +
-  theme(legend.position = "none") # Remove legend
-
-#Tissue:Shell plot with mean and SD
-ggplot(summary_stats_t_s, aes(x = Phase_1_treat, y = mean_growth, color = Phase_1_treat)) +
-  geom_point(size = 4, position = position_dodge(0.9)) + # Plot means as points
-  geom_errorbar(aes(ymin = mean_growth - se_growth, ymax = mean_growth + se_growth), 
-                width = 0.2, position = position_dodge(0.9)) + # Error bars for SD
-  theme_classic() +
-  guides(color = "none") + # Remove legend for color
-  facet_wrap(vars(Phase_2_treat), scales = "fixed", nrow = 1) + # Facet by Phase_2_treat
-  scale_color_brewer(palette = "Set2") + # Use color palette for points
-  labs(x = "Phase 1 Treatment", y = "Mean Tissue:Shell Growth (mg)") +
-  theme(legend.position = "none") # Remove legend
-
-    #error bars are crazy on T:S plot, visualize data
-  #histogram
-ggplot(Growth_Data_forR_clean) +
-  aes(x = Ratio_tissue_shell_mg) +
-  geom_histogram(bins = 30L, fill = "#112446") +
+ggplot(data = both_hyp, aes(x= Actual_shell_growth_mg, y= Actual_tissue_growth_mg))+
+  geom_point()+
   theme_classic()
-  #scatterplot
-ggplot(Growth_Data_forR_clean) +
-  aes(x = Actual_shell_growth_mg, y = Actual_tissue_growth_mg) +
-  geom_point(colour = "#112446") +
-  theme_classic()
+View(both_hyp)
 
 
 
-ggplot(Growth_Data_forR_clean) +
-  aes(x = Phase_1_treat, y = Actual_tissue_growth_mg, fill = Phase_1_treat) + # Map fill to Phase_1_treat
-  geom_boxplot() +
-  theme_classic() +
-  theme(legend.position="none") +
-  facet_wrap(vars(Phase_2_treat), scales = "free", nrow = 1) + # Arrange facets side by side
-  scale_fill_brewer(palette = "Set2") # Use a color palette for distinct colors
+#Filter out just the top 20 
+Growthdata_20out_pre<- Growth_Data_forR_pre%>%
+  group_by(Phase_1_treat) %>%
+  arrange(if_else(Phase_1_treat %in% c("Cont", "Warm"), desc(Dry_weight_pre), Dry_weight_pre)) %>%
+  mutate(row_num = row_number()) %>%
+  filter(
+    !(Phase_1_treat %in% c("Cont", "Warm") & row_num <= 6),
+    !(Phase_1_treat %in% c("Hyp", "Both") & row_num <= 6)
+  ) %>%
+  select(-row_num) %>%
+  ungroup()
 
-ggplot(Growth_Data_forR_clean) +
-  aes(x = Phase_1_treat, y = Actual_shell_growth_mg, fill = Phase_1_treat) + # Map fill to Phase_1_treat
-  geom_boxplot() +
-  theme_classic() +
-  theme(legend.position="none") +
-  facet_wrap(vars(Phase_2_treat), scales = "free", nrow = 1) + # Arrange facets side by side
-  scale_fill_brewer(palette = "Set2") # Use a color palette for distinct colors
-
-ggplot(Growth_Data_forR_clean) +
-  aes(x = Phase_1_treat, y = Ratio_tissue_shell_mg, fill = Phase_1_treat) + # Map fill to Phase_1_treat
-  geom_boxplot() +
-  theme_classic() +
-  theme(legend.position="none") +
-  facet_wrap(vars(Phase_2_treat), scales = "free", nrow = 1) + # Arrange facets side by side
-  scale_fill_brewer(palette = "Set2") # Use a color palette for distinct colors
-
-
-
-# Convert emmeans and contrasts data to data frames
-emmeans_df <- as.data.frame(emm2$emmeans)
-contrasts_df <- as.data.frame(emm2$contrasts)
-
-# Basic plot for emmeans
-ggplot(emmeans_df, aes(x = interaction(Phase_1_DO, Phase_2.1_DO), 
-                       y = emmean, fill = Phase_1_temp)) +
-  geom_bar(stat = "identity", position = "dodge") +
-  facet_grid(Phase_2.1_temp ~ Phase_1_temp) +
-  labs(x = "DO Levels (Phase 1 and Phase 2.1)", 
-       y = "Estimated Marginal Means", 
-       title = "Effects of Phase-wise DO and Temperature Interactions") +
-  theme_minimal() +
-  theme(legend.position = "bottom")
-
-# Overlay contrasts as annotations (optional based on contrast significance)
-# Example: Adding contrast annotations if significant contrasts found
-contrasts_df <- contrasts_df %>% 
-  mutate(significant = ifelse(p.value < 0.05, "Significant", "Not Significant"))
-
-ggplot(contrasts_df, aes(x = interaction(Phase_1_DO, Phase_2.1_DO), 
-                       y = emmean, fill = Phase_1_temp)) +
-  geom_bar(stat = "identity", position = "dodge") +
-  facet_grid(Phase_2.1_temp ~ Phase_1_temp) +
-  labs(x = "DO Levels (Phase 1 and Phase 2.1)", 
-       y = "Estimated Marginal Means", 
-       title = "Effects of Phase-wise DO and Temperature Interactions") +
-  theme_minimal() +
-  theme(legend.position = "bottom")
+Growthdata_20out<- Growth_Data_forR_full%>%
+  group_by(Phase_1_treat) %>%
+  arrange(if_else(Phase_1_treat %in% c("Cont", "Warm"), desc(Dry_weight_pre), Dry_weight_pre)) %>%
+  mutate(row_num = row_number()) %>%
+  filter(
+    !(Phase_1_treat %in% c("Cont", "Warm") & row_num <= 6),
+    !(Phase_1_treat %in% c("Hyp", "Both") & row_num <= 6)
+  ) %>%
+  select(-row_num) %>%
+  ungroup()
+View(Growthdata_20out)
 
 
+#check the effect of phase 1 at the start of phase 2
+# excluding INDIVIDUAL OYSTERS
+##tissue growth (mg)
+Tm2 <- lmer(Actual_tissue_pre_mg~ Phase_1_DO*Phase_1_temp +
+              (1|Phase_1_rep_R), data = Growthdata_20out, REML=TRUE)
+Anova(Tm2, test="F", type="III")
+#diagnostics
+leveneTest(Actual_tissue_pre_mg~Phase1_Phase2_treat, Growthdata_20out)
+m1.e <- residuals(Tm2) 
+qqnorm(m1.e)
+qqline(m1.e)
+
+##shell growth (mg)
+Sm2 <- lmer(Actual_shell_pre_mg~ Phase_1_DO*Phase_1_temp + 
+              (1|Phase_1_rep_R), data = Growthdata_20out, REML=TRUE)
+Anova(Sm2, test="F", type="III")
+#diagnostics
+leveneTest(log(Actual_shell_pre_mg)~Phase1_Phase2_treat, Growthdata_20out)
+m1.e <- residuals(Sm2) 
+qqnorm(m1.e)
+qqline(m1.e)
+
+##tissue:shell growth (mg)
+TSm2 <- lmer(Ratio_tissue_shell_pre_mg~ Phase_1_DO*Phase_1_temp +
+               (1|Phase_1_rep_R), data = Growthdata_20out, REML=TRUE)
+Anova(TSm2, test="F", type="III")
+#diagnostics
+leveneTest(Ratio_tissue_shell_pre_mg~Phase1_Phase2_treat, Growthdata_20out)
+m1.e <- residuals(TSm2) 
+qqnorm(m1.e)
+qqline(m1.e)
 
 
-##for formatting tables into overleaf
-install.packages("stargazer")
-library(stargazer)
-stargazer(m1, type = "latex")
+#run tissue model excluding replicates from phase 1 treatments
+m1_rep <- lmer(Actual_tissue_growth_mg~ Phase_1_DO*Phase_1_temp*Phase_2.1_temp*Phase_2.1_DO+Actual_tissue_pre_mg+
+                 (1|Phase_2_rep_R)+(1|Phase_1_rep_R)+
+                 (1|Phase_2_rep_R:Phase_1_DO)+(1|Phase_2_rep_R:Phase_1_temp)+(1|Phase_2_rep_R:Phase_1_DO:Phase_1_temp), data = Growthdata_20out, REML=TRUE)
+Anova(m1_rep, test="F", type="III")
 
-#normal table
-install.packages("flextable")
-library(flextable)
-flextable(Warm1)
+#posthocs
+emmeans(m1_rep,specs = pairwise ~ Phase_2.1_DO, adjust="none")
+(119- 94)/119
+
+#diagnostics
+leveneTest(Actual_tissue_growth_mg~Phase1_Phase2_treat, Growthdata_20out) #passes
+m1.e <- residuals(m1_rep) 
+qqnorm(m1.e)
+
+
+#run shell model excluding replicates from phase 1 treatments
+Lm2_rep <- lmer(log(Actual_shell_growth_mg)~ Phase_1_DO*Phase_1_temp*Phase_2.1_temp*Phase_2.1_DO+Actual_shell_pre_mg+
+                  (1|Phase_2_rep_R)+(1|Phase_1_rep_R)+
+                  (1|Phase_2_rep_R:Phase_1_DO)+(1|Phase_2_rep_R:Phase_1_temp)+(1|Phase_2_rep_R:Phase_1_DO:Phase_1_temp), data = Growthdata_20out, REML=TRUE)
+Anova(Lm2_rep, test="F", type="III")
+
+#posthocs
+emmeans(Lm2_rep,specs = pairwise ~ Phase_2.1_DO, adjust="none")
+exp(5.50); exp(5.24)
+(244.6919-188.6701)/244.6919
+emmeans(Lm2_rep,specs = pairwise ~ Phase_1_DO:Phase_1_temp, adjust="none")
+
+#diagnostics
+leveneTest(Actual_shell_growth_mg~Phase1_Phase2_treat, Growthdata_20out) 
+m1.e <- residuals(m1_rep)
+qqnorm(m1.e)
+
+View(Growth_Data_filtered)
+
+#T:S model
+Lm3_rep <- lmer(Ratio_tissue_shell_mg~ Phase_1_DO*Phase_1_temp*Phase_2.1_temp*Phase_2.1_DO+ 
+                  (1|Phase_2_rep_R)+(1|Phase_1_rep_R)+
+                  (1|Phase_2_rep_R:Phase_1_DO)+(1|Phase_2_rep_R:Phase_1_temp)+(1|Phase_2_rep_R:Phase_1_DO:Phase_1_temp), data = Growthdata_20out, REML=TRUE)
+Anova(Lm3_rep, test="F", type="III")
+
+
+#posthocs
+emmeans(Lm3_rep,specs = pairwise ~ Phase_1_DO*Phase_1_temp*Phase_2.1_temp*Phase_2.1_DO, adjust = "none") 
+#More tissue:shell growth in hypoxic conditions than in normoxic conditions
+
+
+#diagnostics
+leveneTest(Ratio_tissue_shell_mg~Phase1_Phase2_treat, Growth_Data_filtered) #passes
+m1.e <- residuals(Lm3_rep) 
+qqnorm(m1.e)
+
 
