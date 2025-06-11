@@ -14,8 +14,8 @@ library(plotrix) #for standard error
 library(readxl) #for excel workbooks
 
 #merge PRE PHASE 2 area data frame with growth data frame
-shellarea_df <- read_csv("OysterGrowth2024_Phase2.1area.csv")
-View(shellarea_df)
+area_pre_df <- read_csv("growth_phase2.1_areaPRE.csv")
+View(area_pre_df)
 Growth_Data_forR <- read_csv("/Users/sophiemontague/Desktop/MontagueORCC_repo/MontagueORCC/Oyster_Weight_Data/growth_phase2.1_weightsSKM.csv", 
                              col_types = cols(Phase_1_temp = col_factor(), 
                                               Phase_1_DO =col_factor(), 
@@ -31,31 +31,30 @@ Growth_Data_forR <- read_csv("/Users/sophiemontague/Desktop/MontagueORCC_repo/Mo
 ?merge
 #merged_df <- merge(Growth_Data_forR, shellarea_df, by = "Sample_Name")
 
-colnames(shellarea_df)
-mergedpre_df <- shellarea_df %>%
-  select(Sample_Name, Area_pre_mm2, Feret_pre_mm, NotesShell_Pre)%>%
+colnames(area_pre_df)
+mergedpre_df <- Growth_Data_forR %>%
+  select(        Sample_Name,
+                 Phase_1_DO,
+                 Phase_1_temp,
+                 Phase_2.1_DO,
+                 Phase_2.1_temp,
+                 Phase_1_treat,
+                 Phase_2_treat,
+                 Phase_1_rep_R,
+                 Phase_2_rep_R,
+                 Actual_shell_pre_mg,
+                 Actual_tissue_pre_mg,
+                 Actual_shell_post_mg,
+                 Actual_tissue_post_mg,
+                 Actual_shell_growth_mg,
+                 Actual_tissue_growth_mg,
+                 Exclude_all,
+                 Exclude_pre_analysis,
+                 Notes_pre,
+                 Notes_post)%>%
   left_join(
-    Growth_Data_forR %>%
-      select(
-        Sample_Name,
-        Phase_1_DO,
-        Phase_1_temp,
-        Phase_2.1_DO,
-        Phase_2.1_temp,
-        Phase_1_treat,
-        Phase_2_treat,
-        Phase_1_rep_R,
-        Phase_2_rep_R,
-        Actual_shell_pre_mg,
-        Actual_tissue_pre_mg,
-        Actual_shell_post_mg,
-        Actual_tissue_post_mg,
-        Actual_shell_growth_mg,
-        Actual_tissue_growth_mg,
-        Exclude_all,
-        Exclude_pre_analysis,
-        Notes_pre,
-        Notes_post),
+    area_pre_df %>%
+      select(Sample_Name, Area_pre_mm2, Feret_pre_mm, NotesShell_Pre),
     by = "Sample_Name")
 
 View(mergedpre_df)
