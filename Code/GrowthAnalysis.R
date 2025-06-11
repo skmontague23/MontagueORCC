@@ -20,9 +20,9 @@ citation("lme4")
 
 #Read in dataset, set column types
 getwd()
-setwd("/Users/sophiemontague/Desktop/MontagueORCC/Oyster Weight Data")
+setwd("/Users/sophiemontague/Desktop/MontagueORCC_repo/MontagueORCC/Oyster_Weight_Data")
 
-Growth_Data_forR <- read_csv("/Users/sophiemontague/Desktop/MontagueORCC/Oyster Weight Data/growth_phase2.1_weightsSKM.csv", 
+Growth_Data_forR <- read_csv("/Users/sophiemontague/Desktop/MontagueORCC_repo/MontagueORCC/Oyster_Weight_Data/growth_phase2.1_weightsSKM.csv", 
                              col_types = cols(Phase_1_temp = col_factor(), 
                                               Phase_1_DO =col_factor(), 
                                               Phase_2.1_temp =col_factor(), 
@@ -80,15 +80,13 @@ colnames(Growth_Data_forR_full)
 #check the effect of phase 1 at the start of phase 2
 #not excluding any replicates
 ##tissue growth (mg)
-#Tm1
+#Tm1, passes the levene test regardless, Q-Q plot looks better when log transformed, same ish results regardless
 Tm1 <- lmer(log(Actual_tissue_pre_mg)~ Phase_1_DO*Phase_1_temp +
               (1|Phase_1_rep_R), data = Growth_Data_forR_pre, REML=TRUE)
 Anova(Tm1, test="F", type="III")
 
   #post hocs
-emm1 <- emmeans(Tm1,specs = pairwise ~ Phase_1_DO, adjust = "none") 
-emm1$emmeans 
-emm1$contrasts
+emmeans(Tm1,specs = pairwise ~ Phase_1_DO, adjust = "none")
 
   #actual value 
 exp(5.25) #hyp
@@ -108,18 +106,15 @@ ggplot(Growth_Data_forR_pre) +
   geom_histogram(bins = 30L, fill = "#112446") +
   theme_classic()
 
-  #posthocs
-emm1 <- emmeans(Tm1,specs = pairwise ~ Phase_1_DO, adjust = "none") 
-emm1$emmeans 
-emm1$contrasts
+
 
 ##shell growth (mg)
-Sm1 <- lmer(log(Actual_shell_pre_mg)~ Phase_1_DO*Phase_1_temp +
+#Sm1, only passes levene's when not log transformed, not log transforming even though Q-Q plot looks exponential
+Sm1 <- lmer(Actual_shell_pre_mg~ Phase_1_DO*Phase_1_temp +
                 (1|Phase_1_rep_R), data = Growth_Data_forR_pre, REML=TRUE)
 Anova(Sm1, test="F", type="III")
 
   #diagnostics
-leveneTest(log(Actual_shell_pre_mg)~Phase_1_treat, Growth_Data_forR_pre)
 leveneTest(Actual_shell_pre_mg~Phase_1_treat, Growth_Data_forR_pre)
 m1.e <- residuals(Sm1) 
 qqnorm(m1.e)
@@ -128,15 +123,11 @@ ggplot(Growth_Data_forR_pre) +
   aes(x = log(Actual_shell_pre_mg)) +
   geom_histogram(bins = 30L, fill = "#112446") +
   theme_classic()
-Sm1 <- lmer(Actual_shell_pre_mg~ Phase_1_DO*Phase_1_temp +
-              (1|Phase_1_rep_R), data = Growth_Data_forR_pre, REML=TRUE)
-Anova(Sm1, test="F", type="III")
 
   #posthocs
 emm2 <- emmeans(Sm1,specs = pairwise ~ Phase_1_DO, adjust = "none") 
-emm2$emmeans 
-emm2$contrasts
-  #actual value 
+
+  #actual value when log transformed (not using)
 exp(5.72) #hyp
 exp(5.87) #norm
 (354.249-304.9049)/354.249
@@ -154,10 +145,6 @@ qqnorm(m1.e)
 qqline(residuals(TSm1))
 AIC(TSm1)
 
-leveneTest(Ratio_tissue_shell_pre_mg~Phase1_Phase2_treat, Growth_Data_forR_pre)
-m1.e <- residuals(TSm1) 
-qqnorm(m1.e)
-qqline(m1.e)
   #posthocs
 emmeans(TSm1, specs = pairwise ~ Phase_1_temp, adjust = "none") 
 (0.643-0.618) /0.643
@@ -184,10 +171,7 @@ qqline(residuals(TSm2))
 AIC(TSm2)
 
 #posthocs
-emm3 <- emmeans(TSm2, specs = pairwise ~ Phase_1_temp, adjust = "none") 
-emm3$emmeans 
-emm3$contrasts
-
+emmeans(TSm2, specs = pairwise ~ Phase_1_temp, adjust = "none") 
 emmeans(TSm2, specs = pairwise ~ Phase_1_DO, adjust = "none") 
 
 
