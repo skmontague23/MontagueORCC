@@ -31,7 +31,7 @@ Growth_Data_forR <- read_csv("/Users/sophiemontague/Desktop/MontagueORCC_repo/Mo
 
 #merge PRE AND POST PHASE 2 area data frame with growth data frame
 colnames(area_pre_df)
-mergedpre_df <- Growth_Data_forR %>%
+mergedarea_df <- Growth_Data_forR %>%
   select(Sample_Name,
          Phase_1_DO,
          Phase_1_temp,
@@ -61,56 +61,79 @@ mergedpre_df <- Growth_Data_forR %>%
       select(Sample_Name, Area_post_mm2, Feret_post_mm, ShellNotes_post),
     by = "Sample_Name")
 
-View(mergedpre_df)
+View(mergedarea_df)
 nrow(Growth_Data_forR)
-nrow(mergedpre_df)
+nrow(mergedarea_df)
 
 #check which oysters have missing area data PRE phase 2
-missing_area_pre <- mergedpre_df %>%
+colnames(mergedarea_df)
+cleanedarea_df <- mergedarea_df %>%
+  filter(Exclude_pre_analysis != "Y" | is.na(Exclude_pre_analysis))
+
+missing_area_pre <- cleanedarea_df %>%
   filter(is.na(Area_pre_mm2))
-View(missing_area_pre) #8 oysters missing data pre phase 2
+View(missing_area_pre) #6 oysters missing data pre phase 2
 
 #check which oysters have missing area data POST phase 2
-missing_area_post <- mergedpre_df %>%
-  filter(is.na(Area_post_mm2))
-View(missing_area_post) #36 oysters missing data pre phase 2, now 32 with matching area data to oyster tags, now down to 27 with matching more tags with the rest of the unmatched area data
+cleanedarea_df <- mergedarea_df %>%
+  filter(Exclude_all != "Y" | is.na(Exclude_all))
 
-#saving a csv of missing areas to annotate
+missing_area_post <- cleanedarea_df %>%
+  filter(is.na(Area_post_mm2))
+View(missing_area_post) #36 oysters missing data pre phase 2, now 32 with matching area data to oyster tags, now down to 23 with matching more tags with the rest of the unmatched area data
+
+#saving a csv of missing areas to annotate while correcting
 write.csv(missing_area_post, "~/Desktop/missing_area_post.csv", row.names = FALSE)
 
+
+
+
+##Working with the data
+#get rid of the missing and dead 
+#Edit dataset to exclude doubles and dead ones, calculate growth in area and Feret
+merged_df_cleaned_all <- mergedpre_df %>%
+  filter(Exclude_all != "Y" | is.na(Exclude_all)) %>%
+  mutate(Area_growth_mm2 = Area_post_mm2 - Area_pre_mm2,
+         Feret_growth_mm = Feret_post_mm - Feret_pre_mm)
+  
 #Visualize mass x area from the two datasets to make sure there aren't outiers from merging
-ggplot(merged_df_cleaned) +
+merged_df_cleaned_pre <- mergedpre_df %>%
+  filter(Exclude_pre_analysis != "Y" | is.na(Exclude_pre_analysis)) %>%
+  mutate(Area_growth_mm2 = Area_post_mm2 - Area_pre_mm2,
+         Feret_growth_mm = Feret_post_mm - Feret_pre_mm)
+
+ggplot(merged_df_cleaned_pre) +
   aes(x = Actual_shell_pre_mg, y = Area_pre_mm2) +
   geom_point(colour = "blue4") +
   theme_classic()
 
-ggplot(merged_df_cleaned) +
+ggplot(merged_df_cleaned_all) +
   aes(x = Area_post_mm2, y = Area_pre_mm2) +
   geom_point(colour = "blue4") +
-  theme_classic()
+  theme_classic() #6 missing from pre, 23 missing from post, 29 missing overall with no overlap
 
-ggplot(merged_df_cleaned) +
+ggplot(merged_df_cleaned_all) +
   aes(x = Feret_growth_mm, y = Area_growth_mm2) +
   geom_point(colour = "blue4") +
   theme_classic()
 
 #Make a list of occurences the shell area growth is negative
-negative_shellarea <- merged_df_cleaned %>%
+negative_shellarea <- merged_df_cleaned_all %>%
   filter(Area_growth_mm2 < 0)
-nrow(negative_shellarea) #92 is a lot, after excluding the ones with negative shell mass
+nrow(negative_shellarea) #89 is a lot, especially after excluding the ones with negative shell mass
 
 #now positive
-positive_shellarea <- merged_df_cleaned %>%
-  filter(Area_growth_mm2 > 0)
+positive_shellarea <- merged_df_cleaned_all %>%
+  filter(Area_growth_mm2 >= 0)
 
 #Make a list of occurences the Feret growth is negative
-negative_feret <- merged_df_cleaned %>%
+negative_feret <- merged_df_cleaned_all %>%
   filter(Feret_growth_mm < 0)
-nrow(negative_feret) #96 is a lot
+nrow(negative_feret) #94 is a lot
 
 #now positive
-positive_feret <- merged_df_cleaned %>%
-  filter(Feret_growth_mm > 0)
+positive_feret <- merged_df_cleaned_all %>%
+  filter(Feret_growth_mm >= 0)
 
 #get the overlap between negative area and Feret sample names
 
@@ -120,14 +143,29 @@ neg_feret_names <- negative_feret$Sample_Name
 
 # Find the intersection and count overlap
 overlap_names <- intersect(neg_shell_names, neg_feret_names)
-length(overlap_names) #64
+length(overlap_names) #62 oysters lost shell area AND length out of 92
 
 
 ## run the Area Growth (mm^2) model on just the positive data
+    #set contrasts ALWAYS RUN
+    options(contrasts = c("contr.sum","contr.poly")) #could also be contr.treatment for unequal groups sum
+    getOption("contrasts")
+    
 PAm2 <- lmer(Area_growth_mm2 ~ Phase_1_DO*Phase_1_temp*Phase_2.1_temp*Phase_2.1_DO+Actual_shell_pre_mg+
               (1|Phase_2_rep_R)+(1|Phase_1_rep_R)+
               (1|Phase_2_rep_R:Phase_1_DO)+(1|Phase_2_rep_R:Phase_1_temp)+(1|Phase_2_rep_R:Phase_1_DO:Phase_1_temp), data = positive_shellarea, REML=TRUE)
 Anova(PAm2, test="F", type="III")
+
+#posthocs
+emmeans(PAm2,specs = pairwise ~ Phase_1_DO, adjust = "none") #grew less area in hypoxia
+emmeans(PAm2,specs = pairwise ~ Phase_2.1_DO, adjust = "none") #grew less area in hypoxia
+emmeans(PAm2,specs = pairwise ~ Phase_2.1_temp*Phase_2.1_DO, adjust = "none") #warm, hypoxic, and both grew less than control
+
+#diagnostics
+leveneTest(Area_pre_mm2~ Phase_1_treat*Phase_2_treat, positive_shellarea) #passes
+m1.e <- residuals(PAm2) #looks ok
+qqnorm(m1.e)
+qqline(m1.e)
 
 View(negative_shellarea)
 
@@ -137,39 +175,38 @@ PFm2 <- lmer(Feret_growth_mm ~ Phase_1_DO*Phase_1_temp*Phase_2.1_temp*Phase_2.1_
                (1|Phase_2_rep_R:Phase_1_DO)+(1|Phase_2_rep_R:Phase_1_temp)+(1|Phase_2_rep_R:Phase_1_DO:Phase_1_temp), data = positive_feret, REML=TRUE)
 Anova(PFm2, test="F", type="III")
 
+#posthocs
+emmeans(PFm2,specs = pairwise ~ Phase_1_DO, adjust = "none") #grew less in hypoxia
+emmeans(PFm2,specs = pairwise ~ Phase_2.1_DO, adjust = "none") # grew less in hypoxia
+emmeans(PFm2,specs = pairwise ~ Phase_2.1_temp*Phase_2.1_DO, adjust = "none") #warm, hypoxic, and both grew less than control
+  #not quite significant
+emmeans(PFm2,specs = pairwise ~ Phase_1_DO*Phase_1_temp, adjust = "none") # P1warm grew more in P2 than P1 both, hypoxic, and control
+emmeans(PFm2,specs = pairwise ~ Phase_1_DO*Phase_1_temp*Phase_2.1_temp, adjust = "none") 
+  #P1 both re-exposed to p2 warming grew less than every other group in any P2 temperature (P1 cont exposed to warming camparison is not quite significant)
+  #P1 warm re-exposed to p2 warming grew more than p1 cont and p1 hyp exposed to p2 warming
+
+  #visualize this last post hoc to visually compare
+  ss_positive_feret <- positive_feret %>%
+  group_by(Phase_1_treat, Phase_2.1_temp) %>%
+  mutate(
+    mean_growth = mean(Feret_growth_mm, na.rm = TRUE),
+    se_growth = std.error(Feret_growth_mm, na.rm = TRUE))
+
+  ggplot(ss_positive_feret) +
+  aes(x = Phase_1_treat, y = mean_growth) +
+  geom_point(colour = "#112446") +
+  geom_errorbar(aes(ymin = mean_growth - se_growth, ymax = mean_growth + se_growth), width = 0.2) +
+  theme_classic() +
+  facet_wrap(vars(Phase_2.1_temp))
+
+#diagnostics
+leveneTest(Area_pre_mm2~ Phase_1_treat*Phase_2_treat, merged_df_cleaned)
+m1.e <- residuals(Am1) 
+qqnorm(m1.e)
+qqline(m1.e)
+
 View(negative_shellarea)
 
-#check which rows were mismatched between datasets, should add more onto the 8 that are missing from before
-not_in_mergeddf <- anti_join(Growth_Data_forR, mergedgrowth_df, by = "Sample_Name")
-View(not_in_mergeddf) #still only missing 8 oysters
-not_in_growth_post <- anti_join(mergedgrowth_df, Growth_Data_forR, by = "Sample_Name")
-View(not_in_growth_post) #None in shell area that are not in growth
-
-
-#Edit dataset to exclude doubles and dead ones, calculate growth in area and Feret
-merged_df_cleaned <- mergedpre_df %>%
-  filter(Exclude_all != "Y" | is.na(Exclude_all)) %>%
-  mutate(Area_growth_mm2 = Area_post_mm2 - Area_pre_mm2,
-         Feret_growth_mm = Feret_post_mm - Feret_pre_mm)
-
-
-#Visualize mass x area from the two datasets to make sure there aren't outiers from merging
-ggplot(mergedgrowth_df) +
-  aes(x = Actual_shell_post_mg, y = Area_post_mm2) +
-  geom_point(colour = "blue4") +
-  theme_classic()
-#REMOVES 38 ROWS, WHY?
-
-missing_area <- merged_df_cleaned %>%
-  filter(is.na(Area_growth_mm2))
-View(missing_area)
-
-#Visualize GROWTH mass x area from the two datasets to make sure there aren't outiers from merging
-ggplot(merged_df_cleaned) +
-  aes(x = Actual_shell_growth_mg, y = Area_growth_mm2) +
-  geom_point(colour = "blue4") +
-  theme_classic()
-#SOME OUTLIERS TO ADDRESS
 
 #set contrasts ALWAYS RUN
 options(contrasts = c("contr.sum","contr.poly")) #could also be contr.treatment for unequal groups sum
@@ -178,16 +215,16 @@ getOption("contrasts")
 
 #run model on shell area size at the start of phase 2
 #effects of phase 1
-Am1 <- lmer( Area_pre_mm2 ~ Phase_1_DO*Phase_1_temp+Actual_shell_pre_mg+
-             (1|Phase_1_rep_R), data = merged_df_cleaned, REML=TRUE)
+Am1 <- lmer(Area_pre_mm2 ~ Phase_1_DO*Phase_1_temp+Actual_shell_pre_mg+
+             (1|Phase_1_rep_R), data = merged_df_cleaned_pre, REML=TRUE)
 Anova(Am1, test="F", type="III")
 
 #posthocs
-emmeans(Am1,specs = pairwise ~ Phase_1_DO, adjust = "none")
+emmeans(Am1,specs = pairwise ~ Phase_1_DO, adjust = "none") #hyp grew more than norm
 
 #diagnostics
-leveneTest(Area_pre_mm2~ Phase_1_treat*Phase_2_treat, merged_df_cleaned)
-m1.e <- residuals(Am1) 
+leveneTest(Area_pre_mm2~ Phase_1_treat*Phase_2_treat, merged_df_cleaned_pre) #passes
+m1.e <- residuals(Am1) #ok
 qqnorm(m1.e)
 qqline(m1.e)
 
@@ -196,15 +233,15 @@ AIC(Am1)
 
 #run model on feret
 Fm1 <- lmer(Feret_pre_mm~ Phase_1_DO*Phase_1_temp+Actual_shell_pre_mg+
-              (1|Phase_1_rep_R), data = merged_df_cleaned, REML=TRUE)
+              (1|Phase_1_rep_R), data = merged_df_cleaned_pre, REML=TRUE)
 Anova(Fm1, test="F", type="III")
 
 #posthocs
-emmeans(Fm1,specs = pairwise ~ Phase_1_DO, adjust = "none") 
+emmeans(Fm1,specs = pairwise ~ Phase_1_DO, adjust = "none") #not quite significant, hyp grew more than norm
 
 #diagnostics
-leveneTest(log(Feret_pre_mm)~ Phase_1_treat*Phase_2_treat, merged_df_cleaned) 
-m1.e <- residuals(Fm1) 
+leveneTest(Feret_pre_mm~ Phase_1_treat*Phase_2_treat, merged_df_cleaned_pre) #passes
+m1.e <- residuals(Fm1) #ok
 qqnorm(m1.e)
 qqline(m1.e)
 
@@ -214,14 +251,30 @@ qqline(m1.e)
 ## Area Growth (mm^2)
 Am2 <- lmer(Area_growth_mm2 ~ Phase_1_DO*Phase_1_temp*Phase_2.1_temp*Phase_2.1_DO+Actual_shell_pre_mg+
              (1|Phase_2_rep_R)+(1|Phase_1_rep_R)+
-             (1|Phase_2_rep_R:Phase_1_DO)+(1|Phase_2_rep_R:Phase_1_temp)+(1|Phase_2_rep_R:Phase_1_DO:Phase_1_temp), data = merged_df_cleaned, REML=TRUE)
+             (1|Phase_2_rep_R:Phase_1_DO)+(1|Phase_2_rep_R:Phase_1_temp)+(1|Phase_2_rep_R:Phase_1_DO:Phase_1_temp), data = merged_df_cleaned_all, REML=TRUE)
 Anova(Am2, test="F", type="III")
 
 #posthocs
-emmeans(Am2,specs = pairwise ~ XYZ, adjust = "none") 
+emmeans(Am2,specs = pairwise ~ Phase_1_DO, adjust = "none") #grew less in hyp
+emmeans(Am2,specs = pairwise ~ Phase_2.1_DO, adjust = "none") #grew less in hyp
+emmeans(Am2,specs = pairwise ~ Phase_1_temp*Phase_2.1_temp*Phase_2.1_DO, adjust = "none")
+  
+  #visualize this last post hoc to visually compare
+  ss_areagrowth <- merged_df_cleaned_all %>%
+  group_by(Phase_1_temp, Phase_2_treat) %>%
+  mutate(
+    mean_growth = mean(Area_growth_mm2, na.rm = TRUE),
+    se_growth = std.error(Area_growth_mm2, na.rm = TRUE))
+
+  ggplot(ss_positive_feret) +
+  aes(x = Phase_1_treat, y = mean_growth) +
+  geom_point(colour = "#112446") +
+  geom_errorbar(aes(ymin = mean_growth - se_growth, ymax = mean_growth + se_growth), width = 0.2) +
+  theme_classic() +
+  facet_wrap(vars(Phase_2.1_temp))
 
 #diagnostics
-leveneTest(Area_growth_mm2~Phase_1_treat*Phase_2_treat, merged_df_cleaned) 
+leveneTest(Area_growth_mm2~Phase_1_treat*Phase_2_treat, merged_df_cleaned_all) #does not pass
 m1.e <- residuals(Am2) 
 qqnorm(m1.e)
 qqline(m1.e)
@@ -230,16 +283,158 @@ qqline(m1.e)
 ## Feret Growth (mm)
 Fm2 <- lmer(Feret_growth_mm ~ Phase_1_DO*Phase_1_temp*Phase_2.1_temp*Phase_2.1_DO+Actual_shell_pre_mg+
               (1|Phase_2_rep_R)+(1|Phase_1_rep_R)+
-              (1|Phase_2_rep_R:Phase_1_DO)+(1|Phase_2_rep_R:Phase_1_temp)+(1|Phase_2_rep_R:Phase_1_DO:Phase_1_temp), data = merged_df_cleaned, REML=TRUE)
+              (1|Phase_2_rep_R:Phase_1_DO)+(1|Phase_2_rep_R:Phase_1_temp)+(1|Phase_2_rep_R:Phase_1_DO:Phase_1_temp), data = merged_df_cleaned_all, REML=TRUE)
 Anova(Fm2, test="F", type="III")
 
 #posthocs
-emmeans(Am2,specs = pairwise ~ XYZ, adjust = "none") 
+emmeans(Fm2,specs = pairwise ~ Phase_1_DO, adjust = "none") #hyp grew less
+emmeans(Fm2,specs = pairwise ~ Phase_2.1_DO, adjust = "none") #hyp grew less
+emmeans(Fm2,specs = pairwise ~ Phase_1_DO*Phase_1_temp, adjust = "none") #p1 both grew less than p1 warm and p1 control
+  #not quite significant
+emmeans(Fm2,specs = pairwise ~ Phase_2.1_DO*Phase_2.1_temp, adjust = "none") 
+  #p2 both and p2 hypoxic grew less than p2 control, 
+  #p=0.0588 for p2 warm growing less than p2 control 
 
 #diagnostics
-leveneTest(Area_growth_mm2~Phase_1_treat*Phase_2_treat, merged_df_cleaned) 
-m1.e <- residuals(Am2) 
+leveneTest(Area_growth_mm2~Phase_1_treat*Phase_2_treat, merged_df_cleaned_all) #doesn't pass
+m1.e <- residuals(Fm2) #ok
 qqnorm(m1.e)
 qqline(m1.e)
 
 
+
+
+
+
+
+#### AREA AS A COVARIATE TO MASS ANALYSIS ####
+
+##tissue growth (mg)
+m1_co_area <- lmer(Actual_tissue_growth_mg~ Phase_1_DO*Phase_1_temp*Phase_2.1_temp*Phase_2.1_DO+Area_growth_mm2+
+             (1|Phase_2_rep_R)+(1|Phase_1_rep_R)+
+             (1|Phase_2_rep_R:Phase_1_DO)+(1|Phase_2_rep_R:Phase_1_temp)+(1|Phase_2_rep_R:Phase_1_DO:Phase_1_temp), data = merged_df_cleaned_all, REML=TRUE)
+Anova(m1_co_area, test="F", type="III")
+
+#posthocs
+emmeans(m1_co_area,specs = pairwise ~ Phase_1_temp*Phase_2.1_temp, adjust = "none") 
+  #not quite significant, oysters exposed to early life warming don't do as well as oysters in ambient water when reexposed to warming
+
+#diagnostics
+leveneTest(Actual_tissue_growth_mg~Phase_1_treat*Phase_2_treat, merged_df_cleaned_all) #pass
+m1.e <- residuals(m1_co_area) #ok, tails trail off
+qqnorm(m1.e)
+qqline(m1.e)
+
+
+#now doing Feret as the tissue covariate
+
+m1_co_feret <- lmer(Actual_tissue_growth_mg~ Phase_1_DO*Phase_1_temp*Phase_2.1_temp*Phase_2.1_DO+Feret_growth_mm+
+                     (1|Phase_2_rep_R)+(1|Phase_1_rep_R)+
+                     (1|Phase_2_rep_R:Phase_1_DO)+(1|Phase_2_rep_R:Phase_1_temp)+(1|Phase_2_rep_R:Phase_1_DO:Phase_1_temp), data = merged_df_cleaned_all, REML=TRUE)
+Anova(m1_co_feret, test="F", type="III")
+
+#better, p value for Phase_1_temp:Phase_2.1_temp is 0.07 instead of 0.09
+
+#posthocs
+emmeans(m1_co_feret,specs = pairwise ~ Phase_1_temp*Phase_2.1_temp, adjust = "none") 
+#not quite significant, oysters exposed to early life warming don't do as well as oysters in ambient water when exposed to warming
+
+#diagnostics
+leveneTest(Actual_tissue_growth_mg~Phase_1_treat*Phase_2_treat, merged_df_cleaned_all) #pass
+m1.e <- residuals(m1_co_feret) #pretty exponential, would probably need a log transformation
+qqnorm(m1.e)
+qqline(m1.e)
+
+
+
+
+##Shell growth (mg)
+m2_co_area <- lmer(log(Actual_shell_growth_mg)~ Phase_1_DO*Phase_1_temp*Phase_2.1_temp*Phase_2.1_DO+Area_growth_mm2+
+                     (1|Phase_2_rep_R)+(1|Phase_1_rep_R)+
+                     (1|Phase_2_rep_R:Phase_1_DO)+(1|Phase_2_rep_R:Phase_1_temp)+(1|Phase_2_rep_R:Phase_1_DO:Phase_1_temp), data = merged_df_cleaned_all, REML=TRUE)
+Anova(m2_co_area, test="F", type="III")
+
+#posthocs
+emmeans(m2_co_area,specs = pairwise ~ Phase_1_temp*Phase_2.1_DO, adjust = "none") 
+#oysters grow less shell in hypoxia when they have previously been exposed to early life warming
+#oysters exposed to early life warming grow more in p2 normoxia than hypoxia
+
+#diagnostics
+leveneTest(log(Actual_shell_growth_mg)~Phase_1_treat*Phase_2_treat, merged_df_cleaned_all) #pass
+m1.e <- residuals(m2_co_area) #ok, tails trail off
+qqnorm(m1.e)
+qqline(m1.e)
+
+
+#now doing Feret as the tissue covariate
+
+m2_co_feret <- lmer(Actual_shell_growth_mg~ Phase_1_DO*Phase_1_temp*Phase_2.1_temp*Phase_2.1_DO+Feret_growth_mm+
+                      (1|Phase_2_rep_R)+(1|Phase_1_rep_R)+
+                      (1|Phase_2_rep_R:Phase_1_DO)+(1|Phase_2_rep_R:Phase_1_temp)+(1|Phase_2_rep_R:Phase_1_DO:Phase_1_temp), data = merged_df_cleaned_all, REML=TRUE)
+Anova(m2_co_feret, test="F", type="III")
+
+#better, p value for Phase_1_temp:Phase_2.1_temp is 0.07 instead of 0.09
+
+#posthocs
+emmeans(m2_co_feret,specs = pairwise ~ Phase_1_temp*Phase_2.1_DO, adjust = "none") 
+#not quite significant, oysters exposed to early life warming grow more shell in p2 normoxia than in p2 hypoxia
+
+#diagnostics
+leveneTest(Actual_tissue_growth_mg~Phase_1_treat*Phase_2_treat, merged_df_cleaned_all) #pass
+m1.e <- residuals(m2_co_feret) #pretty exponential, would probably need a log transformation
+qqnorm(m1.e)
+qqline(m1.e)
+
+
+
+
+##Tissue: Shell growth (mg)
+m3_co_area <- lmer((Actual_tissue_growth_mg/Actual_shell_growth_mg)~ Phase_1_DO*Phase_1_temp*Phase_2.1_temp*Phase_2.1_DO+Area_growth_mm2+
+                     (1|Phase_2_rep_R)+(1|Phase_1_rep_R)+
+                     (1|Phase_2_rep_R:Phase_1_DO)+(1|Phase_2_rep_R:Phase_1_temp)+(1|Phase_2_rep_R:Phase_1_DO:Phase_1_temp), data = merged_df_cleaned_all, REML=TRUE)
+Anova(m3_co_area, test="F", type="III")
+
+#posthocs
+emmeans(m3_co_area,specs = pairwise ~ Phase_1_temp*Phase_2.1_DO, adjust = "none") 
+  #oysters exposed to early life warming don't grow as mcuh in normoxia later on
+
+  #almost significant SKM
+emmeans(m3_co_area,specs = pairwise ~ Phase_1_temp*Phase_2.1_temp*Phase_2.1_DO, adjust = "none")
+  #visualize
+ss <- merged_df_cleaned_all %>%
+  group_by(Phase_1_temp, Phase_2_treat) %>%
+  summarise(
+    mean_growth = mean(Actual_tissue_growth_mg / Actual_shell_growth_mg, na.rm = TRUE),
+    se_growth = std.error(Actual_tissue_growth_mg / Actual_shell_growth_mg, na.rm = TRUE),
+    .groups = "drop")
+
+ggplot(ss) +
+  aes(x = Phase_1_temp, y = mean_growth, color = Phase_2_treat) +
+  geom_point(size = 3) +
+  geom_errorbar(aes(ymin = mean_growth - se_growth, ymax = mean_growth + se_growth), width = 0.2) +
+  theme_classic() +
+  facet_wrap(vars(Phase_2_treat))
+
+#diagnostics
+leveneTest((Actual_tissue_growth_mg/Actual_shell_growth_mg)~Phase_1_treat*Phase_2_treat, merged_df_cleaned_all) #pass
+m1.e <- residuals(m3_co_area) #ok, tails trail off
+qqnorm(m1.e)
+qqline(m1.e)
+
+
+#now doing Feret as the tissue covariate
+
+m3_co_feret <- lmer((Actual_tissue_growth_mg/Actual_shell_growth_mg)~ Phase_1_DO*Phase_1_temp*Phase_2.1_temp*Phase_2.1_DO+Feret_growth_mm+
+                      (1|Phase_2_rep_R)+(1|Phase_1_rep_R)+
+                      (1|Phase_2_rep_R:Phase_1_DO)+(1|Phase_2_rep_R:Phase_1_temp)+(1|Phase_2_rep_R:Phase_1_DO:Phase_1_temp), data = merged_df_cleaned_all, REML=TRUE)
+Anova(m3_co_feret, test="F", type="III")
+
+#posthocs
+emmeans(m3_co_feret,specs = pairwise ~ Phase_1_temp*Phase_2.1_DO, adjust = "none")
+#oysters exposed to early life warming rather than ambient, grow less relative tissue in p2 normoxia
+
+#diagnostics
+leveneTest((Actual_tissue_growth_mg/Actual_shell_growth_mg)~Phase_1_treat*Phase_2_treat, merged_df_cleaned_all) #pass
+m1.e <- residuals(m3_co_feret) #tails trail off
+qqnorm(m1.e)
+qqline(m1.e)
