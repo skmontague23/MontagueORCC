@@ -1,5 +1,4 @@
-## script just to format Orion data for analysis 
-## Last modified: JGM 06/24/2024
+## script just to format Orion data for analysis
 
 # loading in packages
 library(tidyverse)
@@ -513,9 +512,8 @@ ggplot(subset(Alk_clean, Phase == "2")) +
   geom_point() +
   theme_classic()
 
+#example
 carb(flag = 8, var1 = 7.96, var2 = 1402.67/(10^6),
               S = 9, T = 25.1, P = 1.018)
-
-
 
 

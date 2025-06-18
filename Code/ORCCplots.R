@@ -1,165 +1,264 @@
+
 #create mean and standard error plots
 
-# Calculate means and standard deviations for each Phase_1_treat and Phase_2_treat group
-#tissue growth
-#summary_stats_t <- Growth_Data_forR_clean %>%
-# group_by(Phase_1_treat, Phase_2_treat) %>%
-# summarise(mean_growth = mean(Actual_tissue_growth_mg, na.rm = TRUE),
-#   se_growth = std.error(Actual_tissue_growth_mg, na.rm = TRUE))
-View(summary_stats_t)
-#tissue growth
+#load packages
+library(ggplot2)
+library(dplyr)
+library(plotrix) #for standard error
+
+#### TISSUE GROWTH PLOTS ####
+#All possible treatment combinations
+
+#effect of phase 1, TISSUE
+pre_summary_stats_t <- Growth_Data_forR_pre %>%
+  group_by(Phase_1_treat) %>%
+  mutate(
+    mean_pre = mean(Actual_tissue_pre_mg, na.rm = TRUE),
+    se_pre = std.error(Actual_tissue_pre_mg, na.rm = TRUE))
+
+  #reorder effect of phase 1 Phase_1_treat
+  pre_summary_stats_t$Phase_1_treat <- factor(pre_summary_stats_t$Phase_1_treat, 
+                                            levels = c("Cont", "Warm","Hyp", "Both"))
+  #plot TISSUE
+  ggplot(pre_summary_stats_t, aes(x = Phase_1_treat, y = mean_pre, color = Phase_1_treat)) +
+    geom_point(size = 4, position = position_dodge(0.9)) + # Plot means as points
+    geom_errorbar(aes(ymin = mean_pre - se_pre, ymax = mean_pre + se_pre), 
+                  width = 0.1, position = position_dodge(0.9)) + # Error bars for SD
+    theme_classic(base_size = 18)+
+    scale_color_manual(values = c("Hyp" = "steelblue3", "Warm" = "palevioletred", "Cont" = "burlywood3", "Both" = "plum3")) +
+    labs(x = "Phase 1 Treatment", y = "Tissue Mass (mg)") +
+    scale_x_discrete(labels = c("Hyp" = "Hypoxic", "Cont" = "Control", "Warm" = "Warm", "Both" = "Both")) +
+    theme(legend.position = "none") # Remove legend
+
+  
+#all, TISSUE
 summary_stats_t <- Growth_Data_forR_full %>%
   group_by(Phase_1_treat, Phase_2_treat) %>%
   mutate(
     mean_growth = mean(Actual_tissue_growth_mg, na.rm = TRUE),
     se_growth = std.error(Actual_tissue_growth_mg, na.rm = TRUE))
 
-View(summary_stats_t)
-#Effect of phase 1 data
-pre_summary_stats_t <- Growth_Data_forR_pre %>%
-  group_by(Phase_1_DO) %>%
-  mutate(
-    mean_pre = mean(Actual_tissue_pre_mg, na.rm = TRUE),
-    se_pre = std.error(Actual_tissue_pre_mg, na.rm = TRUE))
-colnames(pre_summary_stats_t)
-head(pre_summary_stats_t)
+  #reorder Phase_1_treat and Phase_2_treat
+  summary_stats_t$Phase_1_treat <- factor(summary_stats_t$Phase_1_treat, 
+                                        levels = c("Cont", "Warm","Hyp", "Both"))
+  summary_stats_t$Phase_2_treat <- factor(summary_stats_t$Phase_2_treat, 
+                                        levels = c("Cont", "Warm","Hyp", "Both"))
+  
+  #plot with mean and SD, TISSUE
+  ggplot(summary_stats_t, aes(x = Phase_1_treat, y = mean_growth, color = Phase_1_treat)) +
+    geom_point(size = 4, position = position_dodge(0.9)) + # Plot means as points
+    geom_errorbar(aes(ymin = mean_growth - se_growth, ymax = mean_growth + se_growth), 
+                  width = 0.2, position = position_dodge(0.9)) + # Error bars for SD
+    theme_classic(base_size = 20) +
+    guides(color = "none") + # Remove legend for color
+    facet_wrap(vars(Phase_2_treat), 
+               labeller = as_labeller(c("Hyp" = "Hypoxic", "Cont" = "Control", "Warm" = "Warm", "Both" = "Both")), 
+               scales = "fixed", nrow = 1) + # Facet by Phase_2_treat
+    scale_color_manual(values = c("Hyp" = "steelblue3", "Warm" = "palevioletred", "Cont" = "burlywood3", "Both" = "plum3")) +
+    labs(x = "Phase 1 Treatment", y = "Mean Tissue Growth (mg)") +
+    scale_x_discrete(labels = c("Hyp" = "Hypoxic", "Cont" = "Control", "Warm" = "Warm", "Both" = "Both")) +
+    theme(legend.position = "none") # Remove legend
 
-#standardize initial size
+  
+#standardize initial size, TISSUE
 filt_summary_stats_t <- Growth_Data_filtered %>%
   group_by(Phase_1_treat, Phase_2_treat) %>%
   mutate(
     mean_growth = mean(Actual_tissue_growth_mg, na.rm = TRUE),
     se_growth = std.error(Actual_tissue_growth_mg, na.rm = TRUE))
 
+  #reorder Phase_1_treat and Phase_2_treat for standardize initial size
+  filt_summary_stats_t$Phase_1_treat <- factor(filt_summary_stats_t$Phase_1_treat, 
+                                             levels = c("Cont", "Warm","Hyp", "Both"))
+  filt_summary_stats_t$Phase_2_treat <- factor(filt_summary_stats_t$Phase_2_treat, 
+                                             levels = c("Cont", "Warm","Hyp", "Both"))
+  #plot, TISSUE
+  ggplot(filt_summary_stats_t, aes(x = Phase_1_treat, y = mean_growth, color = Phase_1_treat)) +
+    geom_point(size = 4, position = position_dodge(0.9)) + # Plot means as points
+    geom_errorbar(aes(ymin = mean_growth - se_growth, ymax = mean_growth + se_growth), 
+                  width = 0.2, position = position_dodge(0.9)) + # Error bars for SD
+    theme_classic(base_size = 20) +
+    guides(color = "none") + # Remove legend for color
+    facet_wrap(vars(Phase_2_treat), 
+               labeller = as_labeller(c("Hyp" = "Hypoxic", "Cont" = "Control", "Warm" = "Warm", "Both" = "Both")), 
+               scales = "fixed", nrow = 1) + # Facet by Phase_2_treat
+    scale_color_manual(values = c("Hyp" = "steelblue3", "Warm" = "palevioletred", "Cont" = "burlywood3", "Both" = "plum3")) +
+    labs(x = "Phase 1 Treatment", y = "Mean Tissue Growth (mg)") +
+    scale_x_discrete(labels = c("Hyp" = "Hypoxic", "Cont" = "Control", "Warm" = "Warm", "Both" = "Both")) +
+    theme(legend.position = "none") # Remove legend
 
+  
+  
 
-#shell growth
+#### SHELL GROWTH ####
+#All possible treatment combinations
+
+#effect of phase 1 data, SHELL
+pre_summary_stats_s <- Growth_Data_forR_pre %>%
+  group_by(Phase_1_treat) %>%
+  mutate(
+    mean_pre = mean(Actual_shell_pre_mg, na.rm = TRUE),
+    se_pre = std.error(Actual_shell_pre_mg, na.rm = TRUE))
+
+  #reorder effect of phase 1 Phase_1_treat
+  pre_summary_stats_s$Phase_1_treat <- factor(pre_summary_stats_s$Phase_1_treat, 
+                                            levels = c("Cont", "Warm","Hyp",  "Both"))
+  
+  #plot SHELL
+  ggplot(pre_summary_stats_s, aes(x = Phase_1_treat, y = mean_pre, color = Phase_1_treat)) +
+    geom_point(size = 4, position = position_dodge(0.9)) + # Plot means as points
+    geom_errorbar(aes(ymin = mean_pre - se_pre, ymax = mean_pre + se_pre), 
+                  width = 0.1, position = position_dodge(0.9)) + # Error bars for SD
+    theme_classic(base_size = 18)+
+    scale_color_manual(values = c("Hyp" = "steelblue3", "Warm" = "palevioletred", "Cont" = "burlywood3", "Both" = "plum3")) +
+    labs(x = "Phase 1 Treatment", y = "Shell Mass (mg)") +
+    scale_x_discrete(labels = c("Hyp" = "Hypoxic", "Cont" = "Control", "Warm" = "Warm", "Both" = "Both")) +
+    ylim(330, 450)+
+    theme(legend.position = "none") # Remove legend
+
+#all, SHELL
 summary_stats_s <- Growth_Data_forR_full%>%
   group_by(Phase_1_treat, Phase_2_treat) %>%
   mutate(
     mean_growth = mean(Actual_shell_growth_mg, na.rm = TRUE),
     se_growth = std.error(Actual_shell_growth_mg, na.rm = TRUE))
 
-#Effect of phase 1 data
-pre_summary_stats_s <- Growth_Data_forR_pre %>%
-  group_by(Phase_1_DO) %>%
-  mutate(
-    mean_pre = mean(Actual_shell_pre_mg, na.rm = TRUE),
-    se_pre = std.error(Actual_shell_pre_mg, na.rm = TRUE))
+  #reorder Phase_1_treat and Phase_2_treat
+  summary_stats_s$Phase_1_treat <- factor(summary_stats_s$Phase_1_treat, 
+                                        levels = c("Cont", "Warm","Hyp",  "Both"))
+  summary_stats_s$Phase_2_treat <- factor(summary_stats_s$Phase_2_treat, 
+                                        levels = c("Cont", "Warm","Hyp",  "Both"))
+  
+  #plot with mean and SD, SHELL
+  ggplot(summary_stats_s, aes(x = Phase_1_treat, y = mean_growth, color = Phase_1_treat)) +
+    geom_point(size = 4, position = position_dodge(0.9)) + # Plot means as points
+    geom_errorbar(aes(ymin = mean_growth - se_growth, ymax = mean_growth + se_growth), 
+                  width = 0.2, position = position_dodge(0.9)) + # Error bars for SD
+    theme_classic(base_size = 18) +
+    guides(color = "none") + # Remove legend for color
+    facet_wrap(vars(Phase_2_treat), labeller = as_labeller(c("Hyp" = "Hypoxic", "Cont" = "Control", "Warm" = "Warm", "Both" = "Both")),
+               scales = "fixed", nrow = 1) + # Facet by Phase_2_treat
+    scale_color_manual(values = c("Hyp" = "steelblue3", "Warm" = "palevioletred", "Cont" = "burlywood3", "Both" = "plum3")) +
+    labs(x = "Phase 1 Treatment", y = "Mean Shell Growth (mg)") +
+    scale_x_discrete(labels = c("Hyp" = "Hypoxic", "Cont" = "Control", "Warm" = "Warm", "Both" = "Both")) +
+    theme(legend.position = "none") # Remove legend
 
-#standardize initial size
+#standardize initial size, SHELL
 filt_summary_stats_s <- Growth_Data_filtered %>%
   group_by(Phase_1_treat, Phase_2_treat) %>%
   mutate(
     mean_growth = mean(Actual_shell_growth_mg, na.rm = TRUE),
     se_growth = std.error(Actual_shell_growth_mg, na.rm = TRUE))
 
+  #reorder Phase_1_treat and Phase_2_treat for standardize initial size
+  filt_summary_stats_s$Phase_1_treat <- factor(filt_summary_stats_s$Phase_1_treat, 
+                                             levels = c("Cont", "Warm","Hyp",  "Both"))
+  filt_summary_stats_s$Phase_2_treat <- factor(filt_summary_stats_s$Phase_2_treat, 
+                                             levels = c("Cont", "Warm","Hyp",  "Both"))
 
-#tissue:shell growth
-summary_stats_t_s <-Growth_Data_forR_full %>%
-  group_by(Phase_1_treat, Phase_2_treat) %>%
-  mutate(
-    mean_growth = mean(Ratio_tissue_shell_mg, na.rm = TRUE),
-    se_growth = std.error(Ratio_tissue_shell_mg, na.rm = TRUE))
-#Effect of phase 1 data
+
+  
+
+#### TISSUE:SHELL PLOTS ####
+#All possible treatment combinations
+
+#effect of phase 1 data, T:S
 pre_summary_stats_t_s <- Growth_Data_forR_pre %>%
   group_by(Phase_1_temp) %>%
   mutate(
     mean_pre = mean(Ratio_tissue_shell_pre_mg, na.rm = TRUE),
     se_pre = std.error(Ratio_tissue_shell_pre_mg, na.rm = TRUE))
 
-#standardize initial size
+  #reorder effect of phase 1 Phase_1_treat
+  pre_summary_stats_t_s$Phase_1_treat <- factor(pre_summary_stats_t_s$Phase_1_treat, 
+                                              levels = c("Cont", "Warm","Hyp",  "Both"))
+  
+  #plot with mean and SD, T:S
+  ggplot(pre_summary_stats_t_s, aes(x = Phase_1_treat, y = mean_pre, color = Phase_1_treat)) +
+    geom_point(size = 4, position = position_dodge(0.9)) + # Plot means as points
+    geom_errorbar(aes(ymin = mean_pre - se_pre, ymax = mean_pre + se_pre), 
+                  width = 0.1, position = position_dodge(0.9)) + # Error bars for SD
+    theme_classic(base_size = 18) +
+    guides(color = "none") + # Remove legend for color
+    scale_color_manual(values = c("Hyp" = "steelblue3", "Warm" = "palevioletred", "Cont" = "burlywood3", "Both" = "plum3")) +
+    labs(x = "Phase 1 Treatment", y = "Tissue:Shell Mass (mg)") +
+    scale_x_discrete(labels = c("Hyp" = "Hypoxic", "Cont" = "Control", "Warm" = "Warm", "Both" = "Both")) +
+    ylim(0.58, 0.66)+
+    theme(legend.position = "none") # Remove legend
+
+  
+#all T:S
+summary_stats_t_s <-Growth_Data_forR_full %>%
+  group_by(Phase_1_treat, Phase_2_treat) %>%
+  mutate(
+    mean_growth = mean(Ratio_tissue_shell_mg, na.rm = TRUE),
+    se_growth = std.error(Ratio_tissue_shell_mg, na.rm = TRUE))
+
+  #reorder Phase_1_treat and Phase_2_treat
+  summary_stats_t_s$Phase_1_treat <- factor(summary_stats_t_s$Phase_1_treat, 
+                                          levels = c("Cont", "Warm","Hyp",  "Both"))
+  summary_stats_t_s$Phase_2_treat <- factor(summary_stats_t_s$Phase_2_treat, 
+                                          levels = c("Cont", "Warm","Hyp",  "Both"))
+  
+  #plot with mean and SD, T:S
+  ggplot(summary_stats_t_s, aes(x = Phase_1_treat, y = mean_growth, color = Phase_1_treat)) +
+    geom_point(size = 4, position = position_dodge(0.9)) + # Plot means as points
+    geom_errorbar(aes(ymin = mean_growth - se_growth, ymax = mean_growth + se_growth), 
+                  width = 0.2, position = position_dodge(0.9)) + # Error bars for SD
+    theme_classic(base_size = 18) +
+    guides(color = "none") + # Remove legend for color
+    facet_wrap(vars(Phase_2_treat), 
+               labeller = as_labeller(c("Hyp" = "Hypoxic", "Cont" = "Control", "Warm" = "Warm", "Both" = "Both")), 
+               scales = "fixed", nrow = 1) +
+    scale_color_manual(values = c("Hyp" = "steelblue3", "Warm" = "palevioletred", "Cont" = "burlywood3", "Both" = "plum3")) +
+    labs(title = "Phase 2 Treatment", x = "Phase 1 Treatment", y = "Mean Tissue:Shell Growth (mg)") +
+    scale_x_discrete(labels = c("Hyp" = "Hypoxic", "Cont" = "Control", "Warm" = "Warm", "Both" = "Both")) +
+    theme(legend.position = "none") # Remove legend
+
+  
+#standardize initial size, T:S
 filt_summary_stats_t_s <- Growth_Data_filtered %>%
   group_by(Phase_1_treat, Phase_2_treat) %>%
   mutate(
     mean_growth = mean(Ratio_tissue_shell_mg, na.rm = TRUE),
     se_growth = std.error(Ratio_tissue_shell_mg, na.rm = TRUE))
 
-#11.19.24
-#plot the figure with points
-# Reorder Phase_1_treat and Phase_2_treat
-summary_stats_t$Phase_1_treat <- factor(summary_stats_t$Phase_1_treat, 
-                                        levels = c("Cont", "Warm","Hyp", "Both"))
-summary_stats_t$Phase_2_treat <- factor(summary_stats_t$Phase_2_treat, 
-                                        levels = c("Cont", "Warm","Hyp", "Both"))
-summary_stats_s$Phase_1_treat <- factor(summary_stats_s$Phase_1_treat, 
-                                        levels = c("Cont", "Warm","Hyp",  "Both"))
-summary_stats_s$Phase_2_treat <- factor(summary_stats_s$Phase_2_treat, 
-                                        levels = c("Cont", "Warm","Hyp",  "Both"))
-summary_stats_t_s$Phase_1_treat <- factor(summary_stats_t_s$Phase_1_treat, 
-                                          levels = c("Cont", "Warm","Hyp",  "Both"))
-summary_stats_t_s$Phase_2_treat <- factor(summary_stats_t_s$Phase_2_treat, 
-                                          levels = c("Cont", "Warm","Hyp",  "Both"))
 
-# Reorder effect of phase 1 Phase_1_treat
-pre_summary_stats_t$Phase_1_treat <- factor(pre_summary_stats_t$Phase_1_treat, 
-                                            levels = c("Cont", "Warm","Hyp", "Both"))
-pre_summary_stats_s$Phase_1_treat <- factor(pre_summary_stats_s$Phase_1_treat, 
-                                            levels = c("Cont", "Warm","Hyp",  "Both"))
-pre_summary_stats_t_s$Phase_1_treat <- factor(pre_summary_stats_t_s$Phase_1_treat, 
-                                              levels = c("Cont", "Warm","Hyp",  "Both"))
 
-# Reorder Phase_1_treat and Phase_2_treat for standardize initial size
-filt_summary_stats_t$Phase_1_treat <- factor(filt_summary_stats_t$Phase_1_treat, 
-                                             levels = c("Cont", "Warm","Hyp", "Both"))
-filt_summary_stats_t$Phase_2_treat <- factor(filt_summary_stats_t$Phase_2_treat, 
-                                             levels = c("Cont", "Warm","Hyp", "Both"))
-filt_summary_stats_s$Phase_1_treat <- factor(filt_summary_stats_s$Phase_1_treat, 
-                                             levels = c("Cont", "Warm","Hyp",  "Both"))
-filt_summary_stats_s$Phase_2_treat <- factor(filt_summary_stats_s$Phase_2_treat, 
-                                             levels = c("Cont", "Warm","Hyp",  "Both"))
-filt_summary_stats_t_s$Phase_1_treat <- factor(filt_summary_stats_t_s$Phase_1_treat, 
-                                               levels = c("Cont", "Warm","Hyp",  "Both"))
-filt_summary_stats_t_s$Phase_2_treat <- factor(filt_summary_stats_t_s$Phase_2_treat, 
-                                               levels = c("Cont", "Warm","Hyp",  "Both"))
-
-#Tissue plot with mean and SD
-ggplot(summary_stats_t, aes(x = Phase_1_treat, y = mean_growth, color = Phase_1_treat)) +
-  geom_point(size = 4, position = position_dodge(0.9)) + # Plot means as points
-  geom_errorbar(aes(ymin = mean_growth - se_growth, ymax = mean_growth + se_growth), 
-                width = 0.2, position = position_dodge(0.9)) + # Error bars for SD
-  theme_classic(base_size = 20) +
-  guides(color = "none") + # Remove legend for color
-  facet_wrap(vars(Phase_2_treat), 
-             labeller = as_labeller(c("Hyp" = "Hypoxic", "Cont" = "Control", "Warm" = "Warm", "Both" = "Both")), 
-             scales = "fixed", nrow = 1) + # Facet by Phase_2_treat
-  scale_color_manual(values = c("Hyp" = "steelblue3", "Warm" = "palevioletred", "Cont" = "burlywood3", "Both" = "plum3")) +
-  labs(x = "Phase 1 Treatment", y = "Mean Tissue Growth (mg)") +
-  scale_x_discrete(labels = c("Hyp" = "Hypoxic", "Cont" = "Control", "Warm" = "Warm", "Both" = "Both")) +
-  theme(legend.position = "none") # Remove legend
-
-#Shell plot with mean and SD
-ggplot(summary_stats_s, aes(x = Phase_1_treat, y = mean_growth, color = Phase_1_treat)) +
-  geom_point(size = 4, position = position_dodge(0.9)) + # Plot means as points
-  geom_errorbar(aes(ymin = mean_growth - se_growth, ymax = mean_growth + se_growth), 
-                width = 0.2, position = position_dodge(0.9)) + # Error bars for SD
-  theme_classic(base_size = 18) +
-  guides(color = "none") + # Remove legend for color
-  facet_wrap(vars(Phase_2_treat), labeller = as_labeller(c("Hyp" = "Hypoxic", "Cont" = "Control", "Warm" = "Warm", "Both" = "Both")),
-             scales = "fixed", nrow = 1) + # Facet by Phase_2_treat
-  scale_color_manual(values = c("Hyp" = "steelblue3", "Warm" = "palevioletred", "Cont" = "burlywood3", "Both" = "plum3")) +
-  labs(x = "Phase 1 Treatment", y = "Mean Shell Growth (mg)") +
-  scale_x_discrete(labels = c("Hyp" = "Hypoxic", "Cont" = "Control", "Warm" = "Warm", "Both" = "Both")) +
-  theme(legend.position = "none") # Remove legend
-
-#Tissue:Shell plot with mean and SD
-ggplot(summary_stats_t_s, aes(x = Phase_1_treat, y = mean_growth, color = Phase_1_treat)) +
-  geom_point(size = 4, position = position_dodge(0.9)) + # Plot means as points
-  geom_errorbar(aes(ymin = mean_growth - se_growth, ymax = mean_growth + se_growth), 
-                width = 0.2, position = position_dodge(0.9)) + # Error bars for SD
-  theme_classic(base_size = 18) +
-  guides(color = "none") + # Remove legend for color
-  facet_wrap(vars(Phase_2_treat), 
-             labeller = as_labeller(c("Hyp" = "Hypoxic", "Cont" = "Control", "Warm" = "Warm", "Both" = "Both")), 
-             scales = "fixed", nrow = 1) +
-  scale_color_manual(values = c("Hyp" = "steelblue3", "Warm" = "palevioletred", "Cont" = "burlywood3", "Both" = "plum3")) +
-  labs(title = "Phase 2 Treatment", x = "Phase 1 Treatment", y = "Mean Tissue:Shell Growth (mg)") +
-  scale_x_discrete(labels = c("Hyp" = "Hypoxic", "Cont" = "Control", "Warm" = "Warm", "Both" = "Both")) +
-  theme(legend.position = "none") # Remove legend
-
-#Meat Yield
+#### MEAT YIELD PLOTS ####
 ##wet tissue weight / total weight = meat yield
+
+#effects of phase 1, MEAT YIELD
+head(Growth_Data_forR_pre_my$meat_yield)
+View(Growth_Data_forR_pre_my)
+head(pre_summary_stats_my)
+
+pre_summary_stats_my <- Growth_Data_forR_pre_my %>%
+  group_by(Phase_1_treat) %>%
+  mutate(
+    mean_pre = mean(meat_yield, na.rm = TRUE),
+    se_pre = std.error(meat_yield, na.rm = TRUE))
+colnames(pre_summary_stats_my)
+
+#order
+pre_summary_stats_my$Phase_1_treat <- factor(pre_summary_stats_my$Phase_1_treat, 
+                                             levels = c("Cont", "Warm","Hyp", "Both"))
+#Meat yield plot with mean and SD
+ggplot(pre_summary_stats_my, aes(x = Phase_1_treat, y = mean_pre, color = Phase_1_treat)) +
+  geom_point(size = 4, position = position_dodge(0.9)) + # Plot means as points
+  geom_errorbar(aes(ymin = mean_pre - se_pre, ymax = mean_pre + se_pre), 
+                width = 0.1, position = position_dodge(0.9)) + # Error bars for SD
+  theme_classic(base_size = 18) +
+  guides(color = "none") + # Remove legend for color
+  scale_color_manual(values = c("Hyp" = "steelblue3", "Warm" = "palevioletred", "Cont" = "burlywood3", "Both" = "plum3")) +
+  labs(x = "Phase 1 Treatment", y = "Meat Yield") +
+  scale_x_discrete(labels = c("Hyp" = "Hypoxic", "Cont" = "Control", "Warm" = "Warm", "Both" = "Both")) +
+  theme(legend.position = "none") # Remove legend
+
+
+#all, MEAT YEILD
 colnames(Growth_Data_forR_full)
+
 Growth_Data_forR_full%>%
   mutate(meat_yield = (Actual_tissue_growth_mg/(Actual_tissue_growth_mg+Actual_shell_growth_mg))) -> Growth_Data_forR_full_my
 
@@ -189,7 +288,16 @@ ggplot(summary_stats_my, aes(x = Phase_1_treat, y = mean_growth, color = Phase_1
   theme(legend.position = "none", plot.title = element_text(size = 18, hjust = 0.5)) # Remove legend
 
 
-##PRE, effect of phase 1
+
+
+
+
+
+#### SIGNIFICANT INTERACTIONS PLOTS
+
+#TISSUE PLOTS, significant interactions
+
+##effects of phase 1, PHASE 1 DO & TISSUE
 pre_summary_stats_t <- Growth_Data_forR_pre %>%
   group_by(Phase_1_DO) %>%
   mutate(
@@ -210,24 +318,13 @@ ggplot(pre_summary_stats_t, aes(x = Phase_1_DO, y = mean_pre, color = Phase_1_DO
   ylim(210,260)+
   theme(legend.position = "none") # Remove legend
 
-#full treatment
-pre_summary_stats_t <- Growth_Data_forR_pre %>%
-  group_by(Phase_1_treat) %>%
-  mutate(
-    mean_pre = mean(Actual_tissue_pre_mg, na.rm = TRUE),
-    se_pre = std.error(Actual_tissue_pre_mg, na.rm = TRUE))
-pre_summary_stats_t$Phase_1_treat <- factor(pre_summary_stats_t$Phase_1_treat, 
-                                            levels = c("Cont", "Warm","Hyp", "Both"))
-ggplot(pre_summary_stats_t, aes(x = Phase_1_treat, y = mean_pre, color = Phase_1_treat)) +
-  geom_point(size = 4, position = position_dodge(0.9)) + # Plot means as points
-  geom_errorbar(aes(ymin = mean_pre - se_pre, ymax = mean_pre + se_pre), 
-                width = 0.1, position = position_dodge(0.9)) + # Error bars for SD
-  theme_classic(base_size = 18)+
-  scale_color_manual(values = c("Hyp" = "steelblue3", "Warm" = "palevioletred", "Cont" = "burlywood3", "Both" = "plum3")) +
-  labs(x = "Phase 1 Treatment", y = "Tissue Mass (mg)") +
-  scale_x_discrete(labels = c("Hyp" = "Hypoxic", "Cont" = "Control", "Warm" = "Warm", "Both" = "Both")) +
-  theme(legend.position = "none") # Remove legend
 
+
+
+
+#SHELL PLOTS, significant interactions
+
+##effects of phase 1, PHASE 1 DO & SHELL
 #pre shell
 pre_summary_stats_s <- Growth_Data_forR_pre %>%
   group_by(Phase_1_DO) %>%
@@ -250,48 +347,16 @@ ggplot(pre_summary_stats_s, aes(x = Phase_1_DO, y = mean_pre, color = Phase_1_DO
   ylim(340,420)+
   theme(legend.position = "none") # Remove legend
 
-#full treatment
-pre_summary_stats_s <- Growth_Data_forR_pre %>%
-  group_by(Phase_1_treat) %>%
-  mutate(
-    mean_pre = mean(Actual_shell_pre_mg, na.rm = TRUE),
-    se_pre = std.error(Actual_shell_pre_mg, na.rm = TRUE))
-pre_summary_stats_s$Phase_1_treat <- factor(pre_summary_stats_s$Phase_1_treat, 
-                                            levels = c("Cont", "Warm","Hyp", "Both"))
-ggplot(pre_summary_stats_s, aes(x = Phase_1_treat, y = mean_pre, color = Phase_1_treat)) +
-  geom_point(size = 4, position = position_dodge(0.9)) + # Plot means as points
-  geom_errorbar(aes(ymin = mean_pre - se_pre, ymax = mean_pre + se_pre), 
-                width = 0.1, position = position_dodge(0.9)) + # Error bars for SD
-  theme_classic(base_size = 18)+
-  scale_color_manual(values = c("Hyp" = "steelblue3", "Warm" = "palevioletred", "Cont" = "burlywood3", "Both" = "plum3")) +
-  labs(x = "Phase 1 Treatment", y = "Shell Mass (mg)") +
-  scale_x_discrete(labels = c("Hyp" = "Hypoxic", "Cont" = "Control", "Warm" = "Warm", "Both" = "Both")) +
-  ylim(330, 450)+
-  theme(legend.position = "none") # Remove legend
 
-#T:S
-pre_summary_stats_t_s <- Growth_Data_forR_pre %>%
-  group_by(Phase_1_treat) %>%
-  mutate(
-    mean_pre = mean(Ratio_tissue_shell_pre_mg, na.rm = TRUE),
-    se_pre = std.error(Ratio_tissue_shell_pre_mg, na.rm = TRUE))
-#order
-pre_summary_stats_t_s$Phase_1_treat <- factor(pre_summary_stats_t_s$Phase_1_treat, 
-                                              levels = c("Cont", "Warm","Hyp",  "Both"))
-#Tissue:Shell plot with mean and SD
-ggplot(pre_summary_stats_t_s, aes(x = Phase_1_treat, y = mean_pre, color = Phase_1_treat)) +
-  geom_point(size = 4, position = position_dodge(0.9)) + # Plot means as points
-  geom_errorbar(aes(ymin = mean_pre - se_pre, ymax = mean_pre + se_pre), 
-                width = 0.1, position = position_dodge(0.9)) + # Error bars for SD
-  theme_classic(base_size = 18) +
-  guides(color = "none") + # Remove legend for color
-  scale_color_manual(values = c("Hyp" = "steelblue3", "Warm" = "palevioletred", "Cont" = "burlywood3", "Both" = "plum3")) +
-  labs(x = "Phase 1 Treatment", y = "Tissue:Shell Mass (mg)") +
-  scale_x_discrete(labels = c("Hyp" = "Hypoxic", "Cont" = "Control", "Warm" = "Warm", "Both" = "Both")) +
-  ylim(0.58, 0.66)+
-  theme(legend.position = "none") # Remove legend
 
-#pre tissue:shell DO
+
+
+
+
+
+#TISSUE:SHELL PLOTS, significant interactions
+
+##effects of phase 1, PHASE 1 DO & TISSUE:SHELL
 pre_summary_stats_t_s <- Growth_Data_forR_pre %>%
   group_by(Phase_1_DO) %>%
   mutate(
@@ -314,7 +379,7 @@ ggplot(pre_summary_stats_t_s, aes(x = Phase_1_DO, y = mean_pre, color = Phase_1_
   theme(legend.position = "none") # Remove legend
 
 
-#pre tissue:shell TEMP
+##effects of phase 1, PHASE 1 TEMP & TISSUE:SHELL
 pre_summary_stats_t_s <- Growth_Data_forR_pre %>%
   group_by(Phase_1_temp) %>%
   mutate(
@@ -339,36 +404,10 @@ ggplot(pre_summary_stats_t_s, aes(x = Phase_1_temp, y = mean_pre, color = Phase_
   theme(legend.position = "none") # Remove legend
 
 
-####SKM HERE ####
 
 
-#Meat yield plot
-head(Growth_Data_forR_pre_my$meat_yield)
-View(Growth_Data_forR_pre_my)
-head(pre_summary_stats_my)
-
-pre_summary_stats_my <- Growth_Data_forR_pre_my %>%
-  group_by(Phase_1_treat) %>%
-  mutate(
-    mean_pre = mean(meat_yield, na.rm = TRUE),
-    se_pre = std.error(meat_yield, na.rm = TRUE))
-colnames(pre_summary_stats_my)
 
 
-#order
-pre_summary_stats_my$Phase_1_treat <- factor(pre_summary_stats_my$Phase_1_treat, 
-                                             levels = c("Cont", "Warm","Hyp", "Both"))
-#Meat yield plot with mean and SD
-ggplot(pre_summary_stats_my, aes(x = Phase_1_treat, y = mean_pre, color = Phase_1_treat)) +
-  geom_point(size = 4, position = position_dodge(0.9)) + # Plot means as points
-  geom_errorbar(aes(ymin = mean_pre - se_pre, ymax = mean_pre + se_pre), 
-                width = 0.1, position = position_dodge(0.9)) + # Error bars for SD
-  theme_classic(base_size = 18) +
-  guides(color = "none") + # Remove legend for color
-  scale_color_manual(values = c("Hyp" = "steelblue3", "Warm" = "palevioletred", "Cont" = "burlywood3", "Both" = "plum3")) +
-  labs(x = "Phase 1 Treatment", y = "Meat Yield") +
-  scale_x_discrete(labels = c("Hyp" = "Hypoxic", "Cont" = "Control", "Warm" = "Warm", "Both" = "Both")) +
-  theme(legend.position = "none") # Remove legend
 
 
 ##STandardized initial size
@@ -808,19 +847,16 @@ install.packages(c("ggplot2", "sf", "ggspatial", "rnaturalearth", "rnaturalearth
 install.packages("devtools")
 library(ggplot2); library(sf); library(rnaturalearth); library(ggspatial); 
 
+devtools::install_github("ropensci/rnaturalearthhires")
+states <- ne_states(country = "United States of America", returnclass = "sf")
+
 # CBL coordinates
 labs <- data.frame(
   lon = c(-76.4547, -76.1238, -76.610031),
   lat = c(38.3189, 38.5926, 38.434068),
   label = c("CBL", "HPL", "Patuxent"))
 
-38.434068, -76.610031
-
 bbox <- c(xmin = -77.5, xmax = -75.5, ymin = 37.5, ymax = 39.5) #background box
-
-# Map of U.S. states
-devtools::install_github("ropensci/rnaturalearthhires")
-states <- ne_states(country = "United States of America", returnclass = "sf")
 
 # Plot
 ggplot(states) +
@@ -841,27 +877,59 @@ ggplot(states) +
 
 
 
+#### effects of phase 1 after standardizing initial size ####
 
+Growth_Data_filtered_pre <- Growth_Data_forR_pre %>%
+  filter(Phase_1_rep_R != "Cont01") %>%
+  filter(Phase_1_rep_R != "Both02") %>%
+  filter(Phase_1_rep_R != "Hyp06") %>%
+  filter(Phase_1_rep_R != "Warm02") #works
 
-filt_pre_summary_stats_t <- Growth_Data_filtered %>%
+Growth_Data_filtered_pre <- Growth_Data_forR_pre %>%
+  filter(Phase_1_rep_R != "Cont01") %>%
+  filter(Phase_1_rep_R != "Both02") %>%
+  filter(Phase_1_rep_R != "Hyp05") %>%
+  filter(Phase_1_rep_R != "Warm02") #better
+
+#effect of phase 1, after standardizing initial size, TISSUE
+filt_pre_summary_stats_t <- Growth_Data_filtered_pre %>%
   group_by(Phase_1_treat) %>%
   mutate(
     mean_pre = mean(Actual_tissue_pre_mg, na.rm = TRUE),
     se_pre = std.error(Actual_tissue_pre_mg, na.rm = TRUE))
-colnames(pre_summary_stats_t)
-head(pre_summary_stats_t)
 
-filt_pre_summary_stats_t$Phase_1_treat
-#reorder
-filt_pre_summary_stats_t$Phase_1_treat <- factor(filt_pre_summary_stats_t$Phase_1_treat, levels = c("Cont", "Warm", "Hyp", "Both"))
-#Tissue plot with mean and SD
+#reorder effect of phase 1 Phase_1_treat
+filt_pre_summary_stats_t$Phase_1_treat <- factor(filt_pre_summary_stats_t$Phase_1_treat, 
+                                            levels = c("Cont", "Warm","Hyp", "Both"))
+#plot TISSUE
 ggplot(filt_pre_summary_stats_t, aes(x = Phase_1_treat, y = mean_pre, color = Phase_1_treat)) +
   geom_point(size = 4, position = position_dodge(0.9)) + # Plot means as points
   geom_errorbar(aes(ymin = mean_pre - se_pre, ymax = mean_pre + se_pre), 
-                width = 0.05, position = position_dodge(0.9)) + # Error bars for SD
-  theme_classic(base_size = 18) +
-  guides(color = "none") + # Remove legend for color
-  scale_x_discrete(labels = c("Hyp" = "Hypoxic", "Norm" = "Normoxic")) +
-  labs(x = "Phase 1 DO", y = "Tissue Mass (mg)") +
-  ylim(210,260)+
+                width = 0.1, position = position_dodge(0.9)) + # Error bars for SD
+  theme_classic(base_size = 18)+
+  scale_color_manual(values = c("Hyp" = "steelblue3", "Warm" = "palevioletred", "Cont" = "burlywood3", "Both" = "plum3")) +
+  labs(x = "Phase 1 Treatment", y = "Tissue Mass (mg)") +
+  scale_x_discrete(labels = c("Hyp" = "Hypoxic", "Cont" = "Control", "Warm" = "Warm", "Both" = "Both")) +
+  theme(legend.position = "none") # Remove legend
+
+
+#effect of phase 1, after standardizing initial size, SHELL
+filt_pre_summary_stats_s <- Growth_Data_filtered_pre %>%
+  group_by(Phase_1_treat) %>%
+  mutate(
+    mean_pre = mean(Actual_shell_pre_mg, na.rm = TRUE),
+    se_pre = std.error(Actual_shell_pre_mg, na.rm = TRUE))
+
+#reorder effect of phase 1 Phase_1_treat
+filt_pre_summary_stats_s$Phase_1_treat <- factor(filt_pre_summary_stats_s$Phase_1_treat, 
+                                                 levels = c("Cont", "Warm","Hyp", "Both"))
+#plot Shell
+ggplot(filt_pre_summary_stats_s, aes(x = Phase_1_treat, y = mean_pre, color = Phase_1_treat)) +
+  geom_point(size = 4, position = position_dodge(0.9)) + # Plot means as points
+  geom_errorbar(aes(ymin = mean_pre - se_pre, ymax = mean_pre + se_pre), 
+                width = 0.1, position = position_dodge(0.9)) + # Error bars for SD
+  theme_classic(base_size = 18)+
+  scale_color_manual(values = c("Hyp" = "steelblue3", "Warm" = "palevioletred", "Cont" = "burlywood3", "Both" = "plum3")) +
+  labs(x = "Phase 1 Treatment", y = "Tissue Mass (mg)") +
+  scale_x_discrete(labels = c("Hyp" = "Hypoxic", "Cont" = "Control", "Warm" = "Warm", "Both" = "Both")) +
   theme(legend.position = "none") # Remove legend
