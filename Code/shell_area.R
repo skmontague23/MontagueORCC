@@ -121,7 +121,7 @@ ggplot(merged_df_cleaned_all) +
 negative_shellarea <- merged_df_cleaned_all %>%
   filter(Area_growth_mm2 < 0)
 nrow(negative_shellarea) #89 is a lot, especially after excluding the ones with negative shell mass
-
+View(negative_shellarea)
 #now positive
 positive_shellarea <- merged_df_cleaned_all %>%
   filter(Area_growth_mm2 >= 0)
