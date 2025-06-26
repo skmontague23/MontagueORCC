@@ -17,6 +17,7 @@ library(readxl) #for excel workbooks
 area_pre_df <- read_csv("growth_phase2.1_areaPRE.csv")
 area_post_df <- read_csv("growth_phase2.1_areaPOST.csv")
 View(area_pre_df)
+
 Growth_Data_forR <- read_csv("/Users/sophiemontague/Desktop/MontagueORCC_repo/MontagueORCC/Oyster_Weight_Data/growth_phase2.1_weightsSKM.csv", 
                              col_types = cols(Phase_1_temp = col_factor(), 
                                               Phase_1_DO =col_factor(), 
@@ -82,7 +83,10 @@ missing_area_post <- cleanedarea_df %>%
   filter(is.na(Area_post_mm2))
 View(missing_area_post) #36 oysters missing data pre phase 2, now 32 with matching area data to oyster tags, now down to 23 with matching more tags with the rest of the unmatched area data
 
-#saving a csv of missing areas to annotate while correcting
+#saving csv of missing areas to annotate while correcting
+  #pre
+write.csv(missing_area_pre, "~/Desktop/missing_area_pre.csv", row.names = FALSE)
+  #post
 write.csv(missing_area_post, "~/Desktop/missing_area_post.csv", row.names = FALSE)
 
 
@@ -91,13 +95,15 @@ write.csv(missing_area_post, "~/Desktop/missing_area_post.csv", row.names = FALS
 ##Working with the data
 #get rid of the missing and dead 
 #Edit dataset to exclude doubles and dead ones, calculate growth in area and Feret
-merged_df_cleaned_all <- mergedpre_df %>%
+merged_df_cleaned_all <- mergedarea_df %>%
   filter(Exclude_all != "Y" | is.na(Exclude_all)) %>%
   mutate(Area_growth_mm2 = Area_post_mm2 - Area_pre_mm2,
          Feret_growth_mm = Feret_post_mm - Feret_pre_mm)
+
+View(mergedarea_df)
   
 #Visualize mass x area from the two datasets to make sure there aren't outiers from merging
-merged_df_cleaned_pre <- mergedpre_df %>%
+merged_df_cleaned_pre <- mergedarea_df %>%
   filter(Exclude_pre_analysis != "Y" | is.na(Exclude_pre_analysis)) %>%
   mutate(Area_growth_mm2 = Area_post_mm2 - Area_pre_mm2,
          Feret_growth_mm = Feret_post_mm - Feret_pre_mm)
@@ -212,15 +218,21 @@ View(negative_shellarea)
 options(contrasts = c("contr.sum","contr.poly")) #could also be contr.treatment for unequal groups sum
 getOption("contrasts") 
 
+#copied from before, this is the cleaned pre dataset model will run on
+merged_df_cleaned_pre <- mergedarea_df %>%
+  filter(Exclude_pre_analysis != "Y" | is.na(Exclude_pre_analysis)) %>%
+  mutate(Area_growth_mm2 = Area_post_mm2 - Area_pre_mm2,
+         Feret_growth_mm = Feret_post_mm - Feret_pre_mm)
 
 #run model on shell area size at the start of phase 2
 #effects of phase 1
-Am1 <- lmer(Area_pre_mm2 ~ Phase_1_DO*Phase_1_temp+Actual_shell_pre_mg+
+Am1 <- lmer(Area_pre_mm2 ~ Phase_1_DO*Phase_1_temp+ Actual_shell_pre_mg+
              (1|Phase_1_rep_R), data = merged_df_cleaned_pre, REML=TRUE)
 Anova(Am1, test="F", type="III")
 
 #posthocs
 emmeans(Am1,specs = pairwise ~ Phase_1_DO, adjust = "none") #hyp grew more than norm
+(231-223)/231
 
 #diagnostics
 leveneTest(Area_pre_mm2~ Phase_1_treat*Phase_2_treat, merged_df_cleaned_pre) #passes
@@ -241,7 +253,7 @@ emmeans(Fm1,specs = pairwise ~ Phase_1_DO, adjust = "none") #not quite significa
 
 #diagnostics
 leveneTest(Feret_pre_mm~ Phase_1_treat*Phase_2_treat, merged_df_cleaned_pre) #passes
-m1.e <- residuals(Fm1) #ok
+m1.e <- residuals(Fm1) #good
 qqnorm(m1.e)
 qqline(m1.e)
 

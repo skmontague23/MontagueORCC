@@ -933,3 +933,143 @@ ggplot(filt_pre_summary_stats_s, aes(x = Phase_1_treat, y = mean_pre, color = Ph
   labs(x = "Phase 1 Treatment", y = "Tissue Mass (mg)") +
   scale_x_discrete(labels = c("Hyp" = "Hypoxic", "Cont" = "Control", "Warm" = "Warm", "Both" = "Both")) +
   theme(legend.position = "none") # Remove legend
+
+
+
+
+#Shell area plots
+#read in data from final merged csv
+mergedarea_df <- ...
+
+#dataset
+merged_df_cleaned_pre <- mergedarea_df %>%
+  filter(Exclude_pre_analysis != "Y" | is.na(Exclude_pre_analysis)) %>%
+  mutate(Area_growth_mm2 = Area_post_mm2 - Area_pre_mm2,
+         Feret_growth_mm = Feret_post_mm - Feret_pre_mm)
+
+colnames(merged_df_cleaned_pre)
+
+#SHELL PLOTS, significant interactions
+
+##effects of phase 1, PHASE 1 DO & SHELL AREA
+#pre area
+pre_summary_stats_area <- merged_df_cleaned_pre %>%
+  group_by(Phase_1_DO) %>%
+  mutate(
+    mean_pre = mean(Area_pre_mm2, na.rm = TRUE),
+    se_pre = std.error(Area_pre_mm2, na.rm = TRUE))
+
+pre_summary_stats_area$Phase_1_DO <- factor(pre_summary_stats_area$Phase_1_DO, 
+                                         levels = c("Norm", "Hyp"))
+#area plot with mean and SD
+ggplot(pre_summary_stats_area, aes(x = Phase_1_DO, y = mean_pre, color = Phase_1_DO)) +
+  geom_point(size = 4, position = position_dodge(0.9)) + # Plot means as points
+  geom_errorbar(aes(ymin = mean_pre - se_pre, ymax = mean_pre + se_pre), 
+                width = 0.05, position = position_dodge(0.9)) + # Error bars for SD
+  theme_classic(base_size = 18) +
+  guides(color = "none") + # Remove legend for color
+  scale_color_manual(values = c("Hyp" = "darkmagenta", "Norm" = "seagreen")) +
+  labs(x = "Phase 1 DO", y = "Shell Area (mm^2)") +
+  scale_x_discrete(labels = c("Hyp" = "Hypoxic", "Norm" = "Normoxic")) +
+  theme(legend.position = "none") # Remove legend
+
+
+##effects of phase 1, PHASE 1 DO & FERET
+#pre feret
+colnames(merged_df_cleaned_pre)
+pre_summary_stats_feret <- merged_df_cleaned_pre %>%
+  group_by(Phase_1_DO) %>%
+  mutate(
+    mean_pre = mean(Feret_pre_mm, na.rm = TRUE),
+    se_pre = std.error(Feret_pre_mm, na.rm = TRUE))
+
+pre_summary_stats_feret$Phase_1_DO <- factor(pre_summary_stats_feret$Phase_1_DO, 
+                                            levels = c("Norm", "Hyp"))
+#area plot with mean and SD
+ggplot(pre_summary_stats_feret, aes(x = Phase_1_DO, y = mean_pre, color = Phase_1_DO)) +
+  geom_point(size = 4, position = position_dodge(0.9)) + # Plot means as points
+  geom_errorbar(aes(ymin = mean_pre - se_pre, ymax = mean_pre + se_pre), 
+                width = 0.05, position = position_dodge(0.9)) + # Error bars for SD
+  theme_classic(base_size = 18) +
+  guides(color = "none") + # Remove legend for color
+  scale_color_manual(values = c("Hyp" = "darkmagenta", "Norm" = "seagreen")) +
+  labs(x = "Phase 1 DO", y = "Feret (mm)") +
+  scale_x_discrete(labels = c("Hyp" = "Hypoxic", "Norm" = "Normoxic")) +
+  theme(legend.position = "none") # Remove legend
+
+
+
+
+
+
+
+
+
+
+## model results
+library(emmeans)
+emm <- emmeans(Am1, ~ Phase_1_DO)
+emm_df <- as.data.frame(emm)
+
+ggplot(emm_df, aes(x = Phase_1_DO, y = emmean, color = Phase_1_DO)) +
+  geom_point(size = 4, position = position_dodge(0.9)) +
+  geom_errorbar(aes(ymin = emmean - SE, ymax = emmean + SE),
+                width = 0.05, position = position_dodge(0.9)) +
+  theme_classic(base_size = 18) +
+  scale_color_manual(values = c("Hyp" = "darkmagenta", "Norm" = "seagreen")) +
+  labs(x = "Phase 1 DO", y = "Model-adjusted Shell Area (mm^2)")
+
+
+#### side by side comparison of raw data vs model ####
+
+library(dplyr)
+library(ggplot2)
+library(emmeans)
+library(patchwork) # For side-by-side plots
+
+# Calculate raw means
+pre_summary_stats_area <- merged_df_cleaned_pre %>%
+  group_by(Phase_1_DO) %>%
+  summarise(
+    mean_pre = mean(Area_pre_mm2, na.rm = TRUE),
+    se_pre = sd(Area_pre_mm2, na.rm = TRUE) / sqrt(sum(!is.na(Area_pre_mm2))),
+    .groups = "drop"
+  )
+
+# Convert to factor with custom levels
+pre_summary_stats_area$Phase_1_DO <- factor(pre_summary_stats_area$Phase_1_DO, 
+                                            levels = c("Norm", "Hyp"))
+
+# Raw mean plot
+p1 <- ggplot(pre_summary_stats_area, aes(x = Phase_1_DO, y = mean_pre, color = Phase_1_DO)) +
+  geom_point(size = 4, position = position_dodge(0.9)) +
+  geom_errorbar(aes(ymin = mean_pre - se_pre, ymax = mean_pre + se_pre), 
+                width = 0.05, position = position_dodge(0.9)) +
+  theme_classic(base_size = 16) +
+  scale_color_manual(values = c("Hyp" = "darkmagenta", "Norm" = "seagreen")) +
+  labs(x = "Phase 1 DO", y = "Raw mean shell area (mm^2)", title = "Raw Means") +
+  scale_x_discrete(labels = c("Hyp" = "Hypoxic", "Norm" = "Normoxic")) +
+  theme(legend.position = "none")
+
+# Model and emmeans
+Am1 <- lmer(Area_pre_mm2 ~ Phase_1_DO*Phase_1_temp+Actual_shell_pre_mg+
+              (1|Phase_1_rep_R), data = merged_df_cleaned_pre, REML=TRUE)
+emm <- emmeans(Am1, ~ Phase_1_DO)
+emm_df <- as.data.frame(emm)
+
+emm_df$Phase_1_DO <- factor(emm_df$Phase_1_DO, levels = c("Norm", "Hyp"))
+
+# Model-adjusted mean plot
+p2 <- ggplot(emm_df, aes(x = Phase_1_DO, y = emmean, color = Phase_1_DO)) +
+  geom_point(size = 4, position = position_dodge(0.9)) +
+  geom_errorbar(aes(ymin = emmean - SE, ymax = emmean + SE),
+                width = 0.05, position = position_dodge(0.9)) +
+  theme_classic(base_size = 16) +
+  scale_color_manual(values = c("Hyp" = "darkmagenta", "Norm" = "seagreen")) +
+  labs(x = "Phase 1 DO", y = "Model-adjusted mean shell area (mm^2)", title = "Model-Adjusted Means") +
+  scale_x_discrete(labels = c("Hyp" = "Hypoxic", "Norm" = "Normoxic")) +
+  theme(legend.position = "none")
+
+# Show plots side by side
+p1 + p2
+
