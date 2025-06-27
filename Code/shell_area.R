@@ -269,21 +269,64 @@ Anova(Am2, test="F", type="III")
 #posthocs
 emmeans(Am2,specs = pairwise ~ Phase_1_DO, adjust = "none") #grew less in hyp
 emmeans(Am2,specs = pairwise ~ Phase_2.1_DO, adjust = "none") #grew less in hyp
-emmeans(Am2,specs = pairwise ~ Phase_1_temp*Phase_2.1_temp*Phase_2.1_DO, adjust = "none")
+emmeans(Am2,specs = pairwise ~ Phase_1_temp*Phase_2.1_temp*Phase_2.1_DO, adjust = "none") #grew less in both and hypoxic compared to control
+  #not significant
+emmeans(Am2,specs = pairwise ~ Phase_2.1_temp*Phase_2.1_DO, adjust = "none") #grew more after warm than both or hypoxic
   
-  #visualize this last post hoc to visually compare
+  #visualize phase 1 treatment effect
   ss_areagrowth <- merged_df_cleaned_all %>%
-  group_by(Phase_1_temp, Phase_2_treat) %>%
-  mutate(
+  group_by(Phase_1_treat) %>%
+    summarise(
     mean_growth = mean(Area_growth_mm2, na.rm = TRUE),
     se_growth = std.error(Area_growth_mm2, na.rm = TRUE))
+nrow(ss_areagrowth)
 
-  ggplot(ss_positive_feret) +
+ss_areagrowth$Phase_1_treat <- factor(ss_areagrowth$Phase_1_treat, 
+                                            levels = c("Cont", "Warm","Hyp", "Both"))
+
+ggplot(ss_areagrowth) +
   aes(x = Phase_1_treat, y = mean_growth) +
   geom_point(colour = "#112446") +
   geom_errorbar(aes(ymin = mean_growth - se_growth, ymax = mean_growth + se_growth), width = 0.2) +
-  theme_classic() +
-  facet_wrap(vars(Phase_2.1_temp))
+  theme_classic()
+
+#visualize phase 2 treatment effect
+ss_areagrowth <- merged_df_cleaned_all %>%
+  group_by(Phase_2_treat) %>%
+  summarise(
+    mean_growth = mean(Area_growth_mm2, na.rm = TRUE),
+    se_growth = std.error(Area_growth_mm2, na.rm = TRUE))
+nrow(ss_areagrowth)
+
+ss_areagrowth$Phase_2_treat <- factor(ss_areagrowth$Phase_2_treat, 
+                                      levels = c("Cont", "Warm","Hyp", "Both"))
+
+ggplot(ss_areagrowth) +
+  aes(x = Phase_2_treat, y = mean_growth) +
+  geom_point(colour = "#112446") +
+  geom_errorbar(aes(ymin = mean_growth - se_growth, ymax = mean_growth + se_growth), width = 0.2) +
+  theme_classic()
+
+#visualize 3 way interaction
+ss_areagrowth <- merged_df_cleaned_all %>%
+  group_by(Phase_1_temp, Phase_2_treat) %>%
+  summarise(
+    mean_growth = mean(Area_growth_mm2, na.rm = TRUE),
+    se_growth = std.error(Area_growth_mm2, na.rm = TRUE))
+nrow(ss_areagrowth)
+levels(ss_areagrowth$Phase_1_temp)
+
+ss_areagrowth$Phase_1_temp <- factor(ss_areagrowth$Phase_1_temp, 
+                                      levels = c("Ambient", "Warm"))
+ss_areagrowth$Phase_2_treat <- factor(ss_areagrowth$Phase_2_treat, 
+                                      levels = c("Cont", "Warm","Hyp", "Both"))
+
+ggplot(ss_areagrowth) +
+  aes(x = Phase_1_temp, y = mean_growth) +
+  geom_point(colour = "#112446") +
+  geom_errorbar(aes(ymin = mean_growth - se_growth, ymax = mean_growth + se_growth), width = 0.2) +
+  theme_classic()+
+  facet_wrap(vars(Phase_2_treat))
 
 #diagnostics
 leveneTest(Area_growth_mm2~Phase_1_treat*Phase_2_treat, merged_df_cleaned_all) #does not pass
@@ -300,12 +343,8 @@ Anova(Fm2, test="F", type="III")
 
 #posthocs
 emmeans(Fm2,specs = pairwise ~ Phase_1_DO, adjust = "none") #hyp grew less
-emmeans(Fm2,specs = pairwise ~ Phase_2.1_DO, adjust = "none") #hyp grew less
 emmeans(Fm2,specs = pairwise ~ Phase_1_DO*Phase_1_temp, adjust = "none") #p1 both grew less than p1 warm and p1 control
-  #not quite significant
-emmeans(Fm2,specs = pairwise ~ Phase_2.1_DO*Phase_2.1_temp, adjust = "none") 
-  #p2 both and p2 hypoxic grew less than p2 control, 
-  #p=0.0588 for p2 warm growing less than p2 control 
+emmeans(Fm2,specs = pairwise ~ Phase_1_DO*Phase_1_temp, adjust = "none") #both and hypoxic grew less than control
 
 #diagnostics
 leveneTest(Area_growth_mm2~Phase_1_treat*Phase_2_treat, merged_df_cleaned_all) #doesn't pass
@@ -317,7 +356,8 @@ qqline(m1.e)
 
 
 
-
+options(contrasts = c("contr.sum","contr.poly")) #could also be contr.treatment for unequal groups sum
+getOption("contrasts") 
 
 #### AREA AS A COVARIATE TO MASS ANALYSIS ####
 
@@ -329,7 +369,7 @@ Anova(m1_co_area, test="F", type="III")
 
 #posthocs
 emmeans(m1_co_area,specs = pairwise ~ Phase_1_temp*Phase_2.1_temp, adjust = "none") 
-  #not quite significant, oysters exposed to early life warming don't do as well as oysters in ambient water when reexposed to warming
+  #not quite significant, oysters exposed to early life warming don't do as well as oysters in early life ambient water when reexposed to warming
 
 #diagnostics
 leveneTest(Actual_tissue_growth_mg~Phase_1_treat*Phase_2_treat, merged_df_cleaned_all) #pass
@@ -356,6 +396,9 @@ leveneTest(Actual_tissue_growth_mg~Phase_1_treat*Phase_2_treat, merged_df_cleane
 m1.e <- residuals(m1_co_feret) #pretty exponential, would probably need a log transformation
 qqnorm(m1.e)
 qqline(m1.e)
+
+AIC(m1_co_area, m1_co_feret) #m1_co_area better than both the others
+AIC(m1)
 
 
 
