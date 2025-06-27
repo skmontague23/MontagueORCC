@@ -1,3 +1,5 @@
+#Assigning Phase 1 information to oysters to pull for gonads. Code adapted from JGM
+
 setwd("/Users/sophiemontague/Desktop/MontagueORCC/Year 2 Data")
 getwd()
 

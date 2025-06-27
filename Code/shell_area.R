@@ -260,6 +260,14 @@ qqline(m1.e)
 
 ####FULL LMER MODEL####
 
+#copied from before
+
+#Edit dataset to exclude doubles and dead ones, calculate growth in area and Feret
+merged_df_cleaned_all <- mergedarea_df %>%
+  filter(Exclude_all != "Y" | is.na(Exclude_all)) %>%
+  mutate(Area_growth_mm2 = Area_post_mm2 - Area_pre_mm2,
+         Feret_growth_mm = Feret_post_mm - Feret_pre_mm)
+
 ## Area Growth (mm^2)
 Am2 <- lmer(Area_growth_mm2 ~ Phase_1_DO*Phase_1_temp*Phase_2.1_temp*Phase_2.1_DO+Actual_shell_pre_mg+
              (1|Phase_2_rep_R)+(1|Phase_1_rep_R)+
