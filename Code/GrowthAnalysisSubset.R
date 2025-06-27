@@ -610,3 +610,26 @@ ggplot(warm_1) +
   theme_minimal() # exclude warm 02
 
 
+
+
+
+# Load necessary package
+library(dplyr)
+
+# Set file paths
+data1 <- read.csv("~/Desktop/MontagueORCC_repo/MontagueORCC/Oyster_Weight_Data/growth_phase2.1_weightsSKM.csv")
+data2 <- read.csv("~/Desktop/CE_ORCC/2024/oyster_data/phase_2.1/growth_phase2.1_weights.csv")
+
+# Force both columns to numeric (NA if conversion fails)
+data1$Ratio_tissue_shell_mg <- as.numeric(data1$Ratio_tissue_shell_mg)
+data2$Ratio_tissue_shell_mg <- as.numeric(data2$Ratio_tissue_shell_mg)
+
+# Find rows in data1 that are not in data2
+diff_1_vs_2 <- anti_join(data1, data2)
+View(diff_1_vs_2)
+
+diff_2_vs_1 <- anti_join(data2, data1)
+View(diff_2_vs_1)
+
+write.csv(diff_1_vs_2, "~/Desktop/p2exclude2.csv", row.names = FALSE)
+
