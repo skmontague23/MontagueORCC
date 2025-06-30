@@ -31,7 +31,6 @@ Growth_Data_forR <- read_csv("/Users/sophiemontague/Desktop/MontagueORCC_repo/Mo
                                               Phase_1_rep_R = col_factor()))
 
 #merge PRE AND POST PHASE 2 area data frame with growth data frame
-colnames(area_pre_df)
 mergedarea_df <- Growth_Data_forR %>%
   select(Sample_Name,
          Phase_1_DO,
@@ -54,12 +53,12 @@ mergedarea_df <- Growth_Data_forR %>%
                  Notes_post)%>%
   left_join(
     area_pre_df %>%
-      select(Sample_Name, Area_pre_mm2, Feret_pre_mm, NotesShell_Pre),
+      select(Sample_Name, Area_pre_mm2, Feret_pre_mm, AreaNotes_Pre),
     by = "Sample_Name")%>%
   
   left_join(
     area_post_df %>%
-      select(Sample_Name, Area_post_mm2, Feret_post_mm, ShellNotes_post),
+      select(Sample_Name, Area_post_mm2, Feret_post_mm, AreaNotes_Post),
     by = "Sample_Name")
 
 View(mergedarea_df)
@@ -88,7 +87,6 @@ View(missing_area_post) #36 oysters missing data pre phase 2, now 32 with matchi
 write.csv(missing_area_pre, "~/Desktop/missing_area_pre.csv", row.names = FALSE)
   #post
 write.csv(missing_area_post, "~/Desktop/missing_area_post.csv", row.names = FALSE)
-
 
 
 
@@ -214,6 +212,8 @@ qqline(m1.e)
 View(negative_shellarea)
 
 
+
+#### Effects of Phase 1 ####
 #set contrasts ALWAYS RUN
 options(contrasts = c("contr.sum","contr.poly")) #could also be contr.treatment for unequal groups sum
 getOption("contrasts") 
@@ -226,16 +226,16 @@ merged_df_cleaned_pre <- mergedarea_df %>%
 
 #run model on shell area size at the start of phase 2
 #effects of phase 1
-Am1 <- lmer(Area_pre_mm2 ~ Phase_1_DO*Phase_1_temp+ Actual_shell_pre_mg+
+Am1 <- lmer(log(Area_pre_mm2) ~ Phase_1_DO*Phase_1_temp+ 
              (1|Phase_1_rep_R), data = merged_df_cleaned_pre, REML=TRUE)
 Anova(Am1, test="F", type="III")
 
 #posthocs
-emmeans(Am1,specs = pairwise ~ Phase_1_DO, adjust = "none") #hyp grew more than norm
+emmeans(Am1,specs = pairwise ~ Phase_1_DO, adjust = "none") #hyp grew less than norm
 (231-223)/231
 
 #diagnostics
-leveneTest(Area_pre_mm2~ Phase_1_treat*Phase_2_treat, merged_df_cleaned_pre) #passes
+leveneTest(log(Area_pre_mm2)~ Phase_1_treat*Phase_2_treat, merged_df_cleaned_pre) #passes
 m1.e <- residuals(Am1) #ok
 qqnorm(m1.e)
 qqline(m1.e)
@@ -244,15 +244,15 @@ AIC(Am1)
 
 
 #run model on feret
-Fm1 <- lmer(Feret_pre_mm~ Phase_1_DO*Phase_1_temp+Actual_shell_pre_mg+
+Fm1 <- lmer(log(Feret_pre_mm)~ Phase_1_DO*Phase_1_temp +
               (1|Phase_1_rep_R), data = merged_df_cleaned_pre, REML=TRUE)
 Anova(Fm1, test="F", type="III")
 
 #posthocs
-emmeans(Fm1,specs = pairwise ~ Phase_1_DO, adjust = "none") #not quite significant, hyp grew more than norm
+emmeans(Fm1,specs = pairwise ~ Phase_1_DO, adjust = "none") # hyp grew less than norm
 
 #diagnostics
-leveneTest(Feret_pre_mm~ Phase_1_treat*Phase_2_treat, merged_df_cleaned_pre) #passes
+leveneTest(log(Feret_pre_mm)~ Phase_1_treat*Phase_2_treat, merged_df_cleaned_pre) #passes
 m1.e <- residuals(Fm1) #good
 qqnorm(m1.e)
 qqline(m1.e)
@@ -266,13 +266,36 @@ qqline(m1.e)
 merged_df_cleaned_all <- mergedarea_df %>%
   filter(Exclude_all != "Y" | is.na(Exclude_all)) %>%
   mutate(Area_growth_mm2 = Area_post_mm2 - Area_pre_mm2,
-         Feret_growth_mm = Feret_post_mm - Feret_pre_mm)
+         Feret_growth_mm = Feret_post_mm - Feret_pre_mm) %>%
+  filter( !is.na(Area_growth_mm2)) %>%
+  mutate(Area_positivegrowth_mm2 = Area_growth_mm2 + 306)%>%
+  mutate(Feret_positivegrowth_mm = Feret_growth_mm + 9)
+
+min(merged_df_cleaned_all$Area_growth_mm2)
+min(merged_df_cleaned_all$Feret_growth_mm)
 
 ## Area Growth (mm^2)
 Am2 <- lmer(Area_growth_mm2 ~ Phase_1_DO*Phase_1_temp*Phase_2.1_temp*Phase_2.1_DO+Actual_shell_pre_mg+
              (1|Phase_2_rep_R)+(1|Phase_1_rep_R)+
              (1|Phase_2_rep_R:Phase_1_DO)+(1|Phase_2_rep_R:Phase_1_temp)+(1|Phase_2_rep_R:Phase_1_DO:Phase_1_temp), data = merged_df_cleaned_all, REML=TRUE)
 Anova(Am2, test="F", type="III")
+
+#with a log transformation + constant, the results are the same (slightly higher p-values) but pass the levene test
+Am2_test <- lmer(log(Area_positivegrowth_mm2) ~ Phase_1_DO*Phase_1_temp*Phase_2.1_temp*Phase_2.1_DO+Actual_shell_pre_mg+
+              (1|Phase_2_rep_R)+(1|Phase_1_rep_R)+
+              (1|Phase_2_rep_R:Phase_1_DO)+(1|Phase_2_rep_R:Phase_1_temp)+(1|Phase_2_rep_R:Phase_1_DO:Phase_1_temp), data = merged_df_cleaned_all, REML=TRUE)
+Anova(Am2_test, test="F", type="III")
+#posthocs
+emmeans(Am2_test,specs = pairwise ~ Phase_1_DO, adjust = "none") #grew less in hyp
+emmeans(Am2_test,specs = pairwise ~ Phase_2.1_DO, adjust = "none") #grew less in hyp
+emmeans(Am2_test,specs = pairwise ~ Phase_1_temp*Phase_2.1_temp*Phase_2.1_DO, adjust = "none") #grew less in both and hypoxic compared to control
+#not significant
+emmeans(Am2_test,specs = pairwise ~ Phase_2.1_temp*Phase_2.1_DO, adjust = "none") #grew more after warm than both or hypoxic
+    #diagnostics
+  leveneTest(log(Area_positivegrowth_mm2)~Phase_1_treat*Phase_2_treat, merged_df_cleaned_all) #passes
+  m1.e <- residuals(Am2_test) 
+  qqnorm(m1.e)
+  qqline(m1.e)
 
 #posthocs
 emmeans(Am2,specs = pairwise ~ Phase_1_DO, adjust = "none") #grew less in hyp
@@ -330,11 +353,38 @@ ss_areagrowth$Phase_2_treat <- factor(ss_areagrowth$Phase_2_treat,
                                       levels = c("Cont", "Warm","Hyp", "Both"))
 
 ggplot(ss_areagrowth) +
-  aes(x = Phase_1_temp, y = mean_growth) +
+  aes(x = Phase_2_treat, y = mean_growth) +
   geom_point(colour = "#112446") +
+  labs(x = "Phase 2 Treatment",
+       y = "Shell Area Growth (mm^2)",
+       title = "Phase 1 Temperature")+
   geom_errorbar(aes(ymin = mean_growth - se_growth, ymax = mean_growth + se_growth), width = 0.2) +
   theme_classic()+
-  facet_wrap(vars(Phase_2_treat))
+  theme(
+    plot.title = element_text(size = 18L,
+                              hjust = 0.5),
+    axis.title.y = element_text(size = 18L),
+    axis.title.x = element_text(size = 18L)
+  )+
+  facet_wrap(vars(Phase_1_temp))+ scale_fill_hue()
+
+
+ggplot(Alkalinity_data) +
+  aes(x = treatment, y = alkalinity_umolL) +
+  geom_point(colour = "#112446") +
+  labs(
+    x = "Phase 2 Treatment",
+    y = "Shell Area Growth (mm^2)",
+    title = "Phase 1 Temperature"
+  ) +
+  theme_classic() +
+  theme(
+    plot.title = element_text(size = 18L,
+                              hjust = 0.5),
+    axis.title.y = element_text(size = 15L),
+    axis.title.x = element_text(size = 18L),
+    axis.text.x = element_text(size = 12L)
+  )
 
 #diagnostics
 leveneTest(Area_growth_mm2~Phase_1_treat*Phase_2_treat, merged_df_cleaned_all) #does not pass
@@ -351,15 +401,31 @@ Anova(Fm2, test="F", type="III")
 
 #posthocs
 emmeans(Fm2,specs = pairwise ~ Phase_1_DO, adjust = "none") #hyp grew less
+emmeans(Fm2,specs = pairwise ~ Phase_2.1_DO, adjust = "none") #hyp grew less
 emmeans(Fm2,specs = pairwise ~ Phase_1_DO*Phase_1_temp, adjust = "none") #p1 both grew less than p1 warm and p1 control
-emmeans(Fm2,specs = pairwise ~ Phase_1_DO*Phase_1_temp, adjust = "none") #both and hypoxic grew less than control
+  #not quite significant
+emmeans(Fm2,specs = pairwise ~ Phase_2.1_temp*Phase_2.1_DO, adjust = "none")
 
 #diagnostics
-leveneTest(Area_growth_mm2~Phase_1_treat*Phase_2_treat, merged_df_cleaned_all) #doesn't pass
+leveneTest(Feret_growth_mm~Phase_1_treat*Phase_2_treat, merged_df_cleaned_all) #doesn't pass
 m1.e <- residuals(Fm2) #ok
 qqnorm(m1.e)
 qqline(m1.e)
 
+## LOG Feret Growth (mm)
+Fm2_test <- lmer(log(Feret_positivegrowth_mm) ~ Phase_1_DO*Phase_1_temp*Phase_2.1_temp*Phase_2.1_DO+Actual_shell_pre_mg+
+              (1|Phase_2_rep_R)+(1|Phase_1_rep_R)+
+              (1|Phase_2_rep_R:Phase_1_DO)+(1|Phase_2_rep_R:Phase_1_temp)+(1|Phase_2_rep_R:Phase_1_DO:Phase_1_temp), data = merged_df_cleaned_all, REML=TRUE)
+Anova(Fm2_test, test="F", type="III")
+
+#posthocs
+emmeans(Fm2_test,specs = pairwise ~ , adjust = "none")
+
+#diagnostics
+leveneTest(log(Feret_positivegrowth_mm)~Phase_1_treat*Phase_2_treat, merged_df_cleaned_all) #doesn't pass
+m1.e <- residuals(Fm2_test) #ok
+qqnorm(m1.e)
+qqline(m1.e)
 
 
 

@@ -1,4 +1,4 @@
-,Date_MMDDYYYY,Year,Phase_1_treat,Phase_1_rep,Phase_2_treat,Phase_2_rep,Tag_color,Tag_num,Sample_Name,Submerged_weight_pre,Dry_weight_pre,Notes,Tag,P2Treatment,Shell#,Area_pre_mm2,Feret_pre_mm,NotesShell_Pre
+,Date_MMDDYYYY,Year,Phase_1_treat,Phase_1_rep,Phase_2_treat,Phase_2_rep,Tag_color,Tag_num,Sample_Name,Submerged_weight_pre,Dry_weight_pre,Notes,Tag,P2Treatment,Shell#,Area_pre_mm2,Feret_pre_mm,AreaNotes_Pre
 2,7/23/24,2024,Hyp,1,Both,1,B,1,2024_Hyp01_Both01_B1,196.3,467.9,,B1,Both1,36,175.1,17.3,
 431,7/23/24,2024,Hyp,1,Cont,1,B,1,2024_Hyp01_Cont01_B1,278.9,719.7,,B1,Cont1,31,210.8,18.7,
 777,7/23/24,2024,Hyp,1,Hyp,1,B,1,2024_Hyp01_Hyp01_B1,190.5,532.9,,B1,Hyp1,37,273.1,20.9,
@@ -1148,3 +1148,6 @@
 ,,,,,,,,,2024_Both01_Cont02_O13,,,,,,26,324,25.5,"6/26/25 SKM Manually calculated pre phase 2 data from remeasuring scales and converting from pixels, had to export as jpg, hoping this did not affect scale at all"
 ,,,,,,,,,2024_Hyp02_Hyp05_B52,,,,,,47,142.5,16.4,"6/26/25 SKM Manually calculated pre phase 2 data from remeasuring scales and converting from pixels, had to export as jpg, hoping this did not affect scale at all"
 ,,,,,,,,,2024_Hyp01_Hyp05_B49,,,,,,5,211.9,20.3,"6/26/25 SKM Manually calculated pre phase 2 data from remeasuring scales and converting from pixels, had to export as jpg, hoping this did not affect scale at all"
+,,,,,,,,,2024_Warm01_Warm05_G49,,,,,,,,,"6/30/25 SKM was retagged, didn’t make it into the warm05 picture or the extras sheet; missing data, will have to exclude"
+,,,,,,,,,2024_Warm03_Both05_G54,,,,,,,,,"6/30/25 SKM missing from photos, I can see the exact location it is supposed to be from the datasheet, but it isn't on the tray. Also not on extras.; missing data, will have to exclude"
+,,,,,,,,,2024_Warm06_Warm05_G59,,,,,,,,,"6/30/25 SKM was retagged, didn’t make it into the warm05 picture or the extras sheet.; missing data, will have to exclude"
