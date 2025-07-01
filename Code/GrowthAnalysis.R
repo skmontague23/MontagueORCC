@@ -72,12 +72,9 @@ Growth_Data_forR_full <- Growth_Data_forR %>%
 table(Growth_Data_forR$Exclude_all, useNA = "ifany")
 table(Growth_Data_forR$Exclude_pre_analysis, useNA = "ifany")
 View(Growth_Data_forR_full)
-nrow(Growth_Data_forR_full)
-
-colnames(Growth_Data_forR_full)
 
 
-#check the effect of phase 1 at the start of phase 2
+#### Effect of phase 1 at the start of phase 2 ####
 #not excluding any replicates
 ##tissue growth (mg)
 #Tm1, passes the levene test regardless, Q-Q plot looks better when log transformed, same ish results regardless
@@ -105,7 +102,6 @@ ggplot(Growth_Data_forR_pre) +
   aes(x = log(Actual_tissue_pre_mg)) +
   geom_histogram(bins = 30L, fill = "#112446") +
   theme_classic()
-
 
 
 ##shell growth (mg)
@@ -175,7 +171,10 @@ emmeans(TSm2, specs = pairwise ~ Phase_1_temp, adjust = "none")
 emmeans(TSm2, specs = pairwise ~ Phase_1_DO, adjust = "none") 
 
 
+
+
 #### FULL LMER MODELS ####
+#phase 1 and phase 2
 
 ##tissue growth (mg)
 m1 <- lmer(Actual_tissue_growth_mg~ Phase_1_DO*Phase_1_temp*Phase_2.1_temp*Phase_2.1_DO+Actual_tissue_pre_mg+
@@ -200,8 +199,8 @@ qqline(m1.e)
 ##shell growth (mg)
 
 #m2 <- lmer(Actual_shell_growth_mg~ Phase_1_temp*Phase_1_DO*Phase_2.1_DO*Phase_2.1_temp+Actual_shell_pre_mg+
-             (1|Phase_2_rep_R)+(1|Phase_1_rep_R)+
-             (1|Phase_2_rep_R:Phase_1_DO)+(1|Phase_2_rep_R:Phase_1_temp)+(1|Phase_2_rep_R:Phase_1_DO:Phase_1_temp), data = Growth_Data_forR_full, REML=TRUE)
+#             (1|Phase_2_rep_R)+(1|Phase_1_rep_R)+
+#             (1|Phase_2_rep_R:Phase_1_DO)+(1|Phase_2_rep_R:Phase_1_temp)+(1|Phase_2_rep_R:Phase_1_DO:Phase_1_temp), data = Growth_Data_forR_full, REML=TRUE)
 #Anova(m2, test="F", type="III")
 #leveneTest(Actual_shell_growth_mg~Phase1_Phase2_treat, Growth_Data_forR_full)
 #m3.e <- residuals(m2) 
@@ -212,7 +211,7 @@ qqline(m1.e)
 #emmeans(m2,specs = pairwise ~ Phase_2.1_DO, adjust = "none") 
 (289-225)/289
 
-#log
+#log, using this model for analysis
 Lm2 <- lmer(log_shell_growth_mg~ Phase_1_DO*Phase_1_temp*Phase_2.1_DO*Phase_2.1_temp+Actual_shell_pre_mg+
               (1|Phase_2_rep_R)+(1|Phase_1_rep_R)+
               (1|Phase_2_rep_R:Phase_1_DO)+(1|Phase_2_rep_R:Phase_1_temp)+(1|Phase_2_rep_R:Phase_1_DO:Phase_1_temp), data = Growth_Data_forR_full, REML=TRUE)
@@ -265,59 +264,44 @@ Growth_Data_filtered <- Growth_Data_forR_full %>%
   filter(Phase_1_rep_R != "Cont01") %>%
   filter(Phase_1_rep_R != "Both02") %>%
   filter(Phase_1_rep_R != "Hyp06") %>%
-  filter(Phase_1_rep_R != "Warm02") #works
+  filter(Phase_1_rep_R != "Warm02") #works, this is the one I've been working with
 
 Growth_Data_filtered <- Growth_Data_forR_full %>%
   filter(Phase_1_rep_R != "Cont01") %>%
   filter(Phase_1_rep_R != "Both02") %>%
   filter(Phase_1_rep_R != "Hyp05") %>%
-  filter(Phase_1_rep_R != "Warm02") #better
-
-View(Growth_Data_filtered)
-Growth_Data_filtered_pre <- Growth_Data_forR_pre %>%
-  filter(!Phase_1_rep_R %in% c("Cont05", "Cont06"))%>%
-  filter(!Phase_1_rep_R %in% c("Both02", "Both04"))%>%
-  filter(!Phase_1_rep_R %in% c("Hyp05", "Hyp06"))%>%
-  filter(!Phase_1_rep_R %in% c("Warm01", "Warm02"))
-Growth_Data_filtered <- Growth_Data_forR_full %>%
-  filter(!Phase_1_rep_R %in% c("Cont05", "Cont06"))%>%
-  filter(!Phase_1_rep_R %in% c("Both02", "Both04"))%>%
-  filter(!Phase_1_rep_R %in% c("Hyp05", "Hyp06"))%>%
-  filter(!Phase_1_rep_R %in% c("Warm01", "Warm02"))
-
-
-colnames(Growth_Data_forR_pre)
+  filter(Phase_1_rep_R != "Warm02") #better?
 
 
 
 #check the effect of phase 1 at the start of phase 2
-# excluding replicates
+# excluding replicates, there should now be no effect
 ##tissue growth (mg)
-Tm2 <- lmer(log(Actual_tissue_pre_mg)~ Phase_1_DO*Phase_1_temp +
+Tm2 <- lmer(Actual_tissue_pre_mg~ Phase_1_DO*Phase_1_temp +
               (1|Phase_1_rep_R), data = Growth_Data_filtered_pre, REML=TRUE)
 Anova(Tm2, test="F", type="III")
 #diagnostics
-leveneTest(log(Actual_tissue_pre_mg)~Phase1_Phase2_treat, Growth_Data_filtered_pre)
+leveneTest(Actual_tissue_pre_mg~Phase1_Phase2_treat, Growth_Data_filtered_pre)
 m1.e <- residuals(Tm2) 
 qqnorm(m1.e)
 qqline(m1.e)
 
 ##shell growth (mg)
-Sm2 <- lmer(log(Actual_shell_pre_mg)~ Phase_1_DO*Phase_1_temp + 
+Sm2 <- lmer(Actual_shell_pre_mg~ Phase_1_DO*Phase_1_temp + 
               (1|Phase_1_rep_R), data = Growth_Data_filtered_pre, REML=TRUE)
 Anova(Sm2, test="F", type="III")
 #diagnostics
-leveneTest(log(Actual_shell_pre_mg)~Phase1_Phase2_treat, Growth_Data_filtered)
+leveneTest(Actual_shell_pre_mg~Phase1_Phase2_treat, Growth_Data_filtered)
 m1.e <- residuals(Sm2) 
 qqnorm(m1.e)
 qqline(m1.e)
 
 ##tissue:shell growth (mg)
-TSm2 <- lmer(log(Ratio_tissue_shell_pre_mg)~ Phase_1_DO*Phase_1_temp +
+TSm2 <- lmer(Ratio_tissue_shell_pre_mg~ Phase_1_DO*Phase_1_temp +
                (1|Phase_1_rep_R), data = Growth_Data_filtered_pre, REML=TRUE)
 Anova(TSm2, test="F", type="III")
 #diagnostics
-leveneTest(log(Ratio_tissue_shell_pre_mg)~Phase1_Phase2_treat, Growth_Data_filtered)
+leveneTest(Ratio_tissue_shell_pre_mg~Phase1_Phase2_treat, Growth_Data_filtered)
 m1.e <- residuals(TSm2) 
 qqnorm(m1.e)
 qqline(m1.e)
@@ -366,7 +350,7 @@ qqline(m1.e)
 
 View(Growth_Data_filtered)
 
-#T:S model
+#T:S model excluding reps
 Lm3_rep <- lmer(Ratio_tissue_shell_mg~ Phase_1_DO*Phase_1_temp*Phase_2.1_temp*Phase_2.1_DO+ 
                   (1|Phase_2_rep_R)+(1|Phase_1_rep_R)+
                   (1|Phase_2_rep_R:Phase_1_DO)+(1|Phase_2_rep_R:Phase_1_temp)+(1|Phase_2_rep_R:Phase_1_DO:Phase_1_temp), data = Growth_Data_filtered, REML=TRUE)
@@ -385,20 +369,9 @@ qqnorm(m1.e)
 
 
 
-#why is there a weird pattern in phase 1 both, phase 2 hypoxic Tissue:Shell
-colnames(Growth_Data_forR)
-both_hyp <- Growth_Data_forR %>%
-  filter(Phase_1_treat != "Both") %>%
-  filter(Phase_2_treat != "Hyp")
-
-ggplot(data = both_hyp, aes(x= Actual_shell_growth_mg, y= Actual_tissue_growth_mg))+
-  geom_point()+
-  theme_classic()
-View(both_hyp)
 
 
-
-#Filter out just the top 20 
+#Try standardizing by filtering out just the top 20 
 Growthdata_20out_pre<- Growth_Data_forR_pre%>%
   group_by(Phase_1_treat) %>%
   arrange(if_else(Phase_1_treat %in% c("Cont", "Warm"), desc(Dry_weight_pre), Dry_weight_pre)) %>%
