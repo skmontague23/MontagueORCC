@@ -126,6 +126,19 @@ negative_shellarea <- merged_df_cleaned_all %>%
   filter(Area_growth_mm2 < 0)
 nrow(negative_shellarea) #89 is a lot, especially after excluding the ones with negative shell mass
 View(negative_shellarea)
+
+negative_shellarea %>%
+  group_by(Phase_2_rep_R) %>%
+  summarise(n = n())
+
+hyp02<- negative_shellarea %>%
+  filter(Phase_2_rep_R == "Hyp02")
+View(hyp02)
+
+both06<- negative_shellarea %>%
+  filter(Phase_2_rep_R == "Both06")
+View(both06)
+
 #now positive
 positive_shellarea <- merged_df_cleaned_all %>%
   filter(Area_growth_mm2 >= 0)

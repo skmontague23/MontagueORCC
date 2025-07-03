@@ -251,9 +251,28 @@ leveneTest(Ratio_tissue_shell_mg~Phase1_Phase2_treat, Growth_Data_forR_full)
 m3.e <- residuals(m3) 
 qqnorm(m3.e) #not quite normal but ancova is robust to non-normality
 
+summary_stats_t_s <- Growth_Data_forR_full %>%
+  group_by(Phase_1_treat, Phase_2_treat) %>%
+  summarise(
+    mean_growth = mean(Ratio_tissue_shell_mg, na.rm = TRUE),
+    se_growth = std.error(Ratio_tissue_shell_mg, na.rm = TRUE),
+    .groups = "drop")
 
 
-
+ggplot(summary_stats_t_s) +
+  aes(
+    x = Phase_1_treat,
+    y = mean_growth,
+    fill = Phase_2_treat
+  ) +
+  geom_point(position = position_dodge(width = 0.9), shape = 21, size = 3) +
+  geom_errorbar(
+    aes(ymin = mean_growth - se_growth, ymax = mean_growth + se_growth),
+    width = 0.2,
+    position = position_dodge(width = 0.9)
+  ) +
+  scale_fill_hue(direction = 1) +
+  theme_minimal()
 
 
 
