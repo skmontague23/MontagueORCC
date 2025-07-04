@@ -146,7 +146,7 @@ positive_shellarea <- merged_df_cleaned_all %>%
 #Make a list of occurences the Feret growth is negative
 negative_feret <- merged_df_cleaned_all %>%
   filter(Feret_growth_mm < 0)
-nrow(negative_feret) #94 is a lot
+nrow(negative_feret) #94 is a lot, now 96
 
 #now positive
 positive_feret <- merged_df_cleaned_all %>%
@@ -161,7 +161,7 @@ neg_feret_names <- negative_feret$Sample_Name
 # Find the intersection and count overlap
 overlap_names <- intersect(neg_shell_names, neg_feret_names)
 length(overlap_names) #62 oysters lost shell area AND length out of 92
-
+View(overlap_names)
 
 ## run the Area Growth (mm^2) model on just the positive data
     #set contrasts ALWAYS RUN
