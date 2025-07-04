@@ -65,6 +65,13 @@ View(mergedarea_df)
 nrow(Growth_Data_forR)
 nrow(mergedarea_df)
 
+csv <- mergedarea_df%>%
+  mutate(Area_growth_mm2 = Area_post_mm2 - Area_pre_mm2,
+         Feret_growth_mm = Feret_post_mm - Feret_pre_mm)
+
+#Growth CSV
+write.csv(csv, "~/Desktop/MontagueORCC_repo/MontagueORCC/Oyster_Weight_Data/growth_phase2.1_areaMERGED.csv", row.names = FALSE)
+
 #check which oysters have missing area data PRE phase 2
 colnames(mergedarea_df)
 cleanedarea_df <- mergedarea_df %>%
@@ -72,7 +79,7 @@ cleanedarea_df <- mergedarea_df %>%
 
 missing_area_pre <- cleanedarea_df %>%
   filter(is.na(Area_pre_mm2))
-View(missing_area_pre) #6 oysters missing data pre phase 2
+View(missing_area_pre) #3 oysters missing data pre phase 2
 
 #check which oysters have missing area data POST phase 2
 cleanedarea_df <- mergedarea_df %>%
@@ -80,7 +87,7 @@ cleanedarea_df <- mergedarea_df %>%
 
 missing_area_post <- cleanedarea_df %>%
   filter(is.na(Area_post_mm2))
-View(missing_area_post) #36 oysters missing data pre phase 2, now 32 with matching area data to oyster tags, now down to 23 with matching more tags with the rest of the unmatched area data
+View(missing_area_post) #0 after QAQC and Teresa rerunning analysis
 
 #saving csv of missing areas to annotate while correcting
   #pre
