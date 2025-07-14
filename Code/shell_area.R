@@ -97,6 +97,9 @@ write.csv(missing_area_post, "~/Desktop/missing_area_post.csv", row.names = FALS
 
 
 
+##LOADING the merged dataset
+mergedarea_df <- read_csv("growth_phase2.1_areaMERGED.csv")
+
 ##Working with the data
 #get rid of the missing and dead 
 #Edit dataset to exclude doubles and dead ones, calculate growth in area and Feret
@@ -105,9 +108,9 @@ merged_df_cleaned_all <- mergedarea_df %>%
   mutate(Area_growth_mm2 = Area_post_mm2 - Area_pre_mm2,
          Feret_growth_mm = Feret_post_mm - Feret_pre_mm)
 
-View(mergedarea_df)
+View(merged_df_cleaned_all)
   
-#Visualize mass x area from the two datasets to make sure there aren't outiers from merging
+#Visualize mass x area from the two datasets to make sure there aren't outliers from merging
 merged_df_cleaned_pre <- mergedarea_df %>%
   filter(Exclude_pre_analysis != "Y" | is.na(Exclude_pre_analysis)) %>%
   mutate(Area_growth_mm2 = Area_post_mm2 - Area_pre_mm2,
@@ -131,7 +134,7 @@ ggplot(merged_df_cleaned_all) +
 #Make a list of occurences the shell area growth is negative
 negative_shellarea <- merged_df_cleaned_all %>%
   filter(Area_growth_mm2 < 0)
-nrow(negative_shellarea) #89 is a lot, especially after excluding the ones with negative shell mass
+nrow(negative_shellarea) #89 is a lot, especially after excluding the ones with negative shell mass, now 90
 View(negative_shellarea)
 
 negative_shellarea %>%
@@ -175,7 +178,7 @@ View(overlap_names)
     options(contrasts = c("contr.sum","contr.poly")) #could also be contr.treatment for unequal groups sum
     getOption("contrasts")
     
-PAm2 <- lmer(Area_growth_mm2 ~ Phase_1_DO*Phase_1_temp*Phase_2.1_temp*Phase_2.1_DO+Actual_shell_pre_mg+
+PAm2 <- lmer(log(Area_growth_mm2) ~ Phase_1_DO*Phase_1_temp*Phase_2.1_temp*Phase_2.1_DO+Actual_shell_pre_mg+
               (1|Phase_2_rep_R)+(1|Phase_1_rep_R)+
               (1|Phase_2_rep_R:Phase_1_DO)+(1|Phase_2_rep_R:Phase_1_temp)+(1|Phase_2_rep_R:Phase_1_DO:Phase_1_temp), data = positive_shellarea, REML=TRUE)
 Anova(PAm2, test="F", type="III")
@@ -186,12 +189,24 @@ emmeans(PAm2,specs = pairwise ~ Phase_2.1_DO, adjust = "none") #grew less area i
 emmeans(PAm2,specs = pairwise ~ Phase_2.1_temp*Phase_2.1_DO, adjust = "none") #warm, hypoxic, and both grew less than control
 
 #diagnostics
-leveneTest(Area_pre_mm2~ Phase_1_treat*Phase_2_treat, positive_shellarea) #passes
+leveneTest(log(Area_growth_mm2)~ Phase_1_treat*Phase_2_treat, positive_shellarea) #passes
 m1.e <- residuals(PAm2) #looks ok
 qqnorm(m1.e)
 qqline(m1.e)
 
 View(negative_shellarea)
+#visualize this last post hoc to visually compare
+ss_positive_shellarea <- positive_shellarea %>%
+  group_by(Phase_2_treat) %>%
+  mutate(
+    mean_growth = mean(log(Area_growth_mm2), na.rm = TRUE), #logged
+    se_growth = std.error(log(Area_growth_mm2), na.rm = TRUE)) #logged
+
+ggplot(ss_positive_shellarea) +
+  aes(x = Phase_2_treat, y = mean_growth) +
+  geom_point(colour = "#112446") +
+  geom_errorbar(aes(ymin = mean_growth - se_growth, ymax = mean_growth + se_growth), width = 0.2) +
+  theme_classic() 
 
 ## run the Feret (mm) model on just the positive data
 PFm2 <- lmer(Feret_growth_mm ~ Phase_1_DO*Phase_1_temp*Phase_2.1_temp*Phase_2.1_DO+Actual_shell_pre_mg+
@@ -224,7 +239,7 @@ emmeans(PFm2,specs = pairwise ~ Phase_1_DO*Phase_1_temp*Phase_2.1_temp, adjust =
   facet_wrap(vars(Phase_2.1_temp))
 
 #diagnostics
-leveneTest(Area_pre_mm2~ Phase_1_treat*Phase_2_treat, merged_df_cleaned)
+leveneTest(log(Feret_growth_mm)~ Phase_1_treat*Phase_2_treat, positive_feret)
 m1.e <- residuals(Am1) 
 qqnorm(m1.e)
 qqline(m1.e)
