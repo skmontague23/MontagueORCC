@@ -66,7 +66,8 @@ Growth_Data_forR_full <- Growth_Data_forR %>%
     prop_shell_growth = Actual_shell_growth_mg / Actual_shell_pre_mg, 
     tissuegrowthratio = Actual_tissue_post_mg/Actual_tissue_pre_mg,
     shellgrowthratio = Actual_shell_post_mg/Actual_shell_pre_mg,
-    log_shell_growth_mg = log(Actual_shell_growth_mg))
+    log_shell_growth_mg = log(Actual_shell_growth_mg),
+    whole_growth_mg = Dry_weight_post - Dry_weight_pre)
 
 
 table(Growth_Data_forR$Exclude_all, useNA = "ifany")
@@ -91,7 +92,7 @@ exp(5.37) #norm
 (214.8629-190.5663)/214.8629
 
   #diagnostics
-leveneTest(log(Actual_tissue_pre_mg)~Phase_1_DO*Phase_1_temp, Growth_Data_forR_pre)
+leveneTest(log(Actual_tissue_pre_mg)~Phase_1_treat, Growth_Data_forR_pre)
 m1.e <- residuals(Tm1) 
 qqnorm(m1.e)
 qqline(m1.e)
@@ -121,12 +122,8 @@ ggplot(Growth_Data_forR_pre) +
   theme_classic()
 
   #posthocs
-emm2 <- emmeans(Sm1,specs = pairwise ~ Phase_1_DO, adjust = "none") 
+emmeans(Sm1,specs = pairwise ~ Phase_1_DO, adjust = "none") 
 
-  #actual value when log transformed (not using)
-exp(5.72) #hyp
-exp(5.87) #norm
-(354.249-304.9049)/354.249
 
 
 ##tissue:shell growth (mg)
@@ -274,6 +271,173 @@ ggplot(summary_stats_t_s) +
   scale_fill_hue(direction = 1) +
   theme_minimal()
 
+
+#### Normalized by Whole Weight ####
+#Phase 1
+#### Effect of phase 1 at the start of phase 2 ####
+#not excluding any replicates
+##tissue growth (mg)
+Tm1_norm <- lmer((Actual_tissue_pre_mg/Dry_weight_pre)~ Phase_1_DO*Phase_1_temp +
+              (1|Phase_1_rep_R), data = Growth_Data_forR_pre, REML=TRUE)
+Anova(Tm1_norm, test="F", type="III")
+
+#post hocs
+emmeans(Tm1_norm,specs = pairwise ~ Phase_1_DO, adjust = "none")
+emmeans(Tm1_norm,specs = pairwise ~ Phase_1_temp, adjust = "none")
+
+#diagnostics
+leveneTest((Actual_tissue_pre_mg/Dry_weight_pre)~Phase_1_treat, Growth_Data_forR_pre)
+m1.e <- residuals(Tm1_norm) 
+qqnorm(m1.e)
+qqline(m1.e)
+
+
+## normalized shell growth (mg)
+Sm1_norm <- lmer((Actual_shell_pre_mg/Dry_weight_pre)~ Phase_1_DO*Phase_1_temp +
+              (1|Phase_1_rep_R), data = Growth_Data_forR_pre, REML=TRUE)
+Anova(Sm1_norm, test="F", type="III")
+
+#diagnostics
+leveneTest((Actual_shell_pre_mg/Dry_weight_pre)~Phase_1_treat, Growth_Data_forR_pre)
+m1.e <- residuals(Sm1_norm) 
+qqnorm(m1.e)
+qqline(m1.e)
+
+#posthocs
+emmeans(Sm1_norm,specs = pairwise ~ Phase_1_DO, adjust = "none") 
+emmeans(Sm1_norm,specs = pairwise ~ Phase_1_temp, adjust = "none") 
+
+
+##Phase 2
+##normalized tissue growth (mg)
+m1_norm <- lmer((Actual_tissue_growth_mg/whole_growth_mg)~ Phase_1_DO*Phase_1_temp*Phase_2.1_temp*Phase_2.1_DO+Actual_tissue_pre_mg+
+             (1|Phase_2_rep_R)+(1|Phase_1_rep_R)+
+             (1|Phase_2_rep_R:Phase_1_DO)+(1|Phase_2_rep_R:Phase_1_temp)+(1|Phase_2_rep_R:Phase_1_DO:Phase_1_temp), 
+            data = Growth_Data_forR_full, REML=TRUE)
+Anova(m1_norm, test="F", type="III")
+
+#posthocs
+emm1 <- emmeans(m1_norm,specs = pairwise ~ Phase_1_DO*Phase_1_temp*Phase_2.1_temp*Phase_2.1_DO, adjust = "none") 
+emm1$emmeans 
+emm1$contrasts
+
+(119.3-95.5)/119.3
+
+#diagnostics
+leveneTest((Actual_tissue_growth_mg/whole_growth_mg)~Phase1_Phase2_treat, Growth_Data_forR_full)
+m1.e <- residuals(m1_norm) 
+qqnorm(m1.e)
+qqline(m1.e)
+
+#all, TISSUE
+summary_stats_t <- Growth_Data_forR_full %>%
+  group_by(Phase_1_treat, Phase_2_treat) %>%
+  mutate(
+    mean_growth = mean((Actual_tissue_growth_mg/whole_growth_mg), na.rm = TRUE),
+    se_growth = std.error((Actual_tissue_growth_mg/whole_growth_mg), na.rm = TRUE))
+
+#reorder Phase_1_treat and Phase_2_treat
+summary_stats_t$Phase_1_treat <- factor(summary_stats_t$Phase_1_treat, 
+                                        levels = c("Cont", "Warm","Hyp", "Both"))
+summary_stats_t$Phase_2_treat <- factor(summary_stats_t$Phase_2_treat, 
+                                        levels = c("Cont", "Warm","Hyp", "Both"))
+
+#plot with mean and SD, TISSUE
+ggplot(summary_stats_t, aes(x = Phase_1_treat, y = mean_growth, color = Phase_1_treat)) +
+  geom_point(size = 4, position = position_dodge(0.9)) + # Plot means as points
+  geom_errorbar(aes(ymin = mean_growth - se_growth, ymax = mean_growth + se_growth), 
+                width = 0.2, position = position_dodge(0.9)) + # Error bars for SD
+  theme_classic(base_size = 20) +
+  guides(color = "none") + # Remove legend for color
+  facet_wrap(vars(Phase_2_treat), 
+             labeller = as_labeller(c("Hyp" = "Hypoxic", "Cont" = "Control", "Warm" = "Warm", "Both" = "Both")), 
+             scales = "fixed", nrow = 1) + # Facet by Phase_2_treat
+  scale_color_manual(values = c("Hyp" = "steelblue3", "Warm" = "palevioletred", "Cont" = "burlywood3", "Both" = "plum3")) +
+  labs(x = "Phase 1 Treatment", y = "Mean Normalized Tissue Growth (mg)") +
+  scale_x_discrete(labels = c("Hyp" = "Hypoxic", "Cont" = "Control", "Warm" = "Warm", "Both" = "Both")) +
+  theme(legend.position = "none") # Remove legend
+
+
+##normalized shell growth (mg)
+m2_norm <- lmer((Actual_shell_growth_mg/whole_growth_mg)~ Phase_1_DO*Phase_1_temp*Phase_2.1_temp*Phase_2.1_DO+Actual_shell_pre_mg+
+             (1|Phase_2_rep_R)+(1|Phase_1_rep_R)+
+             (1|Phase_2_rep_R:Phase_1_DO)+(1|Phase_2_rep_R:Phase_1_temp)+(1|Phase_2_rep_R:Phase_1_DO:Phase_1_temp), 
+           data = Growth_Data_forR_full, REML=TRUE)
+Anova(m2_norm, test="F", type="III")
+
+#posthocs
+emmeans(m2_norm,specs = pairwise ~ Phase_1_temp*Phase_2.1_DO, adjust = "none")
+emmeans(m2_norm,specs = pairwise ~ Phase_1_DO*Phase_1_temp*Phase_2.1_DO*Phase_2.1_temp, adjust = "none")
+
+(119.3-95.5)/119.3
+
+#diagnostics
+leveneTest((Actual_shell_growth_mg/whole_growth_mg)~Phase1_Phase2_treat, Growth_Data_forR_full)
+m1.e <- residuals(m2_norm) 
+qqnorm(m1.e)
+qqline(m1.e)
+
+#Phase_1_temp*Phase_2.1_DO graph
+ss_normshell <- Growth_Data_forR_full %>%
+  group_by(Phase_1_temp, Phase_2.1_DO) %>%
+  summarise(
+    mean_growth = mean((Actual_shell_growth_mg/whole_growth_mg), na.rm = TRUE),
+    se_growth = std.error((Actual_shell_growth_mg/whole_growth_mg), na.rm = TRUE))
+
+nrow(ss_normshell)
+
+
+ss_normshell$Phase_1_temp <- factor(ss_normshell$Phase_1_temp, 
+                                     levels = c("Ambient", "Warm"))
+ss_normshell$Phase_2.1_DO <- factor(ss_normshell$Phase_2.1_DO, 
+                                      levels = c("Norm","Hyp"))
+View(ss_normshell)
+ggplot(ss_normshell) +
+  aes(x = Phase_1_temp, y = mean_growth) +
+  geom_point(colour = "#112446") +
+  labs(x = "Phase 1 Temp",
+       y = "Norm Shell Growth (mg)",
+       title = "Phase 2 DO")+
+  geom_errorbar(aes(ymin = mean_growth - se_growth, ymax = mean_growth + se_growth), width = 0.2) +
+  theme_classic()+
+  theme(
+    plot.title = element_text(size = 18L,
+                              hjust = 0.5),
+    axis.title.y = element_text(size = 18L),
+    axis.title.x = element_text(size = 18L)
+  )+
+  facet_wrap(vars(Phase_2.1_DO))+ scale_fill_hue()
+
+#4 way interaction
+#all, SHELL
+summary_stats_s <- Growth_Data_forR_full %>%
+  group_by(Phase_1_treat, Phase_2_treat) %>%
+  mutate(
+    mean_growth = mean((Actual_shell_growth_mg/whole_growth_mg), na.rm = TRUE),
+    se_growth = std.error((Actual_shell_growth_mg/whole_growth_mg), na.rm = TRUE))
+
+#reorder Phase_1_treat and Phase_2_treat
+summary_stats_s$Phase_1_treat <- factor(summary_stats_s$Phase_1_treat, 
+                                        levels = c("Cont", "Warm","Hyp", "Both"))
+summary_stats_s$Phase_2_treat <- factor(summary_stats_s$Phase_2_treat, 
+                                        levels = c("Cont", "Warm","Hyp", "Both"))
+
+#plot with mean and SD, TISSUE
+ggplot(summary_stats_s, aes(x = Phase_1_treat, y = mean_growth, color = Phase_1_treat)) +
+  geom_point(size = 4, position = position_dodge(0.9)) + # Plot means as points
+  geom_errorbar(aes(ymin = mean_growth - se_growth, ymax = mean_growth + se_growth), 
+                width = 0.2, position = position_dodge(0.9)) + # Error bars for SD
+  theme_classic(base_size = 20) +
+  guides(color = "none") + # Remove legend for color
+  facet_wrap(vars(Phase_2_treat), 
+             labeller = as_labeller(c("Hyp" = "Hypoxic", "Cont" = "Control", "Warm" = "Warm", "Both" = "Both")), 
+             scales = "fixed", nrow = 1) + # Facet by Phase_2_treat
+  scale_color_manual(values = c("Hyp" = "steelblue3", "Warm" = "palevioletred", "Cont" = "burlywood3", "Both" = "plum3")) +
+  labs(x = "Phase 1 Treatment", y = "Mean Normalized Shell Growth (mg)") +
+  scale_x_discrete(labels = c("Hyp" = "Hypoxic", "Cont" = "Control", "Warm" = "Warm", "Both" = "Both")) +
+  theme(legend.position = "none") # Remove legend
+
+####
 
 
 ####Standardize Initial Size####

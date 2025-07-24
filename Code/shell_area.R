@@ -119,7 +119,11 @@ View(merged_df_cleaned_all)
 merged_df_cleaned_pre <- mergedarea_df %>%
   filter(Exclude_pre_analysis != "Y" | is.na(Exclude_pre_analysis)) %>%
   mutate(Area_growth_mm2 = Area_post_mm2 - Area_pre_mm2,
-         Feret_growth_mm = Feret_post_mm - Feret_pre_mm)
+         Feret_growth_mm = Feret_post_mm - Feret_pre_mm,
+         shell_density_pre = Actual_shell_pre_mg/Feret_pre_mm,
+         tissue_feret_pre = Actual_tissue_pre_mg/Feret_pre_mm,
+         tissue_area_pre = Actual_tissue_pre_mg/Area_pre_mm2,
+         shell_density_area_pre = Actual_shell_pre_mg/Area_pre_mm2)
   
 #Visualize mass x area from the two datasets to make sure there aren't outliers from merging
 
@@ -316,6 +320,71 @@ leveneTest(Feret_pre_mm~ Phase_1_treat*Phase_2_treat, positive_feret_pre) #passe
 m1.e <- residuals(Fm1) #good
 qqnorm(m1.e)
 qqline(m1.e)
+
+####Phase 1 condition Indexes####
+#initial shell weight/ initial length (shell_density)
+p_shell_density <- lmer(shell_density_pre ~ Phase_1_DO*Phase_1_temp+
+                          (1|Phase_1_rep_R), data = merged_df_cleaned_pre, REML=TRUE)
+Anova(p_shell_density, test="F", type="III")
+
+#posthocs
+emmeans(p_shell_density,specs = pairwise ~ Phase_1_DO, adjust = "none")
+emmeans(p_shell_density,specs = pairwise ~ Phase_1_temp, adjust = "none")
+
+#diagnostics
+leveneTest(shell_density_pre~ Phase_1_treat, merged_df_cleaned_pre) #passes
+m1.e <- residuals(p_shell_density) #looks pretty good
+qqnorm(m1.e)
+qqline(m1.e)
+
+
+
+#initial tissue weight/ initial length (tissue_feret_pre)
+p_tissue_feret <- lmer(tissue_feret_pre ~ Phase_1_DO*Phase_1_temp+
+                         (1|Phase_1_rep_R), data = merged_df_cleaned_pre, REML=TRUE)
+Anova(p_tissue_feret, test="F", type="III")
+
+#posthocs
+emmeans(p_tissue_feret,specs = pairwise ~ Phase_1_DO, adjust = "none") #grew less area in hypoxia
+
+#diagnostics
+leveneTest(tissue_feret_pre~ Phase_1_treat, merged_df_cleaned_pre) #passes
+m1.e <- residuals(p_tissue_feret) #looks pretty good
+qqnorm(m1.e)
+qqline(m1.e)
+
+
+
+#initial tissue weight/ initial area (tissue_area_pre)
+p_tissue_area <- lmer(tissue_area_pre ~ Phase_1_DO*Phase_1_temp+
+                        (1|Phase_1_rep_R), data = merged_df_cleaned_pre, REML=TRUE)
+Anova(p_tissue_area, test="F", type="III")
+
+#posthocs
+emmeans(p_tissue_area,specs = pairwise ~ Phase_1_DO, adjust = "none")
+
+#diagnostics
+leveneTest(tissue_area_pre~ Phase_1_treat, merged_df_cleaned_pre) #passes
+m1.e <- residuals(p_tissue_area) #looks pretty good
+qqnorm(m1.e)
+qqline(m1.e)
+
+
+
+#initial shell weight/ initial area (shell_density_area_pre) 
+p_shell_density_area <- lmer(shell_density_area_pre ~ Phase_1_DO*Phase_1_temp+
+                               (1|Phase_1_rep_R), data = merged_df_cleaned_pre, REML=TRUE)
+Anova(p_shell_density_area, test="F", type="III")
+
+#posthocs
+emmeans(p_shell_density_area,specs = pairwise ~ Phase_1_DO, adjust = "none")
+
+#diagnostics
+leveneTest(shell_density_area_pre~ Phase_1_treat, merged_df_cleaned_pre) #passes
+m1.e <- residuals(p_shell_density_area) #looks pretty good
+qqnorm(m1.e)
+qqline(m1.e)
+
 
 
 ####FULL LMER MODEL####
