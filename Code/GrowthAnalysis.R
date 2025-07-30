@@ -55,7 +55,8 @@ getOption("contrasts")
 Growth_Data_forR_pre <- Growth_Data_forR %>%
   filter(Exclude_pre_analysis != "Y" | is.na(Exclude_pre_analysis)) %>%
   mutate(prop_tissue_growth = Actual_tissue_growth_mg / Actual_tissue_pre_mg,
-         prop_shell_growth = Actual_shell_growth_mg / Actual_shell_pre_mg)
+         prop_shell_growth = Actual_shell_growth_mg / Actual_shell_pre_mg,
+         meat_yield = (Actual_tissue_pre_mg/(Dry_weight_pre)))
 View(Growth_Data_forR_pre)
 table(Growth_Data_forR$Exclude_pre_analysis, useNA = "ifany")
 nrow(Growth_Data_forR_pre)
@@ -67,7 +68,9 @@ Growth_Data_forR_full <- Growth_Data_forR %>%
     tissuegrowthratio = Actual_tissue_post_mg/Actual_tissue_pre_mg,
     shellgrowthratio = Actual_shell_post_mg/Actual_shell_pre_mg,
     log_shell_growth_mg = log(Actual_shell_growth_mg),
-    whole_growth_mg = Dry_weight_post - Dry_weight_pre)
+    whole_growth_mg = Dry_weight_post - Dry_weight_pre,
+    meat_yield_post = Actual_tissue_post_mg/Dry_weight_post,
+    shell_yield_post = Actual_shell_post_mg/Dry_weight_post)
 
 
 table(Growth_Data_forR$Exclude_all, useNA = "ifany")
@@ -146,18 +149,16 @@ emmeans(TSm1, specs = pairwise ~ Phase_1_DO, adjust = "none")
 (0.641-0.620) /0.641
 
 ##wet tissue weight / total weight = meat yield
-Growth_Data_forR_pre%>%
-  mutate(meat_yield = (Actual_tissue_pre_mg/(Actual_tissue_pre_mg+Actual_shell_pre_mg))) -> Growth_Data_forR_pre_my
 
 colnames(Growth_Data_forR_pre_my)
 
 qqnorm(Growth_Data_forR_pre$Ratio_tissue_shell_pre_mg)
 
 TSm2 <- lmer(meat_yield ~ Phase_1_DO*Phase_1_temp +
-               (1|Phase_1_rep_R), data = Growth_Data_forR_pre_my, REML=TRUE)
+               (1|Phase_1_rep_R), data = Growth_Data_forR_pre, REML=TRUE)
 Anova(TSm2, test="F", type="III")
 #diagnostics
-leveneTest(meat_yield~Phase_1_treat, Growth_Data_forR_pre_my)
+leveneTest(meat_yield~Phase_1_treat, Growth_Data_forR_pre)
 m1.e <- residuals(TSm2) 
 qqnorm(m1.e)
 qqline(residuals(TSm2))
@@ -180,9 +181,7 @@ m1 <- lmer(Actual_tissue_growth_mg~ Phase_1_DO*Phase_1_temp*Phase_2.1_temp*Phase
 Anova(m1, test="F", type="III")
 
 #posthocs
-emm1 <- emmeans(m1,specs = pairwise ~ Phase_2.1_DO, adjust = "none") 
-emm1$emmeans 
-emm1$contrasts
+emmeans(m1,specs = pairwise ~ Phase_2.1_DO, adjust = "none") 
 
 (119.3-95.5)/119.3
 
@@ -213,6 +212,7 @@ Lm2 <- lmer(log_shell_growth_mg~ Phase_1_DO*Phase_1_temp*Phase_2.1_DO*Phase_2.1_
               (1|Phase_2_rep_R)+(1|Phase_1_rep_R)+
               (1|Phase_2_rep_R:Phase_1_DO)+(1|Phase_2_rep_R:Phase_1_temp)+(1|Phase_2_rep_R:Phase_1_DO:Phase_1_temp), data = Growth_Data_forR_full, REML=TRUE)
 Anova(Lm2, test="F", type="III")
+
 leveneTest(log_shell_growth_mg~Phase1_Phase2_treat, Growth_Data_forR_full)
 m3.e <- residuals(Lm2)
 qqnorm(m3.e)
@@ -271,6 +271,41 @@ ggplot(summary_stats_t_s) +
   scale_fill_hue(direction = 1) +
   theme_minimal()
 
+##meat yield phase 2
+m4 <- lmer(meat_yield_post~ Phase_1_DO*Phase_1_temp*Phase_2.1_DO*Phase_2.1_temp+
+             (1|Phase_2_rep_R)+(1|Phase_1_rep_R)+
+             (1|Phase_2_rep_R:Phase_1_DO:Phase_1_temp), data = Growth_Data_forR_full, REML=TRUE)
+Anova(m4, test="F", type="III")
+
+#posthocs
+emmeans(m4,specs = pairwise ~ Phase_1_temp*Phase_2.1_DO*Phase_2.1_temp, adjust="none")
+
+View(Growth_Data_forR)
+
+#diagnostics
+leveneTest(meat_yield_post~Phase1_Phase2_treat, Growth_Data_forR_full) 
+m3.e <- residuals(m4) 
+qqnorm(m3.e) #not quite normal but ancova is robust to non-normality
+
+
+##shell yield phase 2
+m5 <- lmer(shell_yield_post~ Phase_1_DO*Phase_1_temp*Phase_2.1_DO*Phase_2.1_temp+
+             (1|Phase_2_rep_R)+(1|Phase_1_rep_R)+
+             (1|Phase_2_rep_R:Phase_1_DO:Phase_1_temp), data = Growth_Data_forR_full, REML=TRUE)
+Anova(m5, test="F", type="III")
+
+#posthocs
+emmeans(m5,specs = pairwise ~ Phase_2.1_DO, adjust="none")
+emmeans(m5,specs = pairwise ~ Phase_1_temp*Phase_2.1_DO*Phase_2.1_temp, adjust="none")
+
+View(Growth_Data_forR)
+
+#diagnostics
+leveneTest(shell_yield_post~Phase1_Phase2_treat, Growth_Data_forR_full) 
+m3.e <- residuals(m5) 
+qqnorm(m3.e) #not quite normal but ancova is robust to non-normality
+
+
 
 #### Normalized by Whole Weight ####
 #Phase 1
@@ -317,9 +352,8 @@ m1_norm <- lmer((Actual_tissue_growth_mg/whole_growth_mg)~ Phase_1_DO*Phase_1_te
 Anova(m1_norm, test="F", type="III")
 
 #posthocs
-emm1 <- emmeans(m1_norm,specs = pairwise ~ Phase_1_DO*Phase_1_temp*Phase_2.1_temp*Phase_2.1_DO, adjust = "none") 
-emm1$emmeans 
-emm1$contrasts
+emmeans(m1_norm,specs = pairwise ~ Phase_1_temp*Phase_2.1_DO, adjust = "none")
+emmeans(m1_norm,specs = pairwise ~ Phase_1_DO*Phase_1_temp*Phase_2.1_temp*Phase_2.1_DO, adjust = "none") 
 
 (119.3-95.5)/119.3
 
@@ -359,7 +393,7 @@ ggplot(summary_stats_t, aes(x = Phase_1_treat, y = mean_growth, color = Phase_1_
 
 
 ##normalized shell growth (mg)
-m2_norm <- lmer((Actual_shell_growth_mg/whole_growth_mg)~ Phase_1_DO*Phase_1_temp*Phase_2.1_temp*Phase_2.1_DO+Actual_shell_pre_mg+
+m2_norm <- lmer((Actual_shell_growth_mg/whole_growth_mg)~ Phase_1_DO*Phase_1_temp*Phase_2.1_temp*Phase_2.1_DO+
              (1|Phase_2_rep_R)+(1|Phase_1_rep_R)+
              (1|Phase_2_rep_R:Phase_1_DO)+(1|Phase_2_rep_R:Phase_1_temp)+(1|Phase_2_rep_R:Phase_1_DO:Phase_1_temp), 
            data = Growth_Data_forR_full, REML=TRUE)
@@ -438,6 +472,51 @@ ggplot(summary_stats_s, aes(x = Phase_1_treat, y = mean_growth, color = Phase_1_
   theme(legend.position = "none") # Remove legend
 
 ####
+
+
+##### Growth Proportion ####
+##normalized tissue growth (mg)
+m1_prop <- lmer(log(prop_tissue_growth +0.55)~ Phase_1_DO*Phase_1_temp*Phase_2.1_temp*Phase_2.1_DO+
+                  (1|Phase_2_rep_R)+(1|Phase_1_rep_R)+
+                  (1|Phase_2_rep_R:Phase_1_DO)+(1|Phase_2_rep_R:Phase_1_temp)+(1|Phase_2_rep_R:Phase_1_DO:Phase_1_temp), 
+                data = Growth_Data_forR_full, REML=TRUE)
+Anova(m1_prop, test="F", type="III")
+
+#posthocs
+emmeans(m1_prop,specs = pairwise ~ Phase_2.1_DO, adjust = "none")
+emmeans(m1_prop,specs = pairwise ~ Phase_1_DO*Phase_1_temp*Phase_2.1_temp, adjust = "none")
+
+(119.3-95.5)/119.3
+
+#diagnostics
+leveneTest(log(prop_tissue_growth+0.55)~Phase1_Phase2_treat, Growth_Data_forR_full)
+min(Growth_Data_forR_full$prop_tissue_growth)
+m1.e <- residuals(m1_prop) 
+qqnorm(m1.e)
+qqline(m1.e)
+
+
+##normalized shell growth (mg)
+m2_prop <- lmer(log(prop_shell_growth +0.04)~ Phase_1_DO*Phase_1_temp*Phase_2.1_temp*Phase_2.1_DO+
+                  (1|Phase_2_rep_R)+(1|Phase_1_rep_R)+
+                  (1|Phase_2_rep_R:Phase_1_DO)+(1|Phase_2_rep_R:Phase_1_temp)+(1|Phase_2_rep_R:Phase_1_DO:Phase_1_temp), 
+                data = Growth_Data_forR_full, REML=TRUE)
+Anova(m2_prop, test="F", type="III")
+min(Growth_Data_forR_full$prop_shell_growth)
+#posthocs
+emmeans(m2_prop,specs = pairwise ~ Phase_1_DO, adjust = "none")
+emmeans(m2_prop,specs = pairwise ~ Phase_2.1_DO, adjust = "none")
+emmeans(m2_prop,specs = pairwise ~ Phase_1_DO*Phase_1_temp, adjust = "none")
+
+
+#diagnostics
+leveneTest(log(prop_shell_growth +0.04)~Phase1_Phase2_treat, Growth_Data_forR_full)
+m1.e <- residuals(m2_prop) 
+qqnorm(m1.e)
+qqline(m1.e)
+
+####
+
 
 
 ####Standardize Initial Size####
