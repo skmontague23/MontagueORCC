@@ -124,3 +124,42 @@ sum(df$Phase_2_treat == "Hyp")
 sum(df$Phase_2_treat == "Both")
 
 
+
+##create sample names from this information in excel
+
+
+##make sure that these oysters were not pulled for genetics last year (2024)
+library(readr)
+phase2_genetics <- read_csv("~/Desktop/CE_ORCC/2024/genetics/growth_weights_phase2.1genetics.csv")
+phase2_spawning <- read_csv("~/Desktop/MontagueORCC_repo/MontagueORCC/Year_2_Data/Oysters_to pull_Spawning.csv")
+phase2_gonads <- read_csv("~/Desktop/MontagueORCC_repo/MontagueORCC/Year_2_Data/Oysters_topull_gonads.csv")
+
+View(phase2_spawning)
+View(phase2_gonads)
+
+#Compare genetics and spawning
+#Get the vectors of Sample_Name from each dataframe
+phase2_genetics_names <- phase2_genetics$Sample_Name
+phase2_spawning_names <- phase2_spawning$Sample_name
+phase2_gonad_names <- phase2_gonads$Sample_name
+
+View(phase2_gonad_names)
+
+#Find the intersection and count overlap
+overlap_names <- intersect(phase2_genetics_names, phase2_spawning_names)
+length(overlap_names)
+View(overlap_names)
+
+
+#now genetics and gonads
+#Find the intersection and count overlap
+overlap_names <- intersect(phase2_genetics_names, phase2_gonad_names)
+length(overlap_names) #62 oysters lost shell area AND length out of 92
+View(overlap_names)
+
+
+#now spawning and gonads
+#Find the intersection and count overlap
+overlap_names <- intersect(phase2_spawning_names, phase2_gonad_names)
+length(overlap_names) #62 oysters lost shell area AND length out of 92
+View(overlap_names)

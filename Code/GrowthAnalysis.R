@@ -72,7 +72,6 @@ Growth_Data_forR_full <- Growth_Data_forR %>%
     meat_yield_post = Actual_tissue_post_mg/Dry_weight_post,
     shell_yield_post = Actual_shell_post_mg/Dry_weight_post)
 
-
 table(Growth_Data_forR$Exclude_all, useNA = "ifany")
 table(Growth_Data_forR$Exclude_pre_analysis, useNA = "ifany")
 View(Growth_Data_forR_full)
@@ -345,7 +344,7 @@ emmeans(Sm1_norm,specs = pairwise ~ Phase_1_temp, adjust = "none")
 
 ##Phase 2
 ##normalized tissue growth (mg)
-m1_norm <- lmer((Actual_tissue_growth_mg/whole_growth_mg)~ Phase_1_DO*Phase_1_temp*Phase_2.1_temp*Phase_2.1_DO+Actual_tissue_pre_mg+
+m1_norm <- lmer((Actual_tissue_growth_mg/whole_growth_mg)~ Phase_1_DO*Phase_1_temp*Phase_2.1_temp*Phase_2.1_DO+
              (1|Phase_2_rep_R)+(1|Phase_1_rep_R)+
              (1|Phase_2_rep_R:Phase_1_DO)+(1|Phase_2_rep_R:Phase_1_temp)+(1|Phase_2_rep_R:Phase_1_DO:Phase_1_temp), 
             data = Growth_Data_forR_full, REML=TRUE)
@@ -483,8 +482,9 @@ m1_prop <- lmer(log(prop_tissue_growth +0.55)~ Phase_1_DO*Phase_1_temp*Phase_2.1
 Anova(m1_prop, test="F", type="III")
 
 #posthocs
+emmeans(m1_prop,specs = pairwise ~ Phase_1_DO, adjust = "none")
 emmeans(m1_prop,specs = pairwise ~ Phase_2.1_DO, adjust = "none")
-emmeans(m1_prop,specs = pairwise ~ Phase_1_DO*Phase_1_temp*Phase_2.1_temp, adjust = "none")
+emmeans(m1_prop,specs = pairwise ~ Phase_1_DO*Phase_1_temp, adjust = "none")
 
 (119.3-95.5)/119.3
 
@@ -497,12 +497,12 @@ qqline(m1.e)
 
 
 ##normalized shell growth (mg)
-m2_prop <- lmer(log(prop_shell_growth +0.04)~ Phase_1_DO*Phase_1_temp*Phase_2.1_temp*Phase_2.1_DO+
+m2_prop <- lmer(log(prop_shell_growth)~ Phase_1_DO*Phase_1_temp*Phase_2.1_temp*Phase_2.1_DO+
                   (1|Phase_2_rep_R)+(1|Phase_1_rep_R)+
                   (1|Phase_2_rep_R:Phase_1_DO)+(1|Phase_2_rep_R:Phase_1_temp)+(1|Phase_2_rep_R:Phase_1_DO:Phase_1_temp), 
                 data = Growth_Data_forR_full, REML=TRUE)
 Anova(m2_prop, test="F", type="III")
-min(Growth_Data_forR_full$prop_shell_growth)
+
 #posthocs
 emmeans(m2_prop,specs = pairwise ~ Phase_1_DO, adjust = "none")
 emmeans(m2_prop,specs = pairwise ~ Phase_2.1_DO, adjust = "none")
@@ -510,8 +510,89 @@ emmeans(m2_prop,specs = pairwise ~ Phase_1_DO*Phase_1_temp, adjust = "none")
 
 
 #diagnostics
-leveneTest(log(prop_shell_growth +0.04)~Phase1_Phase2_treat, Growth_Data_forR_full)
+leveneTest(log(prop_shell_growth)~Phase1_Phase2_treat, Growth_Data_forR_full)
 m1.e <- residuals(m2_prop) 
+qqnorm(m1.e)
+qqline(m1.e)
+
+####
+
+
+####Post Phase 2 mass analysis####
+##tissue mass post
+m1_post <- lmer(Actual_tissue_post_mg~ Phase_1_DO*Phase_1_temp*Phase_2.1_temp*Phase_2.1_DO+Actual_tissue_pre_mg+
+             (1|Phase_2_rep_R)+(1|Phase_1_rep_R)+
+             (1|Phase_2_rep_R:Phase_1_DO)+(1|Phase_2_rep_R:Phase_1_temp)+(1|Phase_2_rep_R:Phase_1_DO:Phase_1_temp), data = Growth_Data_forR_full, REML=TRUE)
+Anova(m1_post, test="F", type="III")
+
+#posthocs
+emmeans(m1_post,specs = pairwise ~ Phase_2.1_DO, adjust = "none")
+
+#diagnostics
+leveneTest(Actual_tissue_post_mg~Phase1_Phase2_treat, Growth_Data_forR_full) 
+m1.e <- residuals(m1_post) 
+qqnorm(m1.e)
+qqline(m1.e)
+
+
+##shell mass post
+m2_post <- lmer(Actual_shell_post_mg~ Phase_1_DO*Phase_1_temp*Phase_2.1_temp*Phase_2.1_DO+Actual_tissue_pre_mg+
+                  (1|Phase_2_rep_R)+(1|Phase_1_rep_R)+
+                  (1|Phase_2_rep_R:Phase_1_DO)+(1|Phase_2_rep_R:Phase_1_temp)+(1|Phase_2_rep_R:Phase_1_DO:Phase_1_temp), data = Growth_Data_forR_full, REML=TRUE)
+Anova(m2_post, test="F", type="III")
+
+#posthocs
+emmeans(m2_post,specs = pairwise ~ Phase_1_DO, adjust = "none")
+emmeans(m2_post,specs = pairwise ~ Phase_2.1_DO, adjust = "none")
+emmeans(m2_post,specs = pairwise ~ Phase_1_temp*Phase_2.1_temp*Phase_2.1_DO, adjust = "none")
+
+#diagnostics
+leveneTest(Actual_shell_post_mg~Phase1_Phase2_treat, Growth_Data_forR_full)
+m1.e <- residuals(m2_post) 
+qqnorm(m1.e)
+qqline(m1.e)
+
+#PLOT SHELL POST PHASE 2
+summary_stats_s <- Growth_Data_forR_full%>%
+  group_by(Phase_1_treat, Phase_2_treat) %>%
+  mutate(
+    mean_growth = mean(Actual_shell_post_mg, na.rm = TRUE),
+    se_growth = std.error(Actual_shell_post_mg, na.rm = TRUE))
+
+#reorder Phase_1_treat and Phase_2_treat
+summary_stats_s$Phase_1_treat <- factor(summary_stats_s$Phase_1_treat, 
+                                        levels = c("Cont", "Warm","Hyp",  "Both"))
+summary_stats_s$Phase_2_treat <- factor(summary_stats_s$Phase_2_treat, 
+                                        levels = c("Cont", "Warm","Hyp",  "Both"))
+
+#plot with mean and SD, SHELL POST
+ggplot(summary_stats_s, aes(x = Phase_1_treat, y = mean_growth, color = Phase_1_treat)) +
+  geom_point(size = 4, position = position_dodge(0.9)) + # Plot means as points
+  geom_errorbar(aes(ymin = mean_growth - se_growth, ymax = mean_growth + se_growth), 
+                width = 0.2, position = position_dodge(0.9)) + # Error bars for SD
+  theme_classic(base_size = 18) +
+  guides(color = "none") + # Remove legend for color
+  facet_wrap(vars(Phase_2_treat), labeller = as_labeller(c("Hyp" = "Hypoxic", "Cont" = "Control", "Warm" = "Warm", "Both" = "Both")),
+             scales = "fixed", nrow = 1) + # Facet by Phase_2_treat
+  scale_color_manual(values = c("Hyp" = "steelblue3", "Warm" = "palevioletred", "Cont" = "burlywood3", "Both" = "plum3")) +
+  labs(x = "Phase 1 Treatment", y = "Mean Shell Mass Post Phase 2 (mg)") +
+  scale_x_discrete(labels = c("Hyp" = "Hypoxic", "Cont" = "Control", "Warm" = "Warm", "Both" = "Both")) +
+  theme(legend.position = "none") # Remove legend
+
+
+##tissue:shell mass post
+m3_post <- lmer((Actual_tissue_post_mg/Actual_shell_post_mg)~ Phase_1_DO*Phase_1_temp*Phase_2.1_temp*Phase_2.1_DO+Actual_tissue_pre_mg+
+                  (1|Phase_2_rep_R)+(1|Phase_1_rep_R)+
+                  (1|Phase_2_rep_R:Phase_1_DO)+(1|Phase_2_rep_R:Phase_1_temp)+(1|Phase_2_rep_R:Phase_1_DO:Phase_1_temp), data = Growth_Data_forR_full, REML=TRUE)
+Anova(m3_post, test="F", type="III")
+
+#posthocs
+emmeans(m3_post,specs = pairwise ~ Phase_1_temp*Phase_2.1_DO, adjust = "none")
+emmeans(m3_post,specs = pairwise ~ Phase_1_temp*Phase_2.1_temp*Phase_2.1_DO, adjust = "none")
+
+#diagnostics
+leveneTest((Actual_tissue_post_mg/Actual_shell_post_mg)~Phase1_Phase2_treat, Growth_Data_forR_full)
+m1.e <- residuals(m3_post) 
 qqnorm(m1.e)
 qqline(m1.e)
 
