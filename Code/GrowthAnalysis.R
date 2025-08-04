@@ -599,6 +599,46 @@ qqline(m1.e)
 ####
 
 
+#### Growth Ratio ####
+tissuegrowthratio
+shellgrowthratio
+## tissue growth (mg)
+m1_ratio <- lmer((1/tissuegrowthratio)~ Phase_1_DO*Phase_1_temp*Phase_2.1_temp*Phase_2.1_DO+
+                  (1|Phase_2_rep_R)+(1|Phase_1_rep_R)+
+                  (1|Phase_2_rep_R:Phase_1_DO)+(1|Phase_2_rep_R:Phase_1_temp)+(1|Phase_2_rep_R:Phase_1_DO:Phase_1_temp), 
+                data = Growth_Data_forR_full, REML=TRUE)
+Anova(m1_ratio, test="F", type="III")
+
+#posthocs
+emmeans(m1_ratio,specs = pairwise ~ Phase_2.1_DO, adjust = "none")
+emmeans(m1_ratio,specs = pairwise ~ Phase_1_DO*Phase_1_temp*Phase_2.1_temp, adjust = "none") 
+
+#diagnostics
+leveneTest((1/tissuegrowthratio)~Phase1_Phase2_treat, Growth_Data_forR_full)
+m1.e <- residuals(m1_ratio) 
+qqnorm(m1.e)
+qqline(m1.e)
+
+## shell growth (mg)
+m2_ratio <- lmer((1/shellgrowthratio)~ Phase_1_DO*Phase_1_temp*Phase_2.1_temp*Phase_2.1_DO+
+                   (1|Phase_2_rep_R)+(1|Phase_1_rep_R)+
+                   (1|Phase_2_rep_R:Phase_1_DO)+(1|Phase_2_rep_R:Phase_1_temp)+(1|Phase_2_rep_R:Phase_1_DO:Phase_1_temp), 
+                 data = Growth_Data_forR_full, REML=TRUE)
+Anova(m2_ratio, test="F", type="III")
+
+#posthocs
+emmeans(m1_ratio,specs = pairwise ~ Phase_2.1_DO, adjust = "none")
+emmeans(m1_ratio,specs = pairwise ~ Phase_1_DO*Phase_1_temp*Phase_2.1_temp, adjust = "none") 
+
+#diagnostics
+leveneTest((1/shellgrowthratio)~Phase1_Phase2_treat, Growth_Data_forR_full)
+m1.e <- residuals(m2_ratio) 
+qqnorm(m1.e)
+qqline(m1.e)
+
+####
+
+
 
 ####Standardize Initial Size####
 #means for each rep calculated in GrowthAnalysisSizeClass.R
