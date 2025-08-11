@@ -1,0 +1,42 @@
+Sample_Name,Phase_1_DO,Phase_1_temp,Phase_2.1_DO,Phase_2.1_temp,Phase_1_treat,Phase_2_treat,Phase_1_rep_R,Phase_2_rep_R,Actual_shell_pre_mg,Actual_tissue_pre_mg,Actual_shell_post_mg,Actual_tissue_post_mg,Actual_shell_growth_mg,Actual_tissue_growth_mg,Exclude_all,Exclude_pre_analysis,Notes_pre,Notes_post,Area_pre_mm2,Feret_pre_mm,area_pixels,feret_pixels,conversion_factor,Area_post_mm2,Feret_post_mm,
+2024_Cont03_Both04_W42,Norm,Ambient,Hyp,Warm,Cont,Both,Cont03,Both04,257.50764,147.89236,382.4379,220.5621,124.93026,72.66974,NA,,,"on the written data sheet, should have data, #7 on the both 04 remaining sheet",152,15.7,13369,153.9,8.0017,208.8,19.2,2024_Cont03_Both04_W42
+2024_Warm01_Both04_G38,Norm,Warm,Hyp,Warm,Warm,Both,Warm01,Both04,419.80614,256.39386,651.14088,336.05912,231.33474,79.66526,NA,,,"on the written data sheet, should have data for #5 on the both 4 nutrients data sheet",297.6,21,23305,196.7,8.0069,363.5,24.6,2024_Warm01_Both04_G38
+2024_Warm05_Both04_G46,Norm,Warm,Hyp,Warm,Warm,Both,Warm05,Both04,699.75126,355.94874,1006.61418,542.68582,306.86292,186.73708,NA,,,"on the written data sheet, missing the genetics data sheet which this should be on from the areas photos",338.7,23,,,,,,2024_Warm05_Both04_G46
+2024_Both03_Cont03_O29,Hyp,Warm,Norm,Ambient,Both,Cont,Both03,Cont03,359.63694,182.46306,741.078,352.322,381.44106,169.85894,NA,,,should be #8 in Cont 03 nutrients,241.8,22.3,21608,203.1,7.8351,352,25.9,2024_Both03_Cont03_O29
+2024_Warm05_Cont06_G69,Norm,Warm,Norm,Ambient,Warm,Cont,Warm05,Cont06,321.95202,201.44798,NA,NA,NA,NA,Y,,,DEAD,251.6,20.9,,,,,,2024_Warm05_Cont06_G69
+2024_Both03_Hyp03_O29,Hyp,Warm,Hyp,Ambient,Both,Hyp,Both03,Hyp03,353.9367,228.2633,770.68758,499.91242,416.75088,271.64912,NA,,,seems like we are missing the genetics oysters area and photo,252.7,20.4,,,,,,2024_Both03_Hyp03_O29
+2024_Both06_Hyp03_O35,Hyp,Warm,Hyp,Ambient,Both,Hyp,Both06,Hyp03,344.91132,180.78868,597.14694,265.55306,252.23562,84.76438,NA,,,seems like we are missing the genetics oysters area and photo,212.2,17.9,,,,,,2024_Both06_Hyp03_O35
+2024_Cont06_Hyp03_W36,Norm,Ambient,Hyp,Ambient,Cont,Hyp,Cont06,Hyp03,562.62882,316.87118,781.92972,427.87028,219.3009,110.9991,NA,,,seems like we are missing the genetics oysters area and photo,234.8,21.2,,,,,,2024_Cont06_Hyp03_W36
+2024_Both02_Hyp05_O51,Hyp,Warm,Hyp,Ambient,Both,Hyp,Both02,Hyp05,62.5911,44.3089,NA,NA,NA,NA,Y,,,DEAD,86.9,12,,,,,,2024_Both02_Hyp05_O51
+2024_Both01_Warm03_O26,Hyp,Warm,Norm,Warm,Both,Warm,Both01,Warm03,185.77962,142.62038,349.81986,239.68014,164.04024,97.05976,NA,,in photos and the written data sheet,on the written data sheet but cut off at the bottom. Should be #16 on warm 3 remaining photo,113.4,14.3,11038,159.8,8.0017,172.4,20,2024_Both01_Warm03_O26
+2024_Both02_Warm05_O51,Hyp,Warm,Norm,Warm,Both,Warm,Both02,Warm05,99.48432,71.31568,NA,NA,NA,NA,Y,,,DEAD,88.1,12.1,,,,,,2024_Both02_Warm05_O51
+,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,
+KEY,,,,,,,,,,,,,,,,,,,,,,,,,,
+"Located, could calculate area in mm^2 from pixels",,,,,,,,,,,,,,,,,,,,,,,,,,
+"Fine to exclude, dead anyways",,,,,,,,,,,,,,,,,,,,,,,,,,
+"No ImageJ photo, would need to be reanalyzed",,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,
+"All phase 2 both 05, one of these pictures is missing",,,,,,,,,,,,,,,,,,,,,,,,,,
+2024_Both02_Both05_O52,Hyp,Warm,Hyp,Warm,Both,Both,Both02,Both05,358.6869,155.2131,637.04862,176.05138,278.36172,20.83828,NA,,,,191.3,18.5,,,,,,
+2024_Both04_Both05_O56,Hyp,Warm,Hyp,Warm,Both,Both,Both04,Both05,387.1881,218.6119,660.64128,258.95872,273.45318,40.34682,NA,,,,265.6,21,,,,,,
+2024_Both05_Both05_O57,Hyp,Warm,Hyp,Warm,Both,Both,Both05,Both05,283.15872,163.64128,641.64048,271.25952,358.48176,107.61824,NA,,,,210.1,18.1,,,,,,
+2024_Both06_Both05_O60,Hyp,Warm,Hyp,Warm,Both,Both,Both06,Both05,257.98266,216.11734,461.29122,321.50878,203.30856,105.39144,NA,,,,216.7,18.8,,,,,,
+2024_Cont01_Both05_W50,Norm,Ambient,Hyp,Warm,Cont,Both,Cont01,Both05,404.6055,200.1945,815.18112,250.01888,410.57562,49.82438,NA,,,,212.9,19.8,,,,,,
+2024_Cont02_Both05_W52,Norm,Ambient,Hyp,Warm,Cont,Both,Cont02,Both05,389.72154,214.47846,733.79436,412.00564,344.07282,197.52718,NA,,,,274.7,21,,,,,,
+2024_Cont03_Both05_W54,Norm,Ambient,Hyp,Warm,Cont,Both,Cont03,Both05,374.67924,251.52076,569.2791,359.5209,194.59986,108.00014,NA,,,,228.1,19.7,,,,,,
+2024_Cont04_Both05_W55,Norm,Ambient,Hyp,Warm,Cont,Both,Cont04,Both05,299.46774,148.03226,467.1498,238.1502,167.68206,90.11794,NA,,,,168.9,16.8,,,,,,
+2024_Hyp01_Both05_B49,Hyp,Ambient,Hyp,Warm,Hyp,Both,Hyp01,Both05,386.55474,160.24526,692.30928,260.29072,305.75454,100.04546,NA,,,,211.4,18.1,,,,,,
+2024_Hyp02_Both05_B52,Hyp,Ambient,Hyp,Warm,Hyp,Both,Hyp02,Both05,268.90812,182.09188,483.14214,217.75786,214.23402,35.66598,NA,,,,189.3,18.5,,,,,,
+2024_Hyp04_Both05_B56,Hyp,Ambient,Hyp,Warm,Hyp,Both,Hyp04,Both05,475.22514,173.27486,702.91806,272.98194,227.69292,99.70708,NA,,,,265.4,20.5,,,,,,
+2024_Hyp05_Both05_B58,Hyp,Ambient,Hyp,Warm,Hyp,Both,Hyp05,Both05,245.79048,160.90952,511.16832,328.63168,265.37784,167.72216,NA,,,,179.4,16.5,,,,,,
+2024_Warm03_Both05_G53,Norm,Warm,Hyp,Warm,Warm,Both,Warm03,Both05,277.61682,202.28318,512.91006,306.68994,235.29324,104.40676,NA,,,,220.3,19.8,,,,,,
+2024_Warm04_Both05_G55,Norm,Warm,Hyp,Warm,Warm,Both,Warm04,Both05,391.9383,254.1617,660.16626,409.53374,268.22796,155.37204,NA,,,,225.9,19.1,,,,,,
+2024_Warm05_Both05_G57,Norm,Warm,Hyp,Warm,Warm,Both,Warm05,Both05,596.67192,369.42808,1155.29544,598.70456,558.62352,229.27648,Y,Y,,2/05/25 SKM Found to be a double while processing nutrient samples,466.1,27.5,,,,,,
+2024_Warm06_Both05_G60,Norm,Warm,Hyp,Warm,Warm,Both,Warm06,Both05,254.02416,166.27584,501.1929,333.2071,247.16874,166.93126,,,,,163.4,16.6,,,,,,
