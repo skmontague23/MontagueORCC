@@ -1,10 +1,14 @@
-setwd("/Users/sophiemontague/Desktop/MontagueORCC/Year 2 Data")
+setwd("/Users/sophiemontague/Desktop/MontagueORCC_repo/MontagueORCC/Year_2_Data")
 getwd()
 
 #read in data
 library(readr)
 df <- read_csv("Oysters to pull for Gonads.csv")
 df <- read_csv("Oysters to pull for Spawning.csv") #Also assigning phase 1 information to this sheet
+df <- read_csv("2025_Phase2_growthupdate_weights.csv")
+
+colnames(df)
+View(df)
 
 #adapted from JGM's code
 #adding phase 1 treatment based on tag color
@@ -24,6 +28,8 @@ for (i in 1:length(df$Tag_color)) { # loop through each row in df
     df$Phase_1_treat[i] <- 'Both'
   } else if (tag == 'W') { # if the tag color is white, it's control
     df$Phase_1_treat[i] <- 'Cont'
+  } else if (tag == 'NA') { # if the tag color is white, it's control
+    df$Phase_1_treat[i] <- 'NA'
   }
 }
 
