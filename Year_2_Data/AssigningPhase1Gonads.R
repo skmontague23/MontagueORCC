@@ -28,10 +28,27 @@ for (i in 1:length(df$Tag_color)) { # loop through each row in df
     df$Phase_1_treat[i] <- 'Both'
   } else if (tag == 'W') { # if the tag color is white, it's control
     df$Phase_1_treat[i] <- 'Cont'
-  } else if (tag == 'NA') { # if the tag color is white, it's control
-    df$Phase_1_treat[i] <- 'NA'
+  } else if (is.na(tag)) {
+    df$Phase_1_treat[i] <- NA
   }
 }
+
+
+##year 2 data, using dplyr to deal with missing values for tag color
+df$Phase_1_treat <- NA_character_  # start with all NAs
+df$Phase_1_treat[df$Tag_color == "B"] <- "Hyp"
+df$Phase_1_treat[df$Tag_color == "G"] <- "Warm"
+df$Phase_1_treat[df$Tag_color == "O"] <- "Both"
+df$Phase_1_treat[df$Tag_color == "W"] <- "Cont"
+
+df <- df %>%
+  mutate(Phase_1_treat = case_when(
+    Tag_color == "B" ~ "Hyp",
+    Tag_color == "G" ~ "Warm",
+    Tag_color == "O" ~ "Both",
+    Tag_color == "W" ~ "Cont",
+    TRUE ~ NA_character_   # keep NA if no match
+  ))
 
 # assigning tag numbers to phase 1 rep
 rep1 <- c(1,2,13,14,25,26,37,38,49,50,61,62)
@@ -52,9 +69,6 @@ rep3 <- c(5,6,17,18,29,30,41,42,53,54,65,66)
 rep4 <- c(7,8,19,20,31,32,43,44,55,56,67,68)
 rep5 <- c(9,10,21,22,33,34,45,46,57,58,69,70)
 rep6 <- c(11,12,23,24,35,36,47,48,59,60,71,72)
-
-# changing to numeric class
-df$Tag_num <- as.numeric(df$Tag_num)
 
 # initialize empty list to store unmatched tag numbers
 unmatched_rows <- list()
@@ -86,7 +100,7 @@ for (i in 1:length(df$Tag_num)) { # loop through each row in df
 
 View(df)
 # then write csv file
-write.csv(df, '/Users/sophiemontague/Desktop/MontagueORCC/Year 2 Data/Oysters to pull for Spawning1.csv')
+write.csv(df, '/Users/sophiemontague/Desktop/MontagueORCC_repo/MontagueORCC/Year_2_Data/growth_YEAR2_weights_working.csv')
 
 
 #check if the phase 1 treatment and reps are even
