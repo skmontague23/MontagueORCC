@@ -455,7 +455,7 @@ summary_stats_s$Phase_1_treat <- factor(summary_stats_s$Phase_1_treat,
 summary_stats_s$Phase_2_treat <- factor(summary_stats_s$Phase_2_treat, 
                                         levels = c("Cont", "Warm","Hyp", "Both"))
 
-#plot with mean and SD, TISSUE
+#plot with mean and SD, 
 ggplot(summary_stats_s, aes(x = Phase_1_treat, y = mean_growth, color = Phase_1_treat)) +
   geom_point(size = 4, position = position_dodge(0.9)) + # Plot means as points
   geom_errorbar(aes(ymin = mean_growth - se_growth, ymax = mean_growth + se_growth), 

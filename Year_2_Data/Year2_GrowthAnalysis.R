@@ -29,7 +29,8 @@ Year2_Growth <- read_csv("/Users/sophiemontague/Desktop/MontagueORCC_repo/Montag
                                               Phase_1_treat = col_factor(),
                                               Phase_2_treat = col_factor(),
                                               Phase_2_rep_R = col_factor(),
-                                              Phase_1_rep_R = col_factor()))
+                                              Phase_1_rep_R = col_factor(),
+                                              double_single_dead_year2 = col_factor()))
 colnames(Year2_Growth)
 #filter out dead and untagged
 Year2_Growth_clean <- Year2_Growth%>%
@@ -39,6 +40,64 @@ Year2_Growth_clean <- Year2_Growth%>%
     Actual_tissue_growth_year2_mg = as.numeric(Actual_tissue_growth_year2_mg),
     Actual_shell_growth_year2_mg = as.numeric(Actual_shell_growth_year2_mg),
     Ratio_TS_year2 = as.numeric(Ratio_TS_year2))
+
+Year2_Growth_clean %>%
+  count(Phase_1_treat, Phase_2_treat)
+Year2_Growth_clean$double_single_dead_year2
+#plot with mean and SD, 16 point TISSUE
+summary_stats <- Year2_Growth_clean %>%
+  drop_na(Ratio_TS_year2) %>%
+  group_by(Phase_1_treat, Phase_2_treat) %>%
+  mutate(
+    mean_growth = mean(Dry_weight_year2, na.rm = TRUE),
+    se_growth = std.error(Dry_weight_year2, na.rm = TRUE))
+
+#reorder Phase_1_treat and Phase_2_treat
+summary_stats$Phase_1_treat <- factor(summary_stats$Phase_1_treat, 
+                                        levels = c("Cont", "Warm","Hyp", "Both"))
+summary_stats$Phase_2_treat <- factor(summary_stats$Phase_2_treat, 
+                                        levels = c("Cont", "Warm","Hyp", "Both"))
+
+ggplot(summary_stats, aes(x = Phase_1_treat, y = mean_growth, color = Phase_1_treat)) +
+  geom_point(size = 4, position = position_dodge(0.9)) + # Plot means as points
+  geom_errorbar(aes(ymin = mean_growth - se_growth, ymax = mean_growth + se_growth), 
+                width = 0.2, position = position_dodge(0.9)) + # Error bars for SD
+  theme_classic(base_size = 20) +
+  guides(color = "none") + # Remove legend for color
+  facet_wrap(vars(Phase_2_treat), 
+             labeller = as_labeller(c("Hyp" = "Hypoxic", "Cont" = "Control", "Warm" = "Warm", "Both" = "Both")), 
+             scales = "fixed", nrow = 1) + # Facet by Phase_2_treat
+  scale_color_manual(values = c("Hyp" = "steelblue3", "Warm" = "palevioletred", "Cont" = "burlywood3", "Both" = "plum3")) +
+  labs(x = "Phase 1 Treatment", y = "Whole weight (mg)") +
+  scale_x_discrete(labels = c("Hyp" = "Hypoxic", "Cont" = "Control", "Warm" = "Warm", "Both" = "Both")) +
+  theme(legend.position = "none") # Remove legend
+
+View(Year2_Growth_clean)
+#counting dead oysters
+unique(Year2_Growth_clean$Notes_year2)
+
+dead_counts <- Year2_Growth_clean %>%
+  drop_na(double_single_dead_year2)%>%
+  filter(double_single_dead_year2 == "Dead") %>%
+  count(Phase_1_treat, Phase_2_treat)
+
+
+# Plot as bar chart
+ggplot(dead_counts, aes(x = Phase_1_treat, y = n, fill = Phase_1_treat)) +
+  geom_col(position = "dodge") +
+  facet_wrap(~Phase_2_treat) +
+  labs(
+    title = "Count of Dead Oysters by Treatments",
+    x = "Phase 1 Treatment",
+    y = "Number of Dead Oysters"
+  ) +
+  theme_classic(base_size = 16) +
+  theme(legend.position = "none")
+
+
+
+
+
 
 #check levels
 str(Year2_Growth_clean)
