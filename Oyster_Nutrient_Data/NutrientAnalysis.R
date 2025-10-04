@@ -29,7 +29,6 @@ N_T_df <- Tissue_Nutrient_df%>%
 C_T_df <- Tissue_Nutrient_df%>%
   filter(C_exclude != "Y" | is.na(C_exclude))
 
-
 #plot with mean and SD, TISSUE, NITROGEN
 summary_stats <- N_T_df %>%
   group_by(Phase_1_treat) %>%
@@ -89,7 +88,7 @@ ggplot(summary_stats, aes(x = Phase_1_treat, y = mean_growth, color = Phase_1_tr
 options(contrasts = c("contr.sum","contr.poly")) #could also be contr.treatment for unequal groups sum
 getOption("contrasts") 
 
-
+N_T_df
 ## % N
 #nothing significant
 Nm1 <- lmer(wt_percent_N ~ Phase_1_DO*Phase_1_temp +
@@ -97,7 +96,7 @@ Nm1 <- lmer(wt_percent_N ~ Phase_1_DO*Phase_1_temp +
 Anova(Nm1, test="F", type="III")
 
 #post hocs
-emmeans(Tm1,specs = pairwise ~ Phase_1_DO, adjust = "none")
+emmeans(Nm1,specs = pairwise ~ Phase_1_DO, adjust = "none")
 
 #diagnostics
 leveneTest(wt_percent_N~Phase_1_treat, N_T_df)
@@ -161,7 +160,7 @@ Nutrientsbyweight <- read_csv("/Users/sophiemontague/Desktop/Nutrients_byweight.
 
 colnames(Nutrientsbyweight)
 N_C_bytissueweight <- Nutrientsbyweight %>%
-  filter(Exclude_all != "Y" | is.na(Exclude_all)) %>%
+  filter(Exclude_pre != "Y" | is.na(Exclude_pre)) %>%
   mutate(
     Phase1N_tissue = case_when(
       Phase_1_treat == "Cont" ~ ((Actual_tissue_pre_mg * 7.741667)/100),
@@ -190,6 +189,10 @@ Anova(Nm1, test="F", type="III")
 #post hocs
 emmeans(Nm1,specs = pairwise ~ Phase_1_DO, adjust = "none")
 
+exp(2.67) #hyp
+exp(2.81) #norm
+(16.60992-14.43997)/16.60992 #13 percent less nitrogen stored in oyster tissue under hypoxia
+
 #diagnostics
 leveneTest(log(Phase1N_tissue)~Phase_1_treat, N_C_bytissueweight)
 m1.e <- residuals(Nm1) 
@@ -201,12 +204,10 @@ qqline(m1.e)
 summary_stats <- N_C_bytissueweight %>%
   group_by(Phase_1_DO) %>%
   summarize(
-    mean_growth = mean(Phase2N_tissue, na.rm = TRUE),
-    se_growth = std.error(Phase2N_tissue, na.rm = TRUE))
+    mean_growth = mean(Phase1N_tissue, na.rm = TRUE),
+    se_growth = std.error(Phase1N_tissue, na.rm = TRUE))
 
 View(summary_stats)
-
-unique(Nutrient_dfclean$Phase_1_treat)
 
 #reorder Phase_1_treat
 summary_stats$Phase_1_DO <- factor(summary_stats$Phase_1_DO, 
@@ -239,6 +240,55 @@ leveneTest(log(Phase1C_tissue)~Phase_1_treat, N_C_bytissueweight)
 m1.e <- residuals(Cm1) 
 qqnorm(m1.e)
 qqline(m1.e)
+
+#plot with mean and SD, HYPOXIA ON TISSUE NITROGEN
+summary_stats <- N_C_bytissueweight %>%
+  group_by(Phase_1_DO) %>%
+  summarize(
+    mean_growth = mean(Phase1C_tissue, na.rm = TRUE),
+    se_growth = std.error(Phase1C_tissue, na.rm = TRUE))
+
+View(summary_stats)
+
+#reorder Phase_1_treat
+summary_stats$Phase_1_DO <- factor(summary_stats$Phase_1_DO, 
+                                   levels = c("Norm", "Hyp"))
+
+ggplot(summary_stats, aes(x = Phase_1_DO, y = mean_growth, color = Phase_1_DO)) +
+  geom_point(size = 4, position = position_dodge(0.9)) + # Plot means as points
+  geom_errorbar(aes(ymin = mean_growth - se_growth, ymax = mean_growth + se_growth), 
+                width = 0.2, position = position_dodge(0.9)) + # Error bars for SD
+  theme_classic(base_size = 20) +
+  theme(panel.background = element_rect(fill = "#E5E5E5")) + #fill background light grey
+  guides(color = "none") + # Remove legend for color
+  scale_color_manual(values = c("Hyp" = "darkmagenta", "Norm" = "seagreen")) +
+  labs(x = "Phase 1 Treatment", y = "Carbon in Tissue (%mg)") +
+  scale_x_discrete(labels = c("Hyp" = "Hypoxic", "Norm" = "Normoxic")) +
+  theme(legend.position = "none") # Remove legend
+
+#plot with mean and SD, WARMING ON TISSUE NITROGEN
+summary_stats <- N_C_bytissueweight %>%
+  group_by(Phase_1_temp) %>%
+  summarize(
+    mean_growth = mean(Phase1C_tissue, na.rm = TRUE),
+    se_growth = std.error(Phase1C_tissue, na.rm = TRUE))
+
+View(summary_stats)
+
+#reorder Phase_1_treat
+summary_stats$Phase_1_temp <- factor(summary_stats$Phase_1_temp, 
+                                   levels = c("Ambient", "Warm"))
+
+ggplot(summary_stats, aes(x = Phase_1_temp, y = mean_growth, color = Phase_1_temp)) +
+  geom_point(size = 4, position = position_dodge(0.9)) + # Plot means as points
+  geom_errorbar(aes(ymin = mean_growth - se_growth, ymax = mean_growth + se_growth), 
+                width = 0.2, position = position_dodge(0.9)) + # Error bars for SD
+  theme_classic(base_size = 20) +
+  theme(panel.background = element_rect(fill = "#E5E5E5")) + #fill background light grey
+  guides(color = "none") + # Remove legend for color
+  scale_color_manual(values = c("Ambient" = "darkblue", "Warm" = "#B00149")) +
+  labs(x = "Phase 1 Treatment", y = "Carbon in Tissue (%mg)") +
+  theme(legend.position = "none") # Remove legend
 
 
 #plot with mean and SD, CARBON
@@ -288,6 +338,7 @@ summary_stats <- N_S_df %>%
   summarize(
     mean_growth = mean(wt_percent_N, na.rm = TRUE),
     se_growth = std.error(wt_percent_N, na.rm = TRUE))
+
 View(summary_stats)
 
 #reorder Phase_1_treat
@@ -333,8 +384,35 @@ ggplot(summary_stats, aes(x = Phase_1_treat, y = mean_growth, color = Phase_1_tr
   ylim(15, 18) +
   theme(legend.position = "none") # Remove legend
 
+## % N analysis
+Nm1 <- lmer(wt_percent_N ~ Phase_1_DO*Phase_1_temp +
+              (1|Phase_1_rep_R), data = N_S_df, REML=TRUE)
+Anova(Nm1, test="F", type="III")
 
+#post hocs
+emmeans(Cm1,specs = pairwise ~ Phase_1_DO, adjust = "none")
+emmeans(Cm1,specs = pairwise ~ Phase_1_temp, adjust = "none")
 
+#diagnostics
+leveneTest(log(wt_percent_N)~Phase_1_treat, N_S_df)
+m1.e <- residuals(Nm1) 
+qqnorm(m1.e)
+qqline(m1.e)
+
+## % C analysis
+Cm1 <- lmer(wt_percent_C ~ Phase_1_DO*Phase_1_temp +
+              (1|Phase_1_rep_R), data = C_S_df, REML=TRUE)
+Anova(Cm1, test="F", type="III")
+
+#post hocs
+emmeans(Cm1,specs = pairwise ~ Phase_1_DO, adjust = "none")
+emmeans(Cm1,specs = pairwise ~ Phase_1_temp, adjust = "none")
+
+#diagnostics
+leveneTest(wt_percent_C~Phase_1_treat, C_S_df)
+m1.e <- residuals(Cm1) 
+qqnorm(m1.e)
+qqline(m1.e)
 
 ##nutrients by weight shell
 
@@ -373,7 +451,7 @@ str(Nutrientsbyweight$Actual_shell_pre_mg)
 View(Nutrientsbyweight)
 
 N_C_byshellweight <- Nutrientsbyweight %>%
-  filter(Exclude_all != "Y" | is.na(Exclude_all)) %>%
+  filter(Exclude_pre_analysis != "Y" | is.na(Exclude_pre_analysis)) %>%
   mutate(
     Phase1N_shell = case_when(
       Phase_1_treat == "Cont" ~ ((Actual_shell_pre_mg * 0.2833333)/100),
@@ -394,7 +472,7 @@ N_C_byshellweight <- Nutrientsbyweight %>%
 View(N_C_byshellweight)
 
 ## % N by weight in shell
-Nm1 <- lmer(log(Phase1N_shell) ~ Phase_1_DO*Phase_1_temp +
+Nm1 <- lmer(Phase1N_shell ~ Phase_1_DO*Phase_1_temp +
               (1|Phase_1_rep_R), data = N_C_byshellweight, REML=TRUE)
 
 Anova(Nm1, test="F", type="III")
@@ -402,26 +480,80 @@ Anova(Nm1, test="F", type="III")
 #post hocs
 emmeans(Nm1,specs = pairwise ~ Phase_1_DO, adjust = "none")
 
+#calculate
+(1.15-1.04)/1.15
+
 #diagnostics
-leveneTest(log(Phase1N_shell)~Phase_1_treat, N_C_byshellweight)
+leveneTest(Phase1N_shell~Phase_1_treat, N_C_byshellweight)
 m1.e <- residuals(Nm1) 
 qqnorm(m1.e)
 qqline(m1.e)
 
 
+#plot with mean and SD, HYPOXIA ON SHELL NITROGEN
+summary_stats <- N_C_byshellweight %>%
+  group_by(Phase_1_DO) %>%
+  summarize(
+    mean_growth = mean(Phase1N_shell, na.rm = TRUE),
+    se_growth = std.error(Phase1N_shell, na.rm = TRUE))
+
+View(summary_stats)
+
+#reorder Phase_1_treat
+summary_stats$Phase_1_DO <- factor(summary_stats$Phase_1_DO, 
+                                   levels = c("Norm", "Hyp"))
+
+ggplot(summary_stats, aes(x = Phase_1_DO, y = mean_growth, color = Phase_1_DO)) +
+  geom_point(size = 4, position = position_dodge(0.9)) + # Plot means as points
+  geom_errorbar(aes(ymin = mean_growth - se_growth, ymax = mean_growth + se_growth), 
+                width = 0.2, position = position_dodge(0.9)) + # Error bars for SD
+  theme_classic(base_size = 20) +
+  theme(panel.background = element_rect(fill = "#E5E5E5")) + #fill background light grey
+  guides(color = "none") + # Remove legend for color
+  scale_color_manual(values = c("Hyp" = "darkmagenta", "Norm" = "seagreen")) +
+  labs(x = "Phase 1 Treatment", y = "Nitrogen in Shell (%mg)") +
+  scale_x_discrete(labels = c("Hyp" = "Hypoxic", "Norm" = "Normoxic")) +
+  theme(legend.position = "none") # Remove legend
+
+
+
 ## % C by weight in shell
-Cm1 <- lmer(log(Phase1C_shell) ~ Phase_1_DO*Phase_1_temp +
+Cm1 <- lmer(Phase1C_shell ~ Phase_1_DO*Phase_1_temp +
               (1|Phase_1_rep_R), data = N_C_byshellweight, REML=TRUE)
 Anova(Cm1, test="F", type="III")
 
 #post hocs
 emmeans(Cm1,specs = pairwise ~ Phase_1_DO, adjust = "none")
-emmeans(Cm1,specs = pairwise ~ Phase_1_temp, adjust = "none")
 
+#calculate
+(64.8-57.9)/64.8
 #diagnostics
-leveneTest(log(Phase1C_shell)~Phase_1_treat, N_C_byshellweight)
+leveneTest(Phase1C_shell~Phase_1_treat, N_C_byshellweight)
 m1.e <- residuals(Cm1) 
 qqnorm(m1.e)
 qqline(m1.e)
 
+#plot with mean and SD, HYPOXIA ON SHELL CARBON
+summary_stats <- N_C_byshellweight %>%
+  group_by(Phase_1_DO) %>%
+  summarize(
+    mean_growth = mean(Phase1C_shell, na.rm = TRUE),
+    se_growth = std.error(Phase1C_shell, na.rm = TRUE))
 
+View(summary_stats)
+
+#reorder Phase_1_treat
+summary_stats$Phase_1_DO <- factor(summary_stats$Phase_1_DO, 
+                                   levels = c("Norm", "Hyp"))
+
+ggplot(summary_stats, aes(x = Phase_1_DO, y = mean_growth, color = Phase_1_DO)) +
+  geom_point(size = 4, position = position_dodge(0.9)) + # Plot means as points
+  geom_errorbar(aes(ymin = mean_growth - se_growth, ymax = mean_growth + se_growth), 
+                width = 0.2, position = position_dodge(0.9)) + # Error bars for SD
+  theme_classic(base_size = 20) +
+  theme(panel.background = element_rect(fill = "#E5E5E5")) + #fill background light grey
+  guides(color = "none") + # Remove legend for color
+  scale_color_manual(values = c("Hyp" = "darkmagenta", "Norm" = "seagreen")) +
+  labs(x = "Phase 1 Treatment", y = "Carbon in Shell (%mg)") +
+  scale_x_discrete(labels = c("Hyp" = "Hypoxic", "Norm" = "Normoxic")) +
+  theme(legend.position = "none") # Remove legend
