@@ -22,12 +22,14 @@ setwd("/Users/sophiemontague/Desktop/MontagueORCC_repo/MontagueORCC/Oyster_Nutri
 Tissue_Nutrient_df <- read_csv("Phase1_tissuenutrient_working.csv", 
                         col_types = cols(wt_percent_N = col_number(), 
                                          wt_percent_C = col_number()))
+Tissue_Nutrient_df
 #filter out data points (errors/replicates)
 N_T_df <- Tissue_Nutrient_df%>%
   filter(N_exclude != "Y" | is.na(N_exclude))
 
 C_T_df <- Tissue_Nutrient_df%>%
   filter(C_exclude != "Y" | is.na(C_exclude))
+View(C_T_df)
 
 #plot with mean and SD, TISSUE, NITROGEN
 summary_stats <- N_T_df %>%
@@ -90,16 +92,16 @@ getOption("contrasts")
 
 N_T_df
 ## % N
-#nothing significant
-Nm1 <- lmer(wt_percent_N ~ Phase_1_DO*Phase_1_temp +
+#nothing significant with or without log transformation
+Nm1 <- lmer(log(wt_percent_N) ~ Phase_1_DO*Phase_1_temp + 
               (1|Phase_1_rep_R), data = N_T_df, REML=TRUE)
 Anova(Nm1, test="F", type="III")
-
+N_T_df
 #post hocs
-emmeans(Nm1,specs = pairwise ~ Phase_1_DO, adjust = "none")
+#emmeans(Nm1,specs = pairwise ~ Phase_1_DO, adjust = "none")
 
 #diagnostics
-leveneTest(wt_percent_N~Phase_1_treat, N_T_df)
+leveneTest(wt_percent_N~Phase_1_DO*Phase_1_temp, N_T_df)
 m1.e <- residuals(Nm1) 
 qqnorm(m1.e)
 qqline(m1.e)
@@ -108,15 +110,15 @@ qqline(m1.e)
 
 ## % C
 #nothing significant
-Cm1 <- lmer(wt_percent_C ~ Phase_1_DO*Phase_1_temp +
+Cm1 <- lmer(log(wt_percent_C) ~ Phase_1_DO*Phase_1_temp +
               (1|Phase_1_rep_R), data = C_T_df, REML=TRUE)
 Anova(Cm1, test="F", type="III")
 
 #post hocs
-emmeans(Cm1,specs = pairwise ~ Phase_1_DO, adjust = "none")
+#emmeans(Cm1,specs = pairwise ~ Phase_1_DO, adjust = "none")
 
 #diagnostics
-leveneTest(wt_percent_C~Phase_1_treat, C_T_df)
+leveneTest(log(wt_percent_C)~Phase_1_DO*Phase_1_temp, C_T_df)
 m1.e <- residuals(Cm1) 
 qqnorm(m1.e)
 qqline(m1.e)
@@ -133,17 +135,18 @@ summary_stats_TN <- N_T_df %>%
 View(summary_stats_TN)
 
 #Now C
-summary_stats_TC <- Nutrient_dfclean %>%
+summary_stats_TC <- C_T_df %>%
   group_by(Phase_1_treat) %>%
   summarize(
     mean_growth = mean(wt_percent_C, na.rm = TRUE),
     se_growth = std.error(wt_percent_C, na.rm = TRUE))
 View(summary_stats_TC)
+View(C_T_df)
 
 
 
-
-##Apply percentages to weights for PHASE 1
+##multiply percentages by weights for PHASE 1
+#read in the data
 Nutrientsbyweight <- read_csv("/Users/sophiemontague/Desktop/Nutrients_byweight.csv", 
                              col_types = cols(Phase_1_temp = col_factor(), 
                                               Phase_1_DO =col_factor(), 
@@ -159,8 +162,10 @@ Nutrientsbyweight <- read_csv("/Users/sophiemontague/Desktop/Nutrients_byweight.
                                               Phase_1_rep_R = col_factor()))
 
 colnames(Nutrientsbyweight)
+
+#get mg nutrients in TISSUE
 N_C_bytissueweight <- Nutrientsbyweight %>%
-  filter(Exclude_pre != "Y" | is.na(Exclude_pre)) %>%
+  filter(Exclude_pre_analysis != "Y" | is.na(Exclude_pre_analysis)) %>%
   mutate(
     Phase1N_tissue = case_when(
       Phase_1_treat == "Cont" ~ ((Actual_tissue_pre_mg * 7.741667)/100),
@@ -172,29 +177,34 @@ N_C_bytissueweight <- Nutrientsbyweight %>%
     mutate(
       Phase1C_tissue = case_when(
         Phase_1_treat == "Cont" ~ ((Actual_tissue_pre_mg * 38.53333)/100),
-        Phase_1_treat == "Warm" ~ ((Actual_tissue_pre_mg * 37.41429)/100),
-        Phase_1_treat == "Hyp"  ~ ((Actual_tissue_pre_mg * 40.50769)/100),
-        Phase_1_treat == "Both" ~ ((Actual_tissue_pre_mg * 34.90909)/100),
+        Phase_1_treat == "Warm" ~ ((Actual_tissue_pre_mg * 38.47500)/100),
+        Phase_1_treat == "Hyp"  ~ ((Actual_tissue_pre_mg * 39.71667)/100),
+        Phase_1_treat == "Both" ~ ((Actual_tissue_pre_mg * 39.78182)/100),
         TRUE ~ NA_real_)
   )
 
 View(N_C_bytissueweight)
 
 
-## % N by weight
+
+#read in nutrient data
+N_C_bytissueweight <- read_csv("Phase1_nutrient_merged.csv")
+
+## mg N in tissue
 Nm1 <- lmer(log(Phase1N_tissue) ~ Phase_1_DO*Phase_1_temp +
               (1|Phase_1_rep_R), data = N_C_bytissueweight, REML=TRUE)
 Anova(Nm1, test="F", type="III")
 
 #post hocs
 emmeans(Nm1,specs = pairwise ~ Phase_1_DO, adjust = "none")
+emmeans(Nm1,specs = pairwise ~ Phase_1_temp, adjust = "none")
 
-exp(2.67) #hyp
+exp(2.66) #hyp
 exp(2.81) #norm
-(16.60992-14.43997)/16.60992 #13 percent less nitrogen stored in oyster tissue under hypoxia
+(16.60992-14.29629)/16.60992 #14 percent less nitrogen stored in oyster tissue under hypoxia
 
 #diagnostics
-leveneTest(log(Phase1N_tissue)~Phase_1_treat, N_C_bytissueweight)
+leveneTest(log(Phase1N_tissue)~Phase_1_DO*Phase_1_temp, N_C_bytissueweight)
 m1.e <- residuals(Nm1) 
 qqnorm(m1.e)
 qqline(m1.e)
@@ -216,13 +226,14 @@ summary_stats$Phase_1_DO <- factor(summary_stats$Phase_1_DO,
 ggplot(summary_stats, aes(x = Phase_1_DO, y = mean_growth, color = Phase_1_DO)) +
   geom_point(size = 4, position = position_dodge(0.9)) + # Plot means as points
   geom_errorbar(aes(ymin = mean_growth - se_growth, ymax = mean_growth + se_growth), 
-                width = 0.2, position = position_dodge(0.9)) + # Error bars for SD
+                width = 0.08, position = position_dodge(0.9)) + # Error bars for SD
   theme_classic(base_size = 20) +
   theme(panel.background = element_rect(fill = "#E5E5E5")) + #fill background light grey
   guides(color = "none") + # Remove legend for color
   scale_color_manual(values = c("Hyp" = "darkmagenta", "Norm" = "seagreen")) +
-  labs(x = "Phase 1 Treatment", y = "Nitrogen in Tissue (%mg)") +
+  labs(x = "Phase 1 Treatment", y = "Nitrogen in Tissue (mg)") +
   scale_x_discrete(labels = c("Hyp" = "Hypoxic", "Norm" = "Normoxic")) +
+  ylim(16,20)+
   theme(legend.position = "none") # Remove legend
 
 
@@ -233,10 +244,9 @@ Anova(Cm1, test="F", type="III")
 
 #post hocs
 emmeans(Cm1,specs = pairwise ~ Phase_1_DO, adjust = "none")
-emmeans(Cm1,specs = pairwise ~ Phase_1_temp, adjust = "none")
 
 #diagnostics
-leveneTest(log(Phase1C_tissue)~Phase_1_treat, N_C_bytissueweight)
+leveneTest(log(Phase1C_tissue)~Phase_1_DO*Phase_1_temp, N_C_bytissueweight)
 m1.e <- residuals(Cm1) 
 qqnorm(m1.e)
 qqline(m1.e)
@@ -262,7 +272,7 @@ ggplot(summary_stats, aes(x = Phase_1_DO, y = mean_growth, color = Phase_1_DO)) 
   theme(panel.background = element_rect(fill = "#E5E5E5")) + #fill background light grey
   guides(color = "none") + # Remove legend for color
   scale_color_manual(values = c("Hyp" = "darkmagenta", "Norm" = "seagreen")) +
-  labs(x = "Phase 1 Treatment", y = "Carbon in Tissue (%mg)") +
+  labs(x = "Phase 1 Treatment", y = "Carbon in Tissue (mg)") +
   scale_x_discrete(labels = c("Hyp" = "Hypoxic", "Norm" = "Normoxic")) +
   theme(legend.position = "none") # Remove legend
 
@@ -332,7 +342,7 @@ C_S_df <- Shell_Nutrient_df%>%
   filter(C_exclude != "Y" | is.na(C_exclude))
 
 
-#plot with mean and SD, TISSUE, NITROGEN
+#plot with mean and SD, shell, NITROGEN
 summary_stats <- N_S_df %>%
   group_by(Phase_1_treat) %>%
   summarize(
@@ -394,7 +404,7 @@ emmeans(Cm1,specs = pairwise ~ Phase_1_DO, adjust = "none")
 emmeans(Cm1,specs = pairwise ~ Phase_1_temp, adjust = "none")
 
 #diagnostics
-leveneTest(log(wt_percent_N)~Phase_1_treat, N_S_df)
+leveneTest(wt_percent_N~Phase_1_DO*Phase_1_temp, N_S_df)
 m1.e <- residuals(Nm1) 
 qqnorm(m1.e)
 qqline(m1.e)
@@ -414,21 +424,11 @@ m1.e <- residuals(Cm1)
 qqnorm(m1.e)
 qqline(m1.e)
 
-##nutrients by weight shell
 
-Nutrientsbyweight <- read_csv("/Users/sophiemontague/Desktop/Nutrients_byweight.csv", 
-                              col_types = cols(Phase_1_temp = col_factor(), 
-                                               Phase_1_DO =col_factor(), 
-                                               Phase_2.1_temp =col_factor(), 
-                                               Phase_2.1_DO=col_factor(), 
-                                               Phase_1_rep =col_factor(), 
-                                               Phase_2_rep =col_factor(),
-                                               Ratio_tissue_shell_mg = col_double(),
-                                               Phase1_Phase2_rep = col_factor(),
-                                               Phase_1_treat = col_factor(),
-                                               Phase_2_treat = col_factor(),
-                                               Phase_2_rep_R = col_factor(),
-                                               Phase_1_rep_R = col_factor()))
+
+##nutrients by weight shell
+##using this as a df to add shell N and C on to tissue N and C
+N_C_bytissueweight
 
 #nitrogen summmary stats
 summary_stats_SN <- N_S_df %>%
@@ -447,10 +447,8 @@ summary_stats_SC <- C_S_df %>%
 View(summary_stats_SC)
 
 #update equations with summary stats
-str(Nutrientsbyweight$Actual_shell_pre_mg)
-View(Nutrientsbyweight)
 
-N_C_byshellweight <- Nutrientsbyweight %>%
+N_C_byshellweight <- N_C_bytissueweight %>%
   filter(Exclude_pre_analysis != "Y" | is.na(Exclude_pre_analysis)) %>%
   mutate(
     Phase1N_shell = case_when(
@@ -471,6 +469,15 @@ N_C_byshellweight <- Nutrientsbyweight %>%
 
 View(N_C_byshellweight)
 
+as.numeric(N_C_byshellweight$Phase1N_tissue);as.numeric(N_C_byshellweight$Phase1C_tissue);as.numeric(N_C_byshellweight$Phase1N_shell);as.numeric(N_C_byshellweight$Phase1C_shell)
+
+#write CSV with nitrogen and carbon in mg for each oyster
+#write_csv(N_C_byshellweight, "~/Desktop/MontagueORCC_repo/MontagueORCC/Oyster_Nutrient_Data/Phase1_nutrient_merged.csv")
+
+
+#read in nutrient data
+N_C_byshellweight <- read_csv("Phase1_nutrient_merged.csv")
+
 ## % N by weight in shell
 Nm1 <- lmer(Phase1N_shell ~ Phase_1_DO*Phase_1_temp +
               (1|Phase_1_rep_R), data = N_C_byshellweight, REML=TRUE)
@@ -484,7 +491,7 @@ emmeans(Nm1,specs = pairwise ~ Phase_1_DO, adjust = "none")
 (1.15-1.04)/1.15
 
 #diagnostics
-leveneTest(Phase1N_shell~Phase_1_treat, N_C_byshellweight)
+leveneTest(Phase1N_shell~Phase_1_DO*Phase_1_temp, N_C_byshellweight)
 m1.e <- residuals(Nm1) 
 qqnorm(m1.e)
 qqline(m1.e)
@@ -506,13 +513,14 @@ summary_stats$Phase_1_DO <- factor(summary_stats$Phase_1_DO,
 ggplot(summary_stats, aes(x = Phase_1_DO, y = mean_growth, color = Phase_1_DO)) +
   geom_point(size = 4, position = position_dodge(0.9)) + # Plot means as points
   geom_errorbar(aes(ymin = mean_growth - se_growth, ymax = mean_growth + se_growth), 
-                width = 0.2, position = position_dodge(0.9)) + # Error bars for SD
+                width = 0.08, position = position_dodge(0.9)) + # Error bars for SD
   theme_classic(base_size = 20) +
   theme(panel.background = element_rect(fill = "#E5E5E5")) + #fill background light grey
   guides(color = "none") + # Remove legend for color
   scale_color_manual(values = c("Hyp" = "darkmagenta", "Norm" = "seagreen")) +
-  labs(x = "Phase 1 Treatment", y = "Nitrogen in Shell (%mg)") +
+  labs(x = "Phase 1 Treatment", y = "Nitrogen in Shell (mg)") +
   scale_x_discrete(labels = c("Hyp" = "Hypoxic", "Norm" = "Normoxic")) +
+  ylim(1, 1.2)+
   theme(legend.position = "none") # Remove legend
 
 
@@ -549,11 +557,11 @@ summary_stats$Phase_1_DO <- factor(summary_stats$Phase_1_DO,
 ggplot(summary_stats, aes(x = Phase_1_DO, y = mean_growth, color = Phase_1_DO)) +
   geom_point(size = 4, position = position_dodge(0.9)) + # Plot means as points
   geom_errorbar(aes(ymin = mean_growth - se_growth, ymax = mean_growth + se_growth), 
-                width = 0.2, position = position_dodge(0.9)) + # Error bars for SD
+                width = 0.08, position = position_dodge(0.9)) + # Error bars for SD
   theme_classic(base_size = 20) +
   theme(panel.background = element_rect(fill = "#E5E5E5")) + #fill background light grey
   guides(color = "none") + # Remove legend for color
   scale_color_manual(values = c("Hyp" = "darkmagenta", "Norm" = "seagreen")) +
-  labs(x = "Phase 1 Treatment", y = "Carbon in Shell (%mg)") +
+  labs(x = "Phase 1 Treatment", y = "Carbon in Shell (mg)") +
   scale_x_discrete(labels = c("Hyp" = "Hypoxic", "Norm" = "Normoxic")) +
   theme(legend.position = "none") # Remove legend
