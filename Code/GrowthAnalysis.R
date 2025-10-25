@@ -228,6 +228,8 @@ exp(5.34)
 exp(5.41)
 (223.6316- 208.5127)/223.6316
 emmeans(Lm2,specs = pairwise ~ Phase_1_temp*Phase_2.1_DO, adjust = "none")
+exp(5.22)
+exp(5.54)
 
 
 ##tissue:shell growth 
