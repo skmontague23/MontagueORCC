@@ -581,6 +581,38 @@ ggplot(summary_stats_s, aes(x = Phase_1_treat, y = mean_growth, color = Phase_1_
   scale_x_discrete(labels = c("Hyp" = "Hypoxic", "Cont" = "Control", "Warm" = "Warm", "Both" = "Both")) +
   theme(legend.position = "none") # Remove legend
 
+# plot Phase_1_temp:Phase_2.1_temp:Phase_2.1_DO shell post phase 2 
+summary_stats_s <- Growth_Data_forR_full%>%
+  group_by(Phase_1_temp, Phase_2_treat) %>%
+  mutate(
+    mean_growth = mean(Actual_shell_post_mg, na.rm = TRUE),
+    se_growth = std.error(Actual_shell_post_mg, na.rm = TRUE))
+
+#reorder Phase_1_treat and Phase_2_treat
+summary_stats_s$Phase_1_temp <- factor(summary_stats_s$Phase_1_temp, 
+                                        levels = c("Ambient", "Warm"))
+summary_stats_s$Phase_2_treat <- factor(summary_stats_s$Phase_2_treat, 
+                                        levels = c("Cont", "Warm","Hyp",  "Both"))
+
+#plot with mean and SD, SHELL POST
+ggplot(summary_stats_s, aes(x = Phase_1_temp, y = mean_growth, color = Phase_1_temp)) +
+  geom_point(size = 4, position = position_dodge(0.9)) + # Plot means as points
+  geom_errorbar(aes(ymin = mean_growth - se_growth, ymax = mean_growth + se_growth), 
+                width = 0.2, position = position_dodge(0.9)) + # Error bars for SD
+  theme_classic(base_size = 16) +
+  guides(color = "none") + # Remove legend for color
+  facet_wrap(
+    vars(Phase_2_treat),
+    labeller = as_labeller(c(
+      "Hyp" = "Hypoxic",
+      "Cont" = "Control",
+      "Warm" = "Warm",
+      "Both" = "Both")), scales = "fixed", nrow = 1) +
+  scale_color_manual(values = c("Warm" = "#B00149", "Ambient" = "darkblue")) +
+  labs(x = "Phase 1 Temperature", y = "Mean Shell Mass Post Phase 2 (mg)") +
+  scale_x_discrete(labels = c("Hyp" = "Hypoxic", "Cont" = "Control", "Warm" = "Warm", "Both" = "Both")) +
+  theme(legend.position = "none") # Remove legend
+
 
 ##tissue:shell mass post
 m3_post <- lmer((Actual_tissue_post_mg/Actual_shell_post_mg)~ Phase_1_DO*Phase_1_temp*Phase_2.1_temp*Phase_2.1_DO+Actual_tissue_pre_mg+
@@ -598,6 +630,38 @@ m1.e <- residuals(m3_post)
 qqnorm(m1.e)
 qqline(m1.e)
 
+
+# plot Phase_1_temp:Phase_2.1_temp:Phase_2.1_DO tissue:shell post phase 2 
+summary_stats_s <- Growth_Data_forR_full%>%
+  group_by(Phase_1_temp, Phase_2_treat) %>%
+  mutate(
+    mean_growth = mean((Actual_tissue_post_mg/Actual_shell_post_mg), na.rm = TRUE),
+    se_growth = std.error((Actual_tissue_post_mg/Actual_shell_post_mg), na.rm = TRUE))
+
+#reorder Phase_1_treat and Phase_2_treat
+summary_stats_s$Phase_1_temp <- factor(summary_stats_s$Phase_1_temp, 
+                                       levels = c("Ambient", "Warm"))
+summary_stats_s$Phase_2_treat <- factor(summary_stats_s$Phase_2_treat, 
+                                        levels = c("Cont", "Warm","Hyp",  "Both"))
+
+#plot with mean and SD, SHELL POST
+ggplot(summary_stats_s, aes(x = Phase_1_temp, y = mean_growth, color = Phase_1_temp)) +
+  geom_point(size = 4, position = position_dodge(0.9)) + # Plot means as points
+  geom_errorbar(aes(ymin = mean_growth - se_growth, ymax = mean_growth + se_growth), 
+                width = 0.2, position = position_dodge(0.9)) + # Error bars for SD
+  theme_classic(base_size = 16) +
+  guides(color = "none") + # Remove legend for color
+  facet_wrap(
+    vars(Phase_2_treat),
+    labeller = as_labeller(c(
+      "Hyp" = "Hypoxic",
+      "Cont" = "Control",
+      "Warm" = "Warm",
+      "Both" = "Both")), scales = "fixed", nrow = 1) +
+  scale_color_manual(values = c("Warm" = "#B00149", "Ambient" = "darkblue")) +
+  labs(x = "Phase 1 Temperature", y = "Tissue:Shell Mass Post Phase 2 (mg)") +
+  scale_x_discrete(labels = c("Hyp" = "Hypoxic", "Cont" = "Control", "Warm" = "Warm", "Both" = "Both")) +
+  theme(legend.position = "none") # Remove legend
 ####
 
 

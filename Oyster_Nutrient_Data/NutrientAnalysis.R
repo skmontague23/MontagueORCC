@@ -47,8 +47,8 @@ ggplot(summary_stats, aes(x = Phase_1_treat, y = mean_growth, color = Phase_1_tr
   geom_point(size = 4, position = position_dodge(0.9)) + # Plot means as points
   geom_errorbar(aes(ymin = mean_growth - se_growth, ymax = mean_growth + se_growth), 
                 width = 0.2, position = position_dodge(0.9)) + # Error bars for SD
-  theme_classic(base_size = 20) +
-  theme(panel.background = element_rect(fill = "#E5E5E5")) + #fill background light grey
+  theme_classic(base_size = 18) +
+  theme(panel.background = element_rect(fill = "aliceblue")) + #fill background light grey
   guides(color = "none") + # Remove legend for color
   scale_color_manual(values = c("Hyp" = "steelblue3", "Warm" = "palevioletred", "Cont" = "burlywood3", "Both" = "plum3")) +
   labs(x = "Phase 1 Treatment", y = "% N in Tissue") +
@@ -227,8 +227,8 @@ ggplot(summary_stats, aes(x = Phase_1_DO, y = mean_growth, color = Phase_1_DO)) 
   geom_point(size = 4, position = position_dodge(0.9)) + # Plot means as points
   geom_errorbar(aes(ymin = mean_growth - se_growth, ymax = mean_growth + se_growth), 
                 width = 0.08, position = position_dodge(0.9)) + # Error bars for SD
-  theme_classic(base_size = 20) +
-  theme(panel.background = element_rect(fill = "#E5E5E5")) + #fill background light grey
+  theme_classic(base_size = 18) +
+  theme(panel.background = element_rect(fill = "aliceblue")) + #fill background light grey
   guides(color = "none") + # Remove legend for color
   scale_color_manual(values = c("Hyp" = "darkmagenta", "Norm" = "seagreen")) +
   labs(x = "Phase 1 Treatment", y = "Nitrogen in Tissue (mg)") +
@@ -267,9 +267,9 @@ summary_stats$Phase_1_DO <- factor(summary_stats$Phase_1_DO,
 ggplot(summary_stats, aes(x = Phase_1_DO, y = mean_growth, color = Phase_1_DO)) +
   geom_point(size = 4, position = position_dodge(0.9)) + # Plot means as points
   geom_errorbar(aes(ymin = mean_growth - se_growth, ymax = mean_growth + se_growth), 
-                width = 0.2, position = position_dodge(0.9)) + # Error bars for SD
-  theme_classic(base_size = 20) +
-  theme(panel.background = element_rect(fill = "#E5E5E5")) + #fill background light grey
+                width = 0.08, position = position_dodge(0.9)) + # Error bars for SD
+  theme_classic(base_size = 18) +
+  theme(panel.background = element_rect(fill = "aliceblue")) + #fill background light grey
   guides(color = "none") + # Remove legend for color
   scale_color_manual(values = c("Hyp" = "darkmagenta", "Norm" = "seagreen")) +
   labs(x = "Phase 1 Treatment", y = "Carbon in Tissue (mg)") +
@@ -359,8 +359,8 @@ ggplot(summary_stats, aes(x = Phase_1_treat, y = mean_growth, color = Phase_1_tr
   geom_point(size = 4, position = position_dodge(0.9)) + # Plot means as points
   geom_errorbar(aes(ymin = mean_growth - se_growth, ymax = mean_growth + se_growth), 
                 width = 0.2, position = position_dodge(0.9)) + # Error bars for SD
-  theme_classic(base_size = 20) +
-  theme(panel.background = element_rect(fill = "#E5E5E5")) + #fill background light grey
+  theme_classic(base_size = 18) +
+  theme(panel.background = element_rect(fill = "aliceblue")) + #fill background light grey
   guides(color = "none") + # Remove legend for color
   scale_color_manual(values = c("Hyp" = "steelblue3", "Warm" = "palevioletred", "Cont" = "burlywood3", "Both" = "plum3")) +
   labs(x = "Phase 1 Treatment", y = "% N in Shell") +
@@ -514,8 +514,8 @@ ggplot(summary_stats, aes(x = Phase_1_DO, y = mean_growth, color = Phase_1_DO)) 
   geom_point(size = 4, position = position_dodge(0.9)) + # Plot means as points
   geom_errorbar(aes(ymin = mean_growth - se_growth, ymax = mean_growth + se_growth), 
                 width = 0.08, position = position_dodge(0.9)) + # Error bars for SD
-  theme_classic(base_size = 20) +
-  theme(panel.background = element_rect(fill = "#E5E5E5")) + #fill background light grey
+  theme_classic(base_size = 18) +
+  theme(panel.background = element_rect(fill = "aliceblue")) + #fill background light grey
   guides(color = "none") + # Remove legend for color
   scale_color_manual(values = c("Hyp" = "darkmagenta", "Norm" = "seagreen")) +
   labs(x = "Phase 1 Treatment", y = "Nitrogen in Shell (mg)") +
