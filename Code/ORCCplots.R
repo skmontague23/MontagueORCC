@@ -342,11 +342,11 @@ ggplot(stats_s, aes(x = Phase_2.1_DO, y = mean_growth, color = Phase_2.1_DO)) +
   geom_point(size = 4, position = position_dodge(0.9)) + # Plot means as points
   geom_errorbar(aes(ymin = mean_growth - se_growth, ymax = mean_growth + se_growth), 
                 width = 0.05, position = position_dodge(0.9)) + # Error bars for SD
-  theme_classic(base_size = 20) +
+  theme_classic(base_size = 18) +
   guides(color = "none") + # Remove legend for color
   scale_color_manual(values = c("Hyp" = "darkmagenta", "Norm" = "seagreen")) +
   scale_x_discrete(labels = c("Hyp" = "Hypoxic", "Norm" = "Normoxic")) +
-  labs(x = "Phase 2 DO", y = "Mean Shell Growth (mg)") +
+  labs(x = "Phase 2 DO", y = "Shell Growth (mg)") +
   ylim(200, 300)+
   theme(legend.position = "none") # Remove legend
 
@@ -369,7 +369,7 @@ ggplot(stats_s, aes(x = Phase_1_treat, y = mean_growth, color = Phase_1_treat)) 
   guides(color = "none") + # Remove legend for color
   scale_color_manual(values = c("Hyp" = "steelblue3", "Warm" = "palevioletred", "Cont" = "burlywood3", "Both" = "plum3")) +
   scale_x_discrete(labels = c("Hyp" = "Hypoxic", "Cont" = "Control", "Warm" = "Warm", "Both" = "Both")) +
-  labs(x = "Phase 1 Treatment", y = "Mean Shell Growth in Phase 2 (mg)") +
+  labs(x = "Phase 1 Treatment", y = "Shell Growth in Phase 2 (mg)") +
   ylim(230,280) +
   theme(legend.position = "none") # Remove legend
 
@@ -652,11 +652,11 @@ ggplot(stats_t, aes(x = Phase_2.1_DO, y = mean_growth, color = Phase_2.1_DO)) +
   geom_point(size = 4, position = position_dodge(0.9)) + # Plot means as points
   geom_errorbar(aes(ymin = mean_growth - se_growth, ymax = mean_growth + se_growth), 
                 width = 0.05, position = position_dodge(0.9)) + # Error bars for SD
-  theme_classic(base_size = 20) +
+  theme_classic(base_size = 18) +
   guides(color = "none") + # Remove legend for color
   scale_color_manual(values = c("Hyp" = "darkmagenta", "Norm" = "seagreen")) +
   scale_x_discrete(labels = c("Hyp" = "Hypoxic", "Norm" = "Normoxic")) +
-  labs(x = "Phase 2 DO", y = "Mean Tissue Growth (mg)") +
+  labs(x = "Phase 2 DO", y = "Tissue Growth (mg)") +
   ylim(90, 130)+
   theme(legend.position = "none") # Remove legend
 

@@ -12,7 +12,7 @@
 12,2024_Both05_Null_O33_T,Both,Both05,Hypoxic,Warm,10.2,7.6,,-22.9,38.1,,,
 34,2024_Both05_Null_O38_T,Both,Both05,Hypoxic,Warm,10.2,7.9,,-23.8,40.2,,,
 15,2024_Both06_Null_O45_T,Both,Both06,Hypoxic,Warm,10.2,8.1,,-24,40.3,,,
-45,2024_Both06_Null_O46_T,Both,Both06,Hypoxic,Warm,1.6,7.2,very small peak - δ15N data unusable,-26.9,60.1,,Y,
+45,2024_Both06_Null_O46_T,Both,Both06,Hypoxic,Warm,1.6,7.2,very small peak - δ15N data unusable,-26.9,60.1,"had to repack this one, have a note that it had a ""weird texture"" and is an outlier in the tissue/carbon data so not including in analysis",Y,Y
 2,2024_Cont01_Null_W2_T,Cont,Cont01,Normoxic,Ambient,11,7.7,,-23.1,37.3,,,
 7,2024_Cont01_Null_W6_T,Cont,Cont01,Normoxic,Ambient,10,7.9,,-23,37.6,,,
 26,2024_Cont02_Null_W10_T,Cont,Cont02,Normoxic,Ambient,11,8.7,,-23.5,41,,,

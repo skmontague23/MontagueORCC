@@ -57,6 +57,29 @@ ggplot(summary_stats, aes(x = Phase_1_treat, y = mean_growth, color = Phase_1_tr
   theme(legend.position = "none") # Remove legend
 
 
+#plot with mean and SD AND RAW DATA, TISSUE, NITROGEN
+ggplot(summary_stats, aes(x = Phase_1_treat, y = mean_growth, color = Phase_1_treat)) +
+  geom_jitter(data = N_T_df,
+              aes(x = Phase_1_treat, y = wt_percent_N, color = Phase_1_treat),
+              width = 0.1, alpha = 0.5, size = 2) +
+  geom_point(size = 4, position = position_dodge(0.9)) +
+  geom_errorbar(aes(ymin = mean_growth - se_growth, ymax = mean_growth + se_growth), 
+                width = 0.1, position = position_dodge(0.9)) +
+  theme_classic(base_size = 18) +
+  theme(panel.background = element_rect(fill = "aliceblue")) +
+  guides(color = "none") +
+  scale_color_manual(values = c("Hyp" = "steelblue3", "Warm" = "palevioletred",
+                                "Cont" = "burlywood3", "Both" = "plum3")) +
+  labs(x = "Phase 1 Treatment", y = "% N in Tissue") +
+  scale_x_discrete(labels = c("Hyp" = "Hypoxic", "Cont" = "Control",
+                              "Warm" = "Warm", "Both" = "Both")) +
+  ylim(6, 9) +
+  theme(legend.position = "none")
+
+
+
+
+
 #plot with mean and SD, TISSUE, CARBON
 summary_stats <- C_T_df %>%
   group_by(Phase_1_treat) %>%
@@ -74,14 +97,81 @@ ggplot(summary_stats, aes(x = Phase_1_treat, y = mean_growth, color = Phase_1_tr
   geom_errorbar(aes(ymin = mean_growth - se_growth, ymax = mean_growth + se_growth), 
                 width = 0.2, position = position_dodge(0.9)) + # Error bars for SD
   theme_classic(base_size = 20) +
-  theme(panel.background = element_rect(fill = "#E5E5E5")) + #fill background light grey
+  theme(panel.background = element_rect(fill = "aliceblue")) + #fill background light grey
   guides(color = "none") + # Remove legend for color
   scale_color_manual(values = c("Hyp" = "steelblue3", "Warm" = "palevioletred", "Cont" = "burlywood3", "Both" = "plum3")) +
   labs(x = "Phase 1 Treatment", y = "% C in Tissue") +
   scale_x_discrete(labels = c("Hyp" = "Hypoxic", "Cont" = "Control", "Warm" = "Warm", "Both" = "Both")) +
-  ylim(35,45)+
+  ylim(34,42)+
   theme(legend.position = "none") # Remove legend
 
+ggplot(summary_stats, aes(x = Phase_1_treat, y = mean_growth, color = Phase_1_treat)) +
+  # Raw data points
+  geom_jitter(data = C_T_df,
+              aes(x = Phase_1_treat, y = wt_percent_C, color = Phase_1_treat),
+              width = 0.1, alpha = 0.5, size = 2) +
+  geom_point(size = 4, position = position_dodge(0.9)) +
+  
+  # Error bars
+  geom_errorbar(aes(ymin = mean_growth - se_growth, ymax = mean_growth + se_growth), 
+                width = 0.1, position = position_dodge(0.9)) +
+  theme_classic(base_size = 18) +
+  theme(panel.background = element_rect(fill = "aliceblue")) +
+  guides(color = "none") +
+  scale_color_manual(values = c("Hyp" = "steelblue3", "Warm" = "palevioletred",
+                                "Cont" = "burlywood3", "Both" = "plum3")) +
+  labs(x = "Phase 1 Treatment", y = "% C in Tissue") +
+  scale_x_discrete(labels = c("Hyp" = "Hypoxic", "Cont" = "Control",
+                              "Warm" = "Warm", "Both" = "Both")) +
+  ylim(20, 50)+
+  theme(legend.position = "none")
+
+
+
+
+#plot with mean and SD, TISSUE, CARBON:NITROGEN
+
+#read in data
+Tissue_Nutrient_df <- read_csv("Phase1_tissuenutrient_working.csv", 
+                               col_types = cols(wt_percent_N = col_number(), 
+                                                wt_percent_C = col_number()))
+
+#filter out exclusions for N and C
+CN_T_df <- Tissue_Nutrient_df %>%
+  filter( (is.na(N_exclude) | N_exclude != "Y") &
+            (is.na(C_exclude) | C_exclude != "Y") )
+
+
+summary_stats <- CN_T_df %>%
+  group_by(Phase_1_treat) %>%
+  summarize(
+    mean_growth = mean((wt_percent_C/wt_percent_N), na.rm = TRUE),
+    se_growth = std.error((wt_percent_C/wt_percent_N), na.rm = TRUE))
+View(summary_stats)
+
+#reorder Phase_1_treat
+summary_stats$Phase_1_treat <- factor(summary_stats$Phase_1_treat, 
+                                      levels = c("Cont", "Warm","Hyp", "Both"))
+
+ggplot(summary_stats, aes(x = Phase_1_treat, y = mean_growth, color = Phase_1_treat)) +
+  # Raw data points
+  geom_jitter(data = CN_T_df,
+              aes(x = Phase_1_treat, y = (wt_percent_C/wt_percent_N), color = Phase_1_treat),
+              width = 0.1, alpha = 0.5, size = 2) +
+  geom_point(size = 4, position = position_dodge(0.9)) +
+  
+  geom_errorbar(aes(ymin = mean_growth - se_growth, ymax = mean_growth + se_growth), 
+                width = 0.1, position = position_dodge(0.9)) +
+  theme_classic(base_size = 18) +
+  theme(panel.background = element_rect(fill = "aliceblue")) +
+  guides(color = "none") +
+  scale_color_manual(values = c("Hyp" = "steelblue3", "Warm" = "palevioletred",
+                                "Cont" = "burlywood3", "Both" = "plum3")) +
+  labs(x = "Phase 1 Treatment", y = "C:N in Tissue") +
+  scale_x_discrete(labels = c("Hyp" = "Hypoxic", "Cont" = "Control",
+                              "Warm" = "Warm", "Both" = "Both")) +
+  ylim(4.5,6.5)+
+  theme(legend.position = "none")
 
 
 
@@ -93,7 +183,7 @@ getOption("contrasts")
 N_T_df
 ## % N
 #nothing significant with or without log transformation
-Nm1 <- lmer(log(wt_percent_N) ~ Phase_1_DO*Phase_1_temp + 
+Nm1 <- lmer(wt_percent_N ~ Phase_1_DO*Phase_1_temp + 
               (1|Phase_1_rep_R), data = N_T_df, REML=TRUE)
 Anova(Nm1, test="F", type="III")
 N_T_df
@@ -106,8 +196,12 @@ m1.e <- residuals(Nm1)
 qqnorm(m1.e)
 qqline(m1.e)
 
+#analyzing isotopes
+Nm2 <- lmer(Linearcorr_d15N ~ Phase_1_DO*Phase_1_temp + 
+              (1|Phase_1_rep_R), data = N_T_df, REML=TRUE)
+Anova(Nm2, test="F", type="III")
 
-
+colnames(N_T_df)
 ## % C
 #nothing significant
 Cm1 <- lmer(log(wt_percent_C) ~ Phase_1_DO*Phase_1_temp +
@@ -123,6 +217,26 @@ m1.e <- residuals(Cm1)
 qqnorm(m1.e)
 qqline(m1.e)
 
+#analyzing isotopes
+Cm2 <- lmer(Linearcorr_d13C ~ Phase_1_DO*Phase_1_temp + 
+              (1|Phase_1_rep_R), data = C_T_df, REML=TRUE)
+Anova(Cm2, test="F", type="III")
+
+
+## C: N 
+CNm1 <- lmer(log(wt_percent_C/wt_percent_N) ~ Phase_1_DO*Phase_1_temp + 
+              (1|Phase_1_rep_R), data = CN_T_df, REML=TRUE)
+Anova(CNm1, test="F", type="III")
+        #log transformed model is preferred as compared by AIC
+
+#post hocs
+emmeans(CNm1,specs = pairwise ~ Phase_1_DO, adjust = "none")
+
+#diagnostics
+leveneTest(log(wt_percent_C/wt_percent_N)~Phase_1_DO*Phase_1_temp, CN_T_df)
+m1.e <- residuals(CNm1) 
+qqnorm(m1.e)
+qqline(m1.e)
 
 
 
@@ -341,6 +455,11 @@ N_S_df <- Shell_Nutrient_df%>%
 C_S_df <- Shell_Nutrient_df%>%
   filter(C_exclude != "Y" | is.na(C_exclude))
 
+#filter out exclusions for N and C
+CN_S_df <- Shell_Nutrient_df %>%
+  filter( (is.na(N_exclude) | N_exclude != "Y") &
+            (is.na(C_exclude) | C_exclude != "Y") )
+
 
 #plot with mean and SD, shell, NITROGEN
 summary_stats <- N_S_df %>%
@@ -368,8 +487,26 @@ ggplot(summary_stats, aes(x = Phase_1_treat, y = mean_growth, color = Phase_1_tr
   ylim(0.25, 0.32)+
   theme(legend.position = "none") # Remove legend
 
+ggplot(summary_stats, aes(x = Phase_1_treat, y = mean_growth, color = Phase_1_treat)) +
+  geom_jitter(data = N_S_df,
+              aes(x = Phase_1_treat, y = wt_percent_N, color = Phase_1_treat),
+              width = 0.1, alpha = 0.5, size = 2) +
+  geom_point(size = 4, position = position_dodge(0.9)) +
+  geom_errorbar(aes(ymin = mean_growth - se_growth, ymax = mean_growth + se_growth), 
+                width = 0.1, position = position_dodge(0.9)) +
+  theme_classic(base_size = 18) +
+  theme(panel.background = element_rect(fill = "aliceblue")) +
+  guides(color = "none") +
+  scale_color_manual(values = c("Hyp" = "steelblue3", "Warm" = "palevioletred",
+                                "Cont" = "burlywood3", "Both" = "plum3")) +
+  labs(x = "Phase 1 Treatment", y = "% N in Shell") +
+  scale_x_discrete(labels = c("Hyp" = "Hypoxic", "Cont" = "Control",
+                              "Warm" = "Warm", "Both" = "Both")) +
+  theme(legend.position = "none")
 
-#plot with mean and SD, TISSUE, CARBON
+
+
+#plot with mean and SD, SHELL, CARBON
 summary_stats <- C_S_df %>%
   group_by(Phase_1_treat) %>%
   summarize(
@@ -386,13 +523,76 @@ ggplot(summary_stats, aes(x = Phase_1_treat, y = mean_growth, color = Phase_1_tr
   geom_errorbar(aes(ymin = mean_growth - se_growth, ymax = mean_growth + se_growth), 
                 width = 0.2, position = position_dodge(0.9)) + # Error bars for SD
   theme_classic(base_size = 20) +
-  theme(panel.background = element_rect(fill = "#E5E5E5")) + #fill background light grey
+  theme(panel.background = element_rect(fill = "aliceblue")) + #fill background light grey
   guides(color = "none") + # Remove legend for color
   scale_color_manual(values = c("Hyp" = "steelblue3", "Warm" = "palevioletred", "Cont" = "burlywood3", "Both" = "plum3")) +
   labs(x = "Phase 1 Treatment", y = "% C in Shell") +
   scale_x_discrete(labels = c("Hyp" = "Hypoxic", "Cont" = "Control", "Warm" = "Warm", "Both" = "Both")) +
   ylim(15, 18) +
   theme(legend.position = "none") # Remove legend
+
+ggplot(summary_stats, aes(x = Phase_1_treat, y = mean_growth, color = Phase_1_treat)) +
+  # Raw data points
+  geom_jitter(data = C_S_df,
+              aes(x = Phase_1_treat, y = wt_percent_C, color = Phase_1_treat),
+              width = 0.1, alpha = 0.5, size = 2) +
+  geom_point(size = 4, position = position_dodge(0.9)) +
+  
+  # Error bars
+  geom_errorbar(aes(ymin = mean_growth - se_growth, ymax = mean_growth + se_growth), 
+                width = 0.1, position = position_dodge(0.9)) +
+  theme_classic(base_size = 18) +
+  theme(panel.background = element_rect(fill = "aliceblue")) +
+  guides(color = "none") +
+  scale_color_manual(values = c("Hyp" = "steelblue3", "Warm" = "palevioletred",
+                                "Cont" = "burlywood3", "Both" = "plum3")) +
+  labs(x = "Phase 1 Treatment", y = "% C in Shell") +
+  scale_x_discrete(labels = c("Hyp" = "Hypoxic", "Cont" = "Control",
+                              "Warm" = "Warm", "Both" = "Both")) +
+  ylim(14,22)+
+  theme(legend.position = "none")
+
+
+#plot with mean and SD, TISSUE, CARBON:NITROGEN
+
+#read in data
+Tissue_Nutrient_df <- read_csv("Phase1_tissuenutrient_working.csv", 
+                               col_types = cols(wt_percent_N = col_number(), 
+                                                wt_percent_C = col_number()))
+
+
+##C:N SHELL NUTRIENTS
+summary_stats <- CN_S_df %>%
+  group_by(Phase_1_treat) %>%
+  summarize(
+    mean_growth = mean((wt_percent_C/wt_percent_N), na.rm = TRUE),
+    se_growth = std.error((wt_percent_C/wt_percent_N), na.rm = TRUE))
+View(summary_stats)
+
+#reorder Phase_1_treat
+summary_stats$Phase_1_treat <- factor(summary_stats$Phase_1_treat, 
+                                      levels = c("Cont", "Warm","Hyp", "Both"))
+
+ggplot(summary_stats, aes(x = Phase_1_treat, y = mean_growth, color = Phase_1_treat)) +
+  # Raw data points
+  geom_jitter(data = CN_S_df,
+              aes(x = Phase_1_treat, y = (wt_percent_C/wt_percent_N), color = Phase_1_treat),
+              width = 0.1, alpha = 0.5, size = 2) +
+  geom_point(size = 4, position = position_dodge(0.9)) +
+  
+  geom_errorbar(aes(ymin = mean_growth - se_growth, ymax = mean_growth + se_growth), 
+                width = 0.1, position = position_dodge(0.9)) +
+  theme_classic(base_size = 18) +
+  theme(panel.background = element_rect(fill = "aliceblue")) +
+  guides(color = "none") +
+  scale_color_manual(values = c("Hyp" = "steelblue3", "Warm" = "palevioletred",
+                                "Cont" = "burlywood3", "Both" = "plum3")) +
+  labs(x = "Phase 1 Treatment", y = "C:N in Shell") +
+  scale_x_discrete(labels = c("Hyp" = "Hypoxic", "Cont" = "Control",
+                              "Warm" = "Warm", "Both" = "Both")) +
+  theme(legend.position = "none")
+
+
 
 ## % N analysis
 Nm1 <- lmer(wt_percent_N ~ Phase_1_DO*Phase_1_temp +
