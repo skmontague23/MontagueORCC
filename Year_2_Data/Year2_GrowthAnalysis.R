@@ -41,7 +41,7 @@ Year2_Growth_clean <- Year2_Growth%>%
     Actual_shell_growth_year2_mg = as.numeric(Actual_shell_growth_year2_mg),
     Ratio_TS_year2 = as.numeric(Ratio_TS_year2))
 
-Year2_Growth_clean %>%
+Year2_Growth %>%
   count(Phase_1_treat, Phase_2_treat)
 Year2_Growth_clean %>%
   count(Phase_1_treat, Phase_2_treat)

@@ -38,6 +38,7 @@ summary_stats <- N_T_df %>%
     mean_growth = mean(wt_percent_N, na.rm = TRUE),
     se_growth = std.error(wt_percent_N, na.rm = TRUE))
 View(summary_stats)
+#write_csv(summary_stats, "/Users/sophiemontague/Desktop/Phase1_N_Tissue_summarystats.csv")
 
 #reorder Phase_1_treat
 summary_stats$Phase_1_treat <- factor(summary_stats$Phase_1_treat, 
@@ -87,6 +88,7 @@ summary_stats <- C_T_df %>%
     mean_growth = mean(wt_percent_C, na.rm = TRUE),
     se_growth = std.error(wt_percent_C, na.rm = TRUE))
 View(summary_stats)
+#write_csv(summary_stats, "/Users/sophiemontague/Desktop/Phase1_C_Tissue_summarystats.csv")
 
 #reorder Phase_1_treat
 summary_stats$Phase_1_treat <- factor(summary_stats$Phase_1_treat, 
@@ -239,23 +241,6 @@ qqnorm(m1.e)
 qqline(m1.e)
 
 
-
-#Calculate summary stats for Nitrogen to multiply with TISSUE mass
-summary_stats_TN <- N_T_df %>%
-  group_by(Phase_1_treat) %>%
-  summarize(
-    mean_growth = mean(wt_percent_N, na.rm = TRUE),
-    se_growth = std.error(wt_percent_N, na.rm = TRUE))
-View(summary_stats_TN)
-
-#Now C
-summary_stats_TC <- C_T_df %>%
-  group_by(Phase_1_treat) %>%
-  summarize(
-    mean_growth = mean(wt_percent_C, na.rm = TRUE),
-    se_growth = std.error(wt_percent_C, na.rm = TRUE))
-View(summary_stats_TC)
-View(C_T_df)
 
 
 
@@ -469,6 +454,7 @@ summary_stats <- N_S_df %>%
     se_growth = std.error(wt_percent_N, na.rm = TRUE))
 
 View(summary_stats)
+#write_csv(summary_stats, "/Users/sophiemontague/Desktop/Phase1_N_Shell_summarystats.csv")
 
 #reorder Phase_1_treat
 summary_stats$Phase_1_treat <- factor(summary_stats$Phase_1_treat, 
@@ -513,6 +499,7 @@ summary_stats <- C_S_df %>%
     mean_growth = mean(wt_percent_C, na.rm = TRUE),
     se_growth = std.error(wt_percent_C, na.rm = TRUE))
 View(summary_stats)
+#write_csv(summary_stats, "/Users/sophiemontague/Desktop/Phase1_C_Shell_summarystats.csv")
 
 #reorder Phase_1_treat
 summary_stats$Phase_1_treat <- factor(summary_stats$Phase_1_treat, 
@@ -613,6 +600,22 @@ qqline(m1.e)
 Cm1 <- lmer(wt_percent_C ~ Phase_1_DO*Phase_1_temp +
               (1|Phase_1_rep_R), data = C_S_df, REML=TRUE)
 Anova(Cm1, test="F", type="III")
+
+#post hocs
+emmeans(Cm1,specs = pairwise ~ Phase_1_DO, adjust = "none")
+emmeans(Cm1,specs = pairwise ~ Phase_1_temp, adjust = "none")
+
+#diagnostics
+leveneTest(wt_percent_C~Phase_1_treat, C_S_df)
+m1.e <- residuals(Cm1) 
+qqnorm(m1.e)
+qqline(m1.e)
+
+## C:N analysis
+CNm1 <- lmer((wt_percent_C/wt_percent_N) ~ Phase_1_DO*Phase_1_temp +
+              (1|Phase_1_rep_R), data = CN_S_df, REML=TRUE)
+Anova(CNm1, test="F", type="III")
+
 
 #post hocs
 emmeans(Cm1,specs = pairwise ~ Phase_1_DO, adjust = "none")

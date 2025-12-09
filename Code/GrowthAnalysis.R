@@ -45,6 +45,15 @@ levels(Growth_Data_forR$Phase_2.1_temp)
 levels(Growth_Data_forR$Phase_1_treat)
 levels(Growth_Data_forR$Phase_2_treat)
 
+Cont01 <- Growth_Data_forR%>%
+  filter(Phase_2_rep_R == "Cont01")
+nrow(Cont01)
+Cont02 <- Growth_Data_forR%>%
+  filter(Tag_color == "B")
+nrow(Cont02)
+
+unique(Growth_Data_forR$Tag_color)
+
 #set contrasts ALWAYS RUN
 options(contrasts = c("contr.sum","contr.poly")) #could also be contr.treatment for unequal groups sum
 getOption("contrasts") 
