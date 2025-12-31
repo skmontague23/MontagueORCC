@@ -55,8 +55,10 @@ nrow(Cont02)
 unique(Growth_Data_forR$Tag_color)
 
 #set contrasts ALWAYS RUN
-options(contrasts = c("contr.sum","contr.poly")) #could also be contr.treatment for unequal groups sum
+options(contrasts = c("contr.sum","contr.sum")) #could also be contr.treatment for unequal groups sum
 getOption("contrasts") 
+
+options("contrasts")
 
 #filter to not include data from dead oysters/ doubles in analysis
   #pre excludes doubles but keeps oysters that died in the second phase, as all oysters were alive for first measurements
