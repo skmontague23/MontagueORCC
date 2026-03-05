@@ -156,12 +156,11 @@ summary_stats$Phase_1_treat <- factor(summary_stats$Phase_1_treat,
                                       levels = c("Cont", "Warm","Hyp", "Both"))
 
 ggplot(summary_stats, aes(x = Phase_1_treat, y = mean_growth, color = Phase_1_treat)) +
-  # Raw data points
-  geom_jitter(data = CN_T_df,
-              aes(x = Phase_1_treat, y = (wt_percent_C/wt_percent_N), color = Phase_1_treat),
-              width = 0.1, alpha = 0.5, size = 2) +
   geom_point(size = 4, position = position_dodge(0.9)) +
-  
+  # Raw data points
+  #geom_jitter(data = CN_T_df,
+              #aes(x = Phase_1_treat, y = (wt_percent_C/wt_percent_N), color = Phase_1_treat),
+              #width = 0.1, alpha = 0.5, size = 2) +
   geom_errorbar(aes(ymin = mean_growth - se_growth, ymax = mean_growth + se_growth), 
                 width = 0.1, position = position_dodge(0.9)) +
   theme_classic(base_size = 18) +
@@ -172,7 +171,7 @@ ggplot(summary_stats, aes(x = Phase_1_treat, y = mean_growth, color = Phase_1_tr
   labs(x = "Phase 1 Treatment", y = "C:N in Tissue") +
   scale_x_discrete(labels = c("Hyp" = "Hypoxic", "Cont" = "Control",
                               "Warm" = "Warm", "Both" = "Both")) +
-  ylim(4.5,6.5)+
+  ylim(4.75,5.75)+
   theme(legend.position = "none")
 
 
@@ -284,6 +283,23 @@ N_C_bytissueweight <- Nutrientsbyweight %>%
 
 View(N_C_bytissueweight)
 
+##Excluded another data point, recalculating carbon in tissue with new summary stats
+NCmerged<-read.csv("~/Desktop/MontagueORCC_repo/MontagueORCC/Oyster_Nutrient_Data/Phase1_nutrient_merged.csv")
+
+N_C_bytissueweight <- NCmerged %>%
+  mutate(
+  Phase1C_tissue = case_when(
+    Phase_1_treat == "Cont" ~ ((Actual_tissue_pre_mg * 38.53333)/100),
+    Phase_1_treat == "Warm" ~ ((Actual_tissue_pre_mg * 38.47500)/100),
+    Phase_1_treat == "Hyp"  ~ ((Actual_tissue_pre_mg * 39.71667)/100),
+    Phase_1_treat == "Both" ~ ((Actual_tissue_pre_mg * 37.75000)/100),
+    TRUE ~ NA_real_
+  ))
+
+View(NCmerged_recalc)
+
+##trying new summary stats
+options(contrasts = c("contr.sum", "contr.sum"))
 
 
 #read in nutrient data
@@ -618,12 +634,11 @@ Anova(CNm1, test="F", type="III")
 
 
 #post hocs
-emmeans(Cm1,specs = pairwise ~ Phase_1_DO, adjust = "none")
-emmeans(Cm1,specs = pairwise ~ Phase_1_temp, adjust = "none")
+
 
 #diagnostics
 leveneTest(wt_percent_C~Phase_1_treat, C_S_df)
-m1.e <- residuals(Cm1) 
+m1.e <- residuals(CNm1) 
 qqnorm(m1.e)
 qqline(m1.e)
 
