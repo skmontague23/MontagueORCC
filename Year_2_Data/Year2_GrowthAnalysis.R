@@ -32,10 +32,12 @@ Year2_Growth <- read_csv("/Users/sophiemontague/Desktop/MontagueORCC_repo/Montag
                                               Phase_1_rep_R = col_factor(),
                                               double_single_dead_year2 = col_factor()))
 colnames(Year2_Growth)
+View(Year2_Growth)
 #filter out dead and untagged
 Year2_Growth_clean <- Year2_Growth%>%
   drop_na(Actual_tissue_growth_year2_mg) %>%
   filter(Exclude_year2 != "Y" | is.na(Exclude_year2)) %>%
+  filter(!is.na(Phase_1_treat)) %>%
   mutate(
     Actual_tissue_growth_year2_mg = as.numeric(Actual_tissue_growth_year2_mg),
     Actual_shell_growth_year2_mg = as.numeric(Actual_shell_growth_year2_mg),
