@@ -196,7 +196,7 @@ summary_stats_t_s <-Growth_Data_forR_full %>%
 
   #reorder Phase_1_treat and Phase_2_treat
   summary_stats_t_s$Phase_1_treat <- factor(summary_stats_t_s$Phase_1_treat, 
-                                          levels = c("Cont", "Warm","Hyp",  "Both"))
+                                          levels = c("Cont", "Warm","Hyp", "Both"))
   summary_stats_t_s$Phase_2_treat <- factor(summary_stats_t_s$Phase_2_treat, 
                                           levels = c("Cont", "Warm","Hyp",  "Both"))
   
