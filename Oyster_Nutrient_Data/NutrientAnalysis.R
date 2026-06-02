@@ -175,6 +175,35 @@ ggplot(summary_stats, aes(x = Phase_1_treat, y = mean_growth, color = Phase_1_tr
   theme(legend.position = "none")
 
 
+##CN graph for phase 1 DO
+summary_stats <- CN_T_df %>%
+  group_by(Phase_1_DO) %>%
+  summarize(
+    mean_growth = mean((wt_percent_C/wt_percent_N), na.rm = TRUE),
+    se_growth = std.error((wt_percent_C/wt_percent_N), na.rm = TRUE))
+View(summary_stats)
+
+#reorder Phase_1_treat
+summary_stats$Phase_1_DO <- factor(summary_stats$Phase_1_DO, 
+                                      levels = c("Normoxic", "Hypoxic"))
+
+ggplot(summary_stats, aes(x = Phase_1_DO, y = mean_growth, color = Phase_1_DO)) +
+  geom_point(size = 4, position = position_dodge(0.9)) +
+  geom_errorbar(aes(ymin = mean_growth - se_growth, ymax = mean_growth + se_growth), 
+                width = 0.1, position = position_dodge(0.9)) +
+  theme_classic(base_size = 18) +
+  theme(panel.background = element_rect(fill = "aliceblue")) +
+  guides(color = "none") +
+  scale_color_manual(values = c("Hypoxic" = "darkmagenta", "Normoxic" = "seagreen")) +
+  labs(x = "Phase 1 DO", y = "C:N in Tissue") +
+  ylim(4.9,5.4)+
+  theme(legend.position = "none")
+
+
+
+
+
+
 
 
 #set contrasts ALWAYS RUN
@@ -238,6 +267,10 @@ leveneTest(log(wt_percent_C/wt_percent_N)~Phase_1_DO*Phase_1_temp, CN_T_df)
 m1.e <- residuals(CNm1) 
 qqnorm(m1.e)
 qqline(m1.e)
+
+
+
+
 
 
 

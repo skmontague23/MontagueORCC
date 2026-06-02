@@ -51,6 +51,7 @@ Year2_Growth_clean %>%
 
 colnames(Year2_Growth_clean)
 unique(Year2_Growth_clean$double_single_dead_year2)
+nrow(Year2_Growth_clean)
 
 View(Year2_Growth)
 
@@ -324,7 +325,7 @@ ggplot(summary_stats_t, aes(x = Phase_1_temp, y = mean_growth, color = Phase_1_t
              labeller = as_labeller(c("Warm" = "Warm", "Ambient" = "Ambient")), 
              scales = "fixed", nrow = 1) + # Facet by Phase_2_treat
   scale_color_manual(values = c("Warm" = "#B00149", "Ambient" = "darkblue")) +
-  labs(x = "Phase 1 Treatment", y = "Year 2 Tissue Growth (mg)") +
+  labs(x = "Phase 1 Temperature", y = "Year 2 Tissue Growth (mg)") +
   theme(legend.position = "none") # Remove legend
 
 
@@ -403,7 +404,7 @@ ggplot(summary_stats_s, aes(x = Phase_1_treat, y = mean_growth, color = Phase_1_
              labeller = as_labeller(c("Hyp" = "Hypoxic", "Cont" = "Control", "Warm" = "Warm", "Both" = "Both")), 
              scales = "fixed", nrow = 1) + # Facet by Phase_2_treat
   scale_color_manual(values = c("Hyp" = "steelblue3", "Warm" = "palevioletred", "Cont" = "burlywood3", "Both" = "plum3")) +
-  labs(x = "Phase 1 Treatment", y = "Year 2 Tissue Growth (mg)") +
+  labs(x = "Phase 1 Treatment", y = "Year 2 Shell Growth (mg)") +
   scale_x_discrete(labels = c("Hyp" = "Hypoxic", "Cont" = "Control", "Warm" = "Warm", "Both" = "Both")) +
   theme(legend.position = "none") # Remove legend
 
