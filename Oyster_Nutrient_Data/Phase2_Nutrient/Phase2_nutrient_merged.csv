@@ -1,0 +1,398 @@
+Vial_num,linear_corr_d15n,wt_percent_n,n_notes,linear_corr_d13c,wt_percent_c,c_notes,n_exclude,c_exclude,Year,Phase_1_treat,Phase_1_treat_old,Phase_1_rep,Phase_1_rep_R,Phase_2_treat,Phase_2_treat_old,Phase_2_rep,Phase_2_rep_R,Tag_color,Tag_num,Tissue_type,Sample_Name_old,Sample_Name,Notes,og_order,filt_out_preprocessing
+1,13.5,0.2,NA,-10.3,16.9,"incorrect C dilution - peaks usable, but might consider rerunning to be sure",NA,NA,2024,Warm,Warm,6,Warm06,Warm,Warm,6,Warm06,G,72,S,Warm6_Warm6_G72_S,2024_Warm06_Warm06_G72_S,May have bee tag in sample,383,NA
+2,11.7,0.2,NA,-9.1,16.2,"incorrect C dilution - peaks usable, but might consider rerunning to be sure",NA,NA,2024,Hyp,Hypoxic,5,Hypoxic05,Warm,Warm,6,Warm06,B,69,S,Hypoxic5_Warm6_B69_S,2024_Hyp05_Warm06_B69_S,NA,379,NA
+3,11.2,0.2,NA,-10,16.7,"incorrect C dilution - peaks usable, but might consider rerunning to be sure",NA,NA,2024,Both,Both,6,Both06,Warm,Warm,6,Warm06,O,72,S,Both6_Warm6_O72_S,2024_Both06_Warm06_O72_S,NA,371,NA
+4,12.6,10,NA,-24,39.3,NA,NA,NA,2024,Warm,Warm,6,Warm06,Warm,Warm,6,Warm06,G,72,T,Warm6_Warm6_G72_T,2024_Warm06_Warm06_G72_T,NA,384,NA
+5,12.5,10.1,NA,-23.8,41.6,NA,NA,NA,2024,Hyp,Hypoxic,5,Hypoxic05,Warm,Warm,6,Warm06,B,69,T,Hypoxic5_Warm6_B69_T,2024_Hyp05_Warm06_B69_T,NA,380,NA
+6,12.4,8.8,NA,-23.6,39.2,NA,NA,NA,2024,Both,Both,6,Both06,Warm,Warm,6,Warm06,O,72,T,Both6_Warm6_O72_T,2024_Both06_Warm06_O72_T,NA,372,NA
+7,12.7,7,NA,-25.7,49.1,NA,NA,NA,2024,Both,Both,3,Both03,Warm,Warm,6,Warm06,O,66,T,Both3_Warm6_O66_T,2024_Both03_Warm06_O66_T,NA,370,NA
+8,12.2,6.8,NA,-26.2,54.9,NA,NA,NA,2024,Cont,Control,2,Control02,Warm,Warm,6,Warm06,W,63,T,Control2_Warm6_W63_T,2024_Cont02_Warm06_W63_T,NA,374,NA
+9,12.5,7.3,NA,-26.2,52.8,NA,NA,NA,2024,Warm,Warm,5,Warm05,Warm,Warm,6,Warm06,G,69,T,Warm5_Warm6_G69_T,2024_Warm05_Warm06_G69_T,NA,382,NA
+10,12.6,0.2,NA,-9.2,16.2,"incorrect C dilution - peaks usable, but might consider rerunning to be sure",NA,NA,2024,Both,Both,3,Both03,Warm,Warm,6,Warm06,O,66,S,Both3_Warm6_O66_S,2024_Both03_Warm06_O66_S,NA,369,NA
+11,11.3,0.2,NA,-9.5,16.5,"incorrect C dilution - peaks usable, but might consider rerunning to be sure",NA,NA,2024,Cont,Control,2,Control02,Warm,Warm,6,Warm06,W,63,S,Control2_Warm6_W63_S,2024_Cont02_Warm06_W63_S,NA,373,NA
+12,12,0.2,NA,-8.9,15.9,"incorrect C dilution - peaks usable, but might consider rerunning to be sure",NA,NA,2024,Warm,Warm,5,Warm05,Warm,Warm,6,Warm06,G,69,S,Warm5_Warm6_G69_S,2024_Warm05_Warm06_G69_S,NA,381,NA
+13,12.4,7.6,NA,-25.5,48.7,NA,NA,NA,2024,Cont,Control,4,Control04,Warm,Warm,6,Warm06,W,67,T,Control4_Warm6_W67_T,2024_Cont04_Warm06_W67_T,NA,376,NA
+14,10.2,5.6,small peak - error on δ15N will be higher,-26.8,59.6,NA,NA,NA,2024,Hyp,Hypoxic,1,Hypoxic01,Warm,Warm,6,Warm06,B,61,T,Hypoxic1_Warm6_B61_T,2024_Hyp01_Warm06_B61_T,NA,378,NA
+15,11.4,0.2,NA,-7.1,14.7,"incorrect C dilution - peaks usable, but might consider rerunning to be sure",NA,NA,2024,Cont,Control,4,Control04,Warm,Warm,6,Warm06,W,67,S,Control4_Warm6_W67_S,2024_Cont04_Warm06_W67_S,NA,375,NA
+16,11.3,0.2,NA,-8.2,15.7,"incorrect C dilution - peaks usable, but might consider rerunning to be sure",NA,NA,2024,Hyp,Hypoxic,1,Hypoxic01,Warm,Warm,6,Warm06,B,61,S,Hypoxic1_Warm6_B61_S,2024_Hyp01_Warm06_B61_S,NA,377,NA
+17,11.8,7.1,NA,-25.6,47.4,NA,NA,NA,2024,Both,Both,3,Both03,Both,Both,6,Both06,O,65,T,Both3_Both6_O65_T,2024_Both03_Both06_O65_T,NA,324,NA
+18,11.9,7,small peak - error on δ15N will be higher,-26,49.9,NA,NA,NA,2024,Warm,Warm,4,Warm04,Both,Both,6,Both06,G,67,T,Warm4_Both6_G67_T,2024_Warm04_Both06_G67_T,NA,336,NA
+19,11.9,7.9,NA,-25.9,50.6,NA,NA,NA,2024,Warm,Warm,3,Warm03,Both,Both,6,Both06,G,65,T,Warm3_Both6_G65_T,2024_Warm03_Both06_G65_T,NA,334,NA
+20,11.7,0.2,NA,-9.4,16.5,"incorrect C dilution - peaks usable, but might consider rerunning to be sure",NA,NA,2024,Warm,Warm,3,Warm03,Both,Both,6,Both06,G,65,S,Warm3_Both6_G65_S,2024_Warm03_Both06_G65_S,NA,333,NA
+21,8.3,0.3,NA,-7,14.9,"incorrect C dilution - peaks usable, but might consider rerunning to be sure",NA,NA,2024,Both,Both,3,Both03,Both,Both,6,Both06,O,65,S,Both3_Both6_O65_S,2024_Both03_Both06_O65_S,NA,323,NA
+22,10.3,0.2,NA,-7.5,15.4,"incorrect C dilution - peaks usable, but might consider rerunning to be sure",NA,NA,2024,Warm,Warm,4,Warm04,Both,Both,6,Both06,G,67,S,Warm4_Both6_G67_S,2024_Warm04_Both06_G67_S,NA,335,NA
+23,12.2,9.5,NA,-24.1,41.4,NA,NA,NA,2024,Cont,Control,1,Control01,Both,Both,6,Both06,W,62,T,Control1_Both6_W62_T,2024_Cont01_Both06_W62_T,NA,326,NA
+24,12.5,9.3,NA,-24.4,42.1,NA,NA,NA,2024,Both,Both,1,Both01,Both,Both,6,Both06,O,62,T,Both1_Both6_O62_T,2024_Both01_Both06_O62_T,NA,322,NA
+25,8.8,4.3,very small peak - δ15N data unusable,-26.1,40.3,small peak - error on δ13C will be higher,Y,NA,2024,Cont,Control,5,Control05,Both,Both,6,Both06,W,69,T,Control5_Both6_W69_T,2024_Cont05_Both06_W69_T,NA,328,NA
+26,10.2,0.1,small peak - error on δ15N will be higher,-11.4,18.1,"incorrect C dilution - peaks usable, but might consider rerunning to be sure",NA,NA,2024,Both,Both,1,Both01,Both,Both,6,Both06,O,62,S,Both1_Both6_O62_S,2024_Both01_Both06_O62_S,NA,321,NA
+27,12.2,0.2,NA,-8.1,15.6,"incorrect C dilution - peaks usable, but might consider rerunning to be sure",NA,NA,2024,Cont,Control,5,Control05,Both,Both,6,Both06,W,69,S,Control5_Both6_W69_S,2024_Cont05_Both06_W69_S,NA,327,NA
+28,11.9,0.2,NA,-12.2,18.8,"incorrect C dilution - peaks usable, but might consider rerunning to be sure",NA,NA,2024,Cont,Control,1,Control01,Both,Both,6,Both06,W,62,S,Control1_Both6_W62_S,2024_Cont01_Both06_W62_S,NA,325,NA
+29,12.5,8.8,NA,-24.2,39.9,NA,NA,NA,2024,Cont,Control,5,Control05,Both,Both,3,Both03,W,34,T,Control5_Both3_W34_T,2024_Cont05_Both03_W34_T,NA,136,NA
+30,12.1,9.1,NA,-25.1,45.2,NA,NA,NA,2024,Hyp,Hypoxic,1,Hypoxic01,Both,Both,3,Both03,B,25,T,Hypoxic1_Both3_B25_T,2024_Hyp01_Both03_B25_T,NA,138,NA
+31,12,9,NA,-25.3,46.9,NA,NA,NA,2024,Hyp,Hypoxic,2,Hypoxic02,Both,Both,6,Both06,B,64,T,Hypoxic2_Both6_B64_T,2024_Hyp02_Both06_B64_T,NA,330,NA
+32,12.1,6.9,small peak - error on δ15N will be higher,-26.7,57.1,NA,NA,NA,2024,Both,Both,2,Both02,Both,Both,3,Both03,O,27,T,Both2_Both3_O27_T,2024_Both02_Both03_O27_T,NA,132,NA
+33,12.4,6.8,NA,-26.1,51.4,NA,NA,NA,2024,Warm,Warm,2,Warm02,Both,Both,3,Both03,G,28,T,Warm2_Both3_G28_T,2024_Warm02_Both03_G28_T,NA,144,NA
+34,12.3,7,NA,-25.8,48.7,NA,NA,NA,2024,Cont,Control,4,Control04,Both,Both,3,Both03,W,31,T,Control4_Both3_W31_T,2024_Cont04_Both03_W31_T,NA,134,NA
+35,12,5.5,small peak - error on δ15N will be higher,-24.8,37.7,NA,NA,NA,2024,Hyp,Hypoxic,3,Hypoxic03,Both,Both,3,Both03,B,30,T,Hypoxic3_Both3_B30_T,2024_Hyp03_Both03_B30_T,NA,140,NA
+36,12.2,8.5,NA,-24.6,44.2,NA,NA,NA,2024,Warm,Warm,1,Warm01,Both,Both,3,Both03,G,26,T,Warm1_Both3_G26_T,2024_Warm01_Both03_G26_T,NA,142,NA
+37,9.9,4,very small peak - δ15N data unusable,-27.5,62.2,NA,Y,NA,2024,Both,Both,1,Both01,Both,Both,3,Both03,O,25,T,Both1_Both3_O25_T,2024_Both01_Both03_O25_T,NA,130,NA
+38,11.8,0.2,NA,-10,17.1,"incorrect C dilution - peaks usable, but might consider rerunning to be sure",NA,NA,2024,Both,Both,1,Both01,Both,Both,3,Both03,O,25,S,Both1_Both3_O25_S,2024_Both01_Both03_O25_S,NA,129,NA
+39,11.6,0.2,NA,-10.3,17.2,"incorrect C dilution - peaks usable, but might consider rerunning to be sure",NA,NA,2024,Both,Both,2,Both02,Both,Both,3,Both03,O,27,S,Both2_Both3_O27_S,2024_Both02_Both03_O27_S,NA,131,NA
+40,10.7,0.2,NA,-8.9,16.2,"incorrect C dilution - peaks usable, but might consider rerunning to be sure",NA,NA,2024,Warm,Warm,2,Warm02,Both,Both,3,Both03,G,28,S,Warm2_Both3_G28_S,2024_Warm02_Both03_G28_S,NA,143,NA
+41,12,0.2,NA,-9.3,16.5,"incorrect C dilution - peaks usable, but might consider rerunning to be sure",NA,NA,2024,Cont,Control,4,Control04,Both,Both,3,Both03,W,31,S,Control4_Both3_W31_S,2024_Cont04_Both03_W31_S,NA,133,NA
+42,11.8,0.2,NA,-10.4,17.3,"incorrect C dilution - peaks usable, but might consider rerunning to be sure",NA,NA,2024,Warm,Warm,1,Warm01,Both,Both,3,Both03,G,26,S,Warm1_Both3_G26_S,2024_Warm01_Both03_G26_S,NA,141,NA
+43,10.7,0.2,NA,-7.5,15.3,"incorrect C dilution - peaks usable, but might consider rerunning to be sure",NA,NA,2024,Hyp,Hypoxic,3,Hypoxic03,Both,Both,3,Both03,B,30,S,Hypoxic3_Both3_B30_S,2024_Hyp03_Both03_B30_S,NA,139,NA
+44,12.5,0.3,NA,-9.4,16.1,NA,NA,NA,2024,Cont,Control,5,Control05,Both,Both,3,Both03,W,34,S,Control5_Both3_W34_S,2024_Cont05_Both03_W34_S,NA,135,NA
+45,11.9,0.2,NA,-9.5,16.2,NA,NA,NA,2024,Hyp,Hypoxic,1,Hypoxic01,Both,Both,3,Both03,B,25,S,Hypoxic1_Both3_B25_S,2024_Hyp01_Both03_B25_S,NA,137,NA
+46,10.2,0.2,NA,-8.9,16,NA,NA,NA,2024,Hyp,Hypoxic,5,Hypoxic05,Both,Both,6,Both06,B,70,S,Hypoxic5_Both6_B70_S,2024_Hyp05_Both06_B70_S,NA,331,NA
+47,11.8,9,NA,-24.7,43.9,NA,NA,NA,2024,Hyp,Hypoxic,5,Hypoxic05,Both,Both,6,Both06,B,70,T,Hypoxic5_Both6_B70_T,2024_Hyp05_Both06_B70_T,NA,332,NA
+48,12.4,8.1,NA,-25.8,48.9,NA,NA,NA,2024,Hyp,Hypoxic,4,Hypoxic04,Cont,Control,6,Control06,B,68,T,Hypoxic4_Control6_B68_T,2024_Hyp04_Cont06_B68_T,NA,348,NA
+49,12.1,9.1,NA,-24.6,41.7,NA,NA,NA,2024,Cont,Control,2,Control02,Cont,Control,6,Control06,W,63,T,Control2_Control6_W63_T,2024_Cont02_Cont06_W63_T,NA,342,NA
+50,11.1,0.2,NA,-9.5,16.4,NA,NA,NA,2024,Hyp,Hypoxic,2,Hypoxic02,Both,Both,6,Both06,B,64,S,Hypoxic2_Both6_B64_S,2024_Hyp02_Both06_B64_S,NA,329,NA
+51,12.5,0.2,NA,-7.7,15.3,NA,NA,NA,2024,Hyp,Hypoxic,4,Hypoxic04,Cont,Control,6,Control06,B,68,S,Hypoxic4_Control6_B68_S,2024_Hyp04_Cont06_B68_S,NA,347,NA
+52,11.9,0.1,NA,-8.9,16.5,NA,NA,NA,2024,Both,Both,2,Both02,Cont,Control,6,Control06,O,63,S,Both2_Control6_O63_S,2024_Both02_Cont06_O63_S,NA,337,NA
+53,11.4,5.2,small peak - error on δ15N will be higher,-25.4,56.6,NA,NA,NA,2024,Cont,Control,6,Control06,Cont,Control,6,Control06,W,72,T,Control6_Control6_W72_T,2024_Cont06_Cont06_W72_T,NA,344,NA
+54,11.4,5.9,small peak - error on δ15N will be higher,-24.4,45,NA,NA,NA,2024,Warm,Warm,4,Warm04,Cont,Control,6,Control06,G,67,T,Warm4_Control6_G67_T,2024_Warm04_Cont06_G67_T,NA,352,NA
+55,12.1,9.2,NA,-24,39,NA,NA,NA,2024,Warm,Warm,2,Warm02,Cont,Control,6,Control06,G,63,T,Warm2_Control6_G63_T,2024_Warm02_Cont06_G63_T,NA,350,NA
+56,11,0.1,NA,-8,15.7,NA,NA,NA,2024,Cont,Control,6,Control06,Cont,Control,6,Control06,W,72,S,Control6_Control6_W72_S,2024_Cont06_Cont06_W72_S,NA,343,NA
+57,11.5,0.2,NA,-9.2,16.5,NA,NA,NA,2024,Warm,Warm,4,Warm04,Cont,Control,6,Control06,G,67,S,Warm4_Control6_G67_S,2024_Warm04_Cont06_G67_S,NA,351,NA
+58,11.4,0.2,NA,-10.1,17.5,NA,NA,NA,2024,Hyp,Hypoxic,3,Hypoxic03,Cont,Control,6,Control06,B,66,S,Hypoxic3_Control6_B66_S,2024_Hyp03_Cont06_B66_S,NA,345,NA
+59,12.2,8.9,NA,-24.6,43.9,NA,NA,NA,2024,Both,Both,4,Both04,Cont,Control,6,Control06,O,67,T,Both4_Control6_O67_T,2024_Both04_Cont06_O67_T,NA,340,NA
+60,11.1,4.3,small peak - error on δ15N will be higher,-25.7,59.2,NA,NA,NA,2024,Hyp,Hypoxic,3,Hypoxic03,Cont,Control,6,Control06,B,66,T,Hypoxic3_Control6_B66_T,2024_Hyp03_Cont06_B66_T,NA,346,NA
+61,11.4,5.9,small peak - error on δ15N will be higher,-25.3,54.5,NA,NA,NA,2024,Both,Both,2,Both02,Cont,Control,6,Control06,O,63,T,Both2_Control6_O63_T,2024_Both02_Cont06_O63_T,NA,338,NA
+62,8,0.2,NA,-9.5,17,NA,NA,NA,2024,Cont,Control,2,Control02,Cont,Control,6,Control06,W,63,S,Control2_Control6_W63_S,2024_Cont02_Cont06_W63_S,NA,341,NA
+63,10.8,0.2,NA,-9.3,16.7,NA,NA,NA,2024,Warm,Warm,2,Warm02,Cont,Control,6,Control06,G,63,S,Warm2_Control6_G63_S,2024_Warm02_Cont06_G63_S,NA,349,NA
+64,11.5,0.2,NA,-6.6,14.7,NA,NA,NA,2024,Both,Both,4,Both04,Cont,Control,6,Control06,O,67,S,Both4_Control6_O67_S,2024_Both04_Cont06_O67_S,NA,339,NA
+65,12.4,9.6,NA,-24.1,40.7,NA,NA,NA,2024,Both,Both,4,Both04,Both,Both,5,Both05,O,56,T,Both4_Both5_O56_T,2024_Both04_Both05_O56_T,NA,258,NA
+66,12.3,10.2,NA,-24.1,41,NA,NA,NA,2024,Cont,Control,2,Control02,Both,Both,5,Both05,W,52,T,Control2_Both5_W52_T,2024_Cont02_Both05_W52_T,NA,262,NA
+67,12.1,10.1,NA,-24.4,41.4,NA,NA,NA,2024,Hyp,Hypoxic,5,Hypoxic05,Both,Both,5,Both05,B,58,T,Hypoxic5_Both5_B58_T,2024_Hyp05_Both05_B58_T,NA,268,NA
+68,11,0.2,NA,-9.3,16.6,NA,NA,NA,2024,Both,Both,4,Both04,Both,Both,5,Both05,O,56,S,Both4_Both5_O56_S,2024_Both04_Both05_O56_S,NA,257,NA
+69,11.3,0.2,NA,-8.8,16.1,NA,NA,NA,2024,Hyp,Hypoxic,5,Hypoxic05,Both,Both,5,Both05,B,58,S,Hypoxic5_Both5_B58_S,2024_Hyp05_Both05_B58_S,NA,267,NA
+70,11.6,0.2,NA,-9,16.4,NA,NA,NA,2024,Cont,Control,2,Control02,Both,Both,5,Both05,W,52,S,Control2_Both5_W52_S,2024_Cont02_Both05_W52_S,NA,261,NA
+71,11.2,0.2,NA,-8.5,15.9,NA,NA,NA,2024,Warm,Warm,6,Warm06,Both,Both,5,Both05,G,60,S,Warm6_Both5_G60_S,2024_Warm06_Both05_G60_S,NA,271,NA
+72,13.3,0.2,NA,-9.9,17.1,NA,NA,NA,2024,Hyp,Hypoxic,1,Hypoxic01,Both,Both,5,Both05,B,49,S,Hypoxic1_Both5_B49_S,2024_Hyp01_Both05_B49_S,NA,265,NA
+73,10.4,0.2,NA,-9.1,16.6,NA,NA,NA,2024,Cont,Control,3,Control03,Both,Both,5,Both05,W,54,S,Control3_Both5_W54_S,2024_Cont03_Both05_W54_S,NA,263,NA
+74,12.7,9.1,NA,-24,40.9,NA,NA,NA,2024,Cont,Control,3,Control03,Both,Both,5,Both05,W,54,T,Control3_Both5_W54_T,2024_Cont03_Both05_W54_T,NA,264,NA
+75,12.9,10.2,NA,-24.1,43.4,NA,NA,NA,2024,Hyp,Hypoxic,1,Hypoxic01,Both,Both,5,Both05,B,49,T,Hypoxic1_Both5_B49_T,2024_Hyp01_Both05_B49_T,NA,266,NA
+76,12.1,9.5,NA,-24.5,41,NA,NA,NA,2024,Warm,Warm,6,Warm06,Both,Both,5,Both05,G,60,T,Warm6_Both5_G60_T,2024_Warm06_Both05_G60_T,NA,272,NA
+77,12.4,9.7,NA,-23.6,40.1,NA,NA,NA,2024,Cont,Control,6,Control06,Both,Both,1,Both01,W,12,T,Control6_Both1_W12_T,2024_Cont06_Both01_W12_T,"2/12 SC When I tried to homogenize the tissue samples, they are clumping in the tube.: not yet dry and homogenizer tubes put into the drying oven. 2/14 SC rehomogenized and all set now.",8,NA
+78,11.9,7.8,NA,-24,38.8,NA,NA,NA,2024,Cont,Control,2,Control02,Both,Both,1,Both01,W,3,T,Control2_Both1_W3_T,2024_Cont02_Both01_W3_T,"2/12 SC When I tried to homogenize the tissue samples, they are clumping in the tube: not yet dry and homogenizer tubes put into the drying oven. 2/14 SC rehomogenized and all set now.",6,NA
+79,12,8.3,NA,-24.7,44.3,NA,NA,NA,2024,Warm,Warm,4,Warm04,Both,Both,1,Both01,G,7,T,Warm4_Both1_G7_T,2024_Warm04_Both01_G7_T,"2/12 SC When I tried to homogenize the tissue samples, they are clumping in the tube.: not yet dry and homogenizer tubes put into the drying oven. 2/14 SC rehomogenized and all set now.",14,NA
+80,11.7,0.2,NA,-7.4,15.1,NA,NA,NA,2024,Cont,Control,6,Control06,Both,Both,1,Both01,W,12,S,Control6_Both1_W12_S,2024_Cont06_Both01_W12_S,NA,7,NA
+81,11.6,0.2,NA,-7.7,15.4,NA,NA,NA,2024,Cont,Control,2,Control02,Both,Both,1,Both01,W,3,S,Control2_Both1_W3_S,2024_Cont02_Both01_W3_S,NA,5,NA
+82,11.2,0.1,small peak - error on δ15N will be higher,-11.4,18.7,NA,NA,NA,2024,Warm,Warm,4,Warm04,Both,Both,1,Both01,G,7,S,Warm4_Both1_G7_S,2024_Warm04_Both01_G7_S,NA,13,NA
+83,10.6,0.2,NA,-8.9,16.3,NA,NA,NA,2024,Warm,Warm,5,Warm05,Both,Both,5,Both05,G,57,S,Warm5_Both5_G57_S,2024_Warm05_Both05_G57_S,2/5/25 SKM found to be a double during processing,269,NA
+84,11.7,0.2,NA,-7.8,15.4,NA,NA,NA,2024,Warm,Warm,5,Warm05,Both,Both,1,Both01,G,10,S,Warm5_Both1_G10_S,2024_Warm05_Both01_G10_S,NA,15,NA
+85,12.5,0.3,NA,-9.3,16.3,NA,NA,NA,2024,Both,Both,5,Both05,Both,Both,5,Both05,O,57,S,Both5_Both5_O57_S,2024_Both05_Both05_O57_S,NA,259,NA
+86,11,0.2,NA,-6.9,14.6,NA,NA,NA,2024,Cont,Control,3,Control03,Both,Both,2,Both02,W,18,S,Control3_Both2_W18_S,2024_Cont03_Both02_W18_S,NA,71,NA
+87,10.5,0.2,NA,-8.8,16.2,NA,NA,NA,2024,Warm,Warm,3,Warm03,Both,Both,2,Both02,G,18,S,Warm3_Both2_G18_S,2024_Warm03_Both02_G18_S,NA,77,NA
+88,11.9,0.2,NA,-9.5,16.7,NA,NA,NA,2024,Hyp,Hypoxic,6,Hypoxic06,Both,Both,2,Both02,B,24,S,Hypoxic6_Both2_B24_S,2024_Hyp06_Both02_B24_S,NA,75,NA
+89,12.1,8.2,NA,-24.4,44.6,NA,NA,NA,2024,Cont,Control,3,Control03,Both,Both,2,Both02,W,18,T,Control3_Both2_W18_T,2024_Cont03_Both02_W18_T,"2/14 SC When I tried to homogenize the tissue samples, they are clumping in the tube.: not yet dry and homogenizer tubes put into the drying oven. 2/19 SC rehomogenized and all set now.",72,NA
+90,12.3,7.2,NA,-24.5,47.3,NA,NA,NA,2024,Warm,Warm,3,Warm03,Both,Both,2,Both02,G,18,T,Warm3_Both2_G18_T,2024_Warm03_Both02_G18_T,"2/14 SC When I tried to homogenize the tissue samples, they are clumping in the tube.: not yet dry and homogenizer tubes put into the drying oven. 2/19 SC rehomogenized and all set now.",78,NA
+91,12.5,8.6,NA,-24.1,41.8,NA,NA,NA,2024,Hyp,Hypoxic,6,Hypoxic06,Both,Both,2,Both02,B,24,T,Hypoxic6_Both2_B24_T,2024_Hyp06_Both02_B24_T,"2/14 SC When I tried to homogenize the tissue samples, they are clumping in the tube.: not yet dry and homogenizer tubes put into the drying oven. 2/19 SC rehomogenized and all set now.",76,NA
+92,11.4,0.2,NA,-9.9,17,NA,NA,NA,2024,Both,Both,5,Both05,Both,Both,2,Both02,O,21,S,Both5_Both2_O21_S,2024_Both05_Both02_O21_S,2/12 SC had a dead shell attached to the top. Was once a double but no tissue found when dissecting.,65,NA
+93,12.4,8.9,NA,-23.8,37.9,NA,NA,NA,2024,Warm,Warm,5,Warm05,Both,Both,5,Both05,G,57,T,Warm5_Both5_G57_T,2024_Warm05_Both05_G57_T,"2/5/25 SKM found to be a double during processing. SC 2/19 When I tried to homogenize the tissue samples, they are clumping in the tube.: not yet dry and homogenizer tubes put into the drying oven. 2/21 SC rehomogenized and all set now.",270,NA
+94,11.4,5.6,small peak - error on δ15N will be higher,-24.3,40.7,NA,NA,NA,2024,Warm,Warm,5,Warm05,Both,Both,1,Both01,G,10,T,Warm5_Both1_G10_T,2024_Warm05_Both01_G10_T,"2/19 SC When I tried to homogenize the tissue samples, they are clumping in the tube.: not yet dry and homogenizer tubes put into the drying oven. 2/21 SC rehomogenized and all set now.",16,NA
+95,12.7,8.8,NA,-23.3,38.1,NA,NA,NA,2024,Both,Both,5,Both05,Both,Both,2,Both02,O,21,T,Both5_Both2_O21_T,2024_Both05_Both02_O21_T,2/12 SC had a dead shell attached to the top. Was once a double but no tissue found when dissecting.,66,NA
+96,12.8,0.2,NA,-6,14.1,NA,NA,NA,2024,Hyp,Hypoxic,4,Hypoxic04,Both,Both,2,Both02,B,20,S,Hypoxic4_Both2_B20_S,2024_Hyp04_Both02_B20_S,NA,73,NA
+97,3.3,0.4,NA,-9.2,16.9,NA,NA,NA,2024,Cont,Control,1,Control01,Both,Both,2,Both02,W,14,S,Control1_Both2_W14_S,2024_Cont01_Both02_W14_S,NA,69,NA
+98,11.7,0.2,NA,-9.1,16.2,NA,NA,NA,2024,Warm,Warm,6,Warm06,Both,Both,2,Both02,G,23,S,Warm6_Both2_G23_S,2024_Warm06_Both02_G23_S,NA,79,NA
+99,reduction column issues - peaks not usable,NA,NA,reduction column issues - peaks not usable,NA,NA,Y,Y,2024,Hyp,Hypoxic,6,Hypoxic06,Both,Both,4,Both04,B,48,S,Hypoxic6_Both4_B48_S,2024_Hyp06_Both04_B48_S,NA,203,NA
+100,reduction column issues - peaks not usable,NA,NA,reduction column issues - peaks not usable,NA,NA,Y,Y,2024,Both,Both,6,Both06,Both,Both,2,Both02,O,24,S,Both6_Both2_O24_S,2024_Both06_Both02_O24_S,NA,67,NA
+101,12.4,9.5,NA,-24.5,44.9,NA,NA,NA,2024,Both,Both,5,Both05,Both,Both,5,Both05,O,57,T,Both5_Both5_O57_T,2024_Both05_Both05_O57_T,NA,260,NA
+102,12.4,7.1,NA,-25.6,50.9,NA,NA,NA,2024,Hyp,Hypoxic,6,Hypoxic06,Both,Both,4,Both04,B,48,T,Hypoxic6_Both4_B48_T,2024_Hyp06_Both04_B48_T,NA,204,NA
+103,12.6,8.3,NA,-25.3,49.5,NA,NA,NA,2024,Warm,Warm,6,Warm06,Both,Both,2,Both02,G,23,T,Warm6_Both2_G23_T,2024_Warm06_Both02_G23_T,NA,80,NA
+104,11.8,7.2,NA,-23.8,38.2,using average from technical reps,Y,Y,2024,Both,Both,6,Both06,Both,Both,2,Both02,O,24,T,Both6_Both2_O24_T,2024_Both06_Both02_O24_T,NA,68,NA
+105,12.6,8,NA,-24.5,43.3,NA,NA,NA,2024,Hyp,Hypoxic,4,Hypoxic04,Both,Both,2,Both02,B,20,T,Hypoxic4_Both2_B20_T,2024_Hyp04_Both02_B20_T,NA,74,NA
+106,reduction column issues - peaks not usable,NA,NA,reduction column issues - peaks not usable,NA,NA,Y,Y,2024,Both,Both,4,Both04,Both,Both,1,Both01,O,8,S,Both4_Both1_O8_S,2024_Both04_Both01_O8_S,NA,3,NA
+107,reduction column issues - peaks not usable,NA,NA,reduction column issues - peaks not usable,NA,NA,Y,Y,2024,Both,Both,3,Both03,Both,Both,1,Both01,O,5,S,Both3_Both1_O5_S,2024_Both03_Both01_O5_S,NA,1,NA
+108,reduction column issues - peaks not usable,NA,NA,reduction column issues - peaks not usable,NA,NA,Y,Y,2024,Hyp,Hypoxic,2,Hypoxic02,Both,Both,1,Both01,B,3,S,Hypoxic2_Both1_B3_S,2024_Hyp02_Both01_B3_S,NA,9,NA
+109,reduction column issues - peaks not usable,NA,NA,reduction column issues - peaks not usable,NA,NA,Y,Y,2024,Hyp,Hypoxic,3,Hypoxic03,Both,Both,1,Both01,B,6,S,Hypoxic3_Both1_B6_S,2024_Hyp03_Both01_B6_S,NA,11,NA
+110,12.3,5.7,small peak - error on δ15N will be higher,-25.3,50.2,NA,NA,NA,2024,Both,Both,3,Both03,Both,Both,1,Both01,O,5,T,Both3_Both1_O5_T,2024_Both03_Both01_O5_T,NA,2,NA
+111,11.7,6.5,NA,-25.1,48.5,NA,NA,NA,2024,Both,Both,4,Both04,Both,Both,1,Both01,O,8,T,Both4_Both1_O8_T,2024_Both04_Both01_O8_T,NA,4,NA
+112,12.4,7.6,NA,-25.8,52,NA,NA,NA,2024,Hyp,Hypoxic,3,Hypoxic03,Both,Both,1,Both01,B,6,T,Hypoxic3_Both1_B6_T,2024_Hyp03_Both01_B6_T,NA,12,NA
+113,12.2,6.4,NA,-25.9,52.6,NA,NA,NA,2024,Hyp,Hypoxic,2,Hypoxic02,Both,Both,1,Both01,B,3,T,Hypoxic2_Both1_B3_T,2024_Hyp02_Both01_B3_T,NA,10,NA
+114,reduction column issues - peaks not usable,NA,NA,reduction column issues - peaks not usable,NA,NA,Y,Y,2024,Both,Both,1,Both01,Warm,Warm,1,Warm01,O,2,S,Both1_Warm1_O2_S,2024_Both01_Warm01_O2_S,NA,49,NA
+115,reduction column issues - peaks not usable,NA,NA,reduction column issues - peaks not usable,NA,NA,Y,Y,2024,Hyp,Hypoxic,5,Hypoxic05,Warm,Warm,1,Warm01,B,10,S,Hypoxic5_Warm1_B10_S,2024_Hyp05_Warm01_B10_S,NA,59,NA
+116,reduction column issues - peaks not usable,NA,NA,reduction column issues - peaks not usable,NA,NA,Y,Y,2024,Warm,Warm,4,Warm04,Warm,Warm,1,Warm01,G,7,S,Warm4_Warm1_G7_S,2024_Warm04_Warm01_G7_S,NA,61,NA
+117,reduction column issues - peaks not usable,NA,NA,reduction column issues - peaks not usable,NA,NA,Y,Y,2024,Both,Both,4,Both04,Warm,Warm,1,Warm01,O,8,S,Both4_Warm1_O8_S,2024_Both04_Warm01_O8_S,NA,51,NA
+118,reduction column issues - peaks not usable,NA,NA,reduction column issues - peaks not usable,NA,NA,Y,Y,2024,Cont,Control,1,Control01,Warm,Warm,1,Warm01,W,1,S,Control1_Warm1_W1_S,2024_Cont01_Warm01_W1_S,NA,53,NA
+119,reduction column issues - peaks not usable,NA,NA,reduction column issues - peaks not usable,NA,NA,Y,Y,2024,Warm,Warm,5,Warm05,Warm,Warm,1,Warm01,G,9,S,Warm5_Warm1_G9_S,2024_Warm05_Warm01_G9_S,2/28/25 SKM we changed the 119 label to this one from Warm4_Warm1_G7_T because of the contents of the vial looking like shell and the order of the weigh boats,63,NA
+123,12.3,9.3,NA,-24.8,46.8,NA,NA,NA,2024,Both,Both,4,Both04,Warm,Warm,1,Warm01,O,8,T,Both4_Warm1_O8_T,2024_Both04_Warm01_O8_T,"2/28/25 SKM This is the correct vial number, but 120-122 should be four samples rather than three based on the weigh boats. Discounting those and not this one.",52,NA
+124,11.8,7.7,NA,-25.6,51.9,NA,NA,NA,2024,Cont,Control,1,Control01,Warm,Warm,1,Warm01,W,1,T,Control1_Warm1_W1_T,2024_Cont01_Warm01_W1_T,3/5 SC Started with this one today.,54,NA
+125,12.6,7,NA,-24.7,43.8,NA,NA,NA,2024,Cont,Control,6,Control06,Warm,Warm,4,Warm04,W,47,T,Control6_Warm4_W47_T,2024_Cont06_Warm04_W47_T,NA,248,NA
+126,reduction column issues - peaks not usable,NA,NA,reduction column issues - peaks not usable,NA,NA,Y,Y,2024,Cont,Control,6,Control06,Warm,Warm,4,Warm04,W,47,S,Control6_Warm4_W47_S,2024_Cont06_Warm04_W47_S,NA,247,NA
+127,13.6,0.2,NA,-6.3,14.7,NA,NA,NA,2024,Hyp,Hypoxic,4,Hypoxic04,Warm,Warm,4,Warm04,B,44,S,Hypoxic4_Warm4_B44_S,2024_Hyp04_Warm04_B44_S,NA,251,NA
+128,11.6,0.2,NA,-6.9,15,NA,NA,NA,2024,Warm,Warm,3,Warm03,Warm,Warm,4,Warm04,G,41,S,Warm3_Warm4_G41_S,2024_Warm03_Warm04_G41_S,SC 3/5 Ended with this one today,253,NA
+129,12,0.2,NA,-7.4,15.3,NA,NA,NA,2024,Cont,Control,5,Control05,Warm,Warm,3,Warm03,W,33,S,Control5_Warm3_W33_S,2024_Cont05_Warm03_W33_S,SC 3/19 Started with this one today,183,NA
+130,9.9,0.2,NA,-8.6,16.2,NA,NA,NA,2024,Cont,Control,4,Control04,Warm,Warm,3,Warm03,W,31,S,Control4_Warm3_W31_S,2024_Cont04_Warm03_W31_S,NA,181,NA
+131,10.8,0.2,NA,-6.8,14.9,NA,NA,NA,2024,Hyp,Hypoxic,2,Hypoxic02,Warm,Warm,3,Warm03,B,28,S,Hypoxic2_Warm3_B28_S,2024_Hyp02_Warm03_B28_S,NA,185,NA
+132,11.8,4.3,small peak - error on δ15N will be higher,-22.9,33.4,NA,NA,NA,2024,Cont,Control,5,Control05,Warm,Warm,3,Warm03,W,33,T,Control5_Warm3_W33_T,2024_Cont05_Warm03_W33_T,NA,184,NA
+133,12.3,7,NA,-25.2,48,NA,NA,NA,2024,Cont,Control,4,Control04,Warm,Warm,3,Warm03,W,31,T,Control4_Warm3_W31_T,2024_Cont04_Warm03_W31_T,NA,182,NA
+134,12.6,8.3,NA,-25.4,47.9,NA,NA,NA,2024,Hyp,Hypoxic,2,Hypoxic02,Warm,Warm,3,Warm03,B,28,T,Hypoxic2_Warm3_B28_T,2024_Hyp02_Warm03_B28_T,NA,186,NA
+135,11.4,0.2,NA,-6.9,15,NA,NA,NA,2024,Both,Both,2,Both02,Warm,Warm,3,Warm03,O,27,S,Both2_Warm3_O27_S,2024_Both02_Warm03_O27_S,NA,177,NA
+136,10.9,0.1,small peak - error on δ15N will be higher,-5.6,14.3,NA,NA,NA,2024,Hyp,Hypoxic,6,Hypoxic06,Warm,Warm,3,Warm03,B,36,S,Hypoxic6_Warm3_B36_S,2024_Hyp06_Warm03_B36_S,NA,187,NA
+137,11.4,0.1,small peak - error on δ15N will be higher,-7.8,15.7,NA,NA,NA,2024,Warm,Warm,3,Warm03,Warm,Warm,3,Warm03,G,30,S,Warm3_Warm3_G30_S,2024_Warm03_Warm03_G30_S,NA,191,NA
+138,13,8.3,NA,-23.5,38.8,NA,NA,NA,2024,Warm,Warm,1,Warm01,Warm,Warm,3,Warm03,G,25,T,Warm1_Warm3_G25_T,2024_Warm01_Warm03_G25_T,NA,190,NA
+139,12.1,7.6,NA,-25.4,49.2,NA,NA,NA,2024,Warm,Warm,3,Warm03,Warm,Warm,3,Warm03,G,30,T,Warm3_Warm3_G30_T,2024_Warm03_Warm03_G30_T,NA,192,NA
+140,12.2,6.4,NA,-26.1,53.4,NA,NA,NA,2024,Hyp,Hypoxic,6,Hypoxic06,Warm,Warm,3,Warm03,B,36,T,Hypoxic6_Warm3_B36_T,2024_Hyp06_Warm03_B36_T,NA,188,NA
+141,12,8,NA,-25.3,45.4,NA,NA,NA,2024,Both,Both,2,Both02,Warm,Warm,3,Warm03,O,27,T,Both2_Warm3_O27_T,2024_Both02_Warm03_O27_T,NA,178,NA
+142,13.6,0.2,NA,-7.8,15.7,NA,NA,NA,2024,Warm,Warm,1,Warm01,Warm,Warm,3,Warm03,G,25,S,Warm1_Warm3_G25_S,2024_Warm01_Warm03_G25_S,SC 3/19 Ended with this one today,189,NA
+143,12.4,9.6,NA,-24.7,44.4,NA,NA,NA,2024,Warm,Warm,4,Warm04,Warm,Warm,4,Warm04,G,44,T,Warm4_Warm4_G44_T,2024_Warm04_Warm04_G44_T,SC 3/21 Started with this one today,256,NA
+144,12.1,8.3,NA,-25.5,49.1,NA,NA,NA,2024,Cont,Control,2,Control02,Warm,Warm,1,Warm01,W,3,T,Control2_Warm1_W3_T,2024_Cont02_Warm01_W3_T,NA,56,NA
+145,12,8.2,NA,-25.7,49.6,NA,NA,NA,2024,Hyp,Hypoxic,3,Hypoxic03,Warm,Warm,1,Warm01,B,6,T,Hypoxic3_Warm1_B6_T,2024_Hyp03_Warm01_B6_T,NA,58,NA
+146,11.8,0.2,NA,-8.4,15.9,NA,NA,NA,2024,Warm,Warm,4,Warm04,Warm,Warm,4,Warm04,G,44,S,Warm4_Warm4_G44_S,2024_Warm04_Warm04_G44_S,NA,255,NA
+147,11.9,0.2,NA,-8.1,15.9,NA,NA,NA,2024,Cont,Control,2,Control02,Warm,Warm,1,Warm01,W,3,S,Control2_Warm1_W3_S,2024_Cont02_Warm01_W3_S,NA,55,NA
+148,10.5,0.2,NA,-10.3,17.8,NA,NA,NA,2024,Hyp,Hypoxic,3,Hypoxic03,Warm,Warm,1,Warm01,B,6,S,Hypoxic3_Warm1_B6_S,2024_Hyp03_Warm01_B6_S,NA,57,NA
+149,12.6,7.8,NA,-24.6,41.1,NA,NA,NA,2024,Warm,Warm,3,Warm03,Warm,Warm,4,Warm04,G,41,T,Warm3_Warm4_G41_T,2024_Warm03_Warm04_G41_T,NA,254,NA
+150,11.9,7,NA,-25.1,47.3,NA,NA,NA,2024,Hyp,Hypoxic,4,Hypoxic04,Warm,Warm,4,Warm04,B,44,T,Hypoxic4_Warm4_B44_T,2024_Hyp04_Warm04_B44_T,SC 3/21 Ended with this one today,252,NA
+151,11.4,0.2,NA,-7.9,15.8,NA,NA,NA,2024,Hyp,Hypoxic,3,Hypoxic03,Warm,Warm,4,Warm04,B,42,S,Hypoxic3_Warm4_B42_S,2024_Hyp03_Warm04_B42_S,SKM 3/21 Started with this one today,249,NA
+152,12.1,0.2,NA,-9,16.9,NA,NA,NA,2024,Cont,Control,1,Control01,Warm,Warm,4,Warm04,W,38,S,Control1_Warm4_W38_S,2024_Cont01_Warm04_W38_S,NA,245,NA
+153,12,0.2,NA,-8,15.9,NA,NA,NA,2024,Both,Both,5,Both05,Warm,Warm,4,Warm04,O,46,S,Both5_Warm4_O46_S,2024_Both05_Warm04_O46_S,NA,243,NA
+154,12.1,7.3,NA,-24,39.7,NA,NA,NA,2024,Hyp,Hypoxic,3,Hypoxic03,Warm,Warm,4,Warm04,B,42,T,Hypoxic3_Warm4_B42_T,2024_Hyp03_Warm04_B42_T,NA,250,NA
+155,12.4,6.7,NA,-23.5,36.9,NA,NA,NA,2024,Cont,Control,1,Control01,Warm,Warm,4,Warm04,W,38,T,Control1_Warm4_W38_T,2024_Cont01_Warm04_W38_T,NA,246,NA
+156,12.1,6.4,small peak - error on δ15N will be higher,-24.5,36.4,NA,NA,NA,2024,Both,Both,5,Both05,Warm,Warm,4,Warm04,O,46,T,Both5_Warm4_O46_T,2024_Both05_Warm04_O46_T,NA,244,NA
+157,10.6,0.2,NA,-7,15.3,NA,NA,NA,2024,Both,Both,2,Both02,Warm,Warm,4,Warm04,O,40,S,Both2_Warm4_O40_S,2024_Both02_Warm04_O40_S,NA,241,NA
+158,11.3,0.1,small peak - error on δ15N will be higher,-7.7,15.9,NA,NA,NA,2024,Both,Both,3,Both03,Warm,Warm,3,Warm03,O,29,S,Both3_Warm3_O29_S,2024_Both03_Warm03_O29_S,NA,179,NA
+159,9.1,0.2,NA,-7.3,15.4,NA,NA,NA,2024,Hyp,Hypoxic,2,Hypoxic02,Warm,Warm,5,Warm05,B,52,S,Hypoxic2_Warm5_B52_S,2024_Hyp02_Warm05_B52_S,NA,313,NA
+160,12.2,5.6,small peak - error on δ15N will be higher,-24.9,40.6,NA,NA,NA,2024,Both,Both,2,Both02,Warm,Warm,4,Warm04,O,40,T,Both2_Warm4_O40_T,2024_Both02_Warm04_O40_T,NA,242,NA
+161,11.9,7.2,NA,-23.8,39.6,NA,NA,NA,2024,Both,Both,3,Both03,Warm,Warm,3,Warm03,O,29,T,Both3_Warm3_O29_T,2024_Both03_Warm03_O29_T,NA,180,NA
+162,12.2,7.7,NA,-24.7,43,NA,NA,NA,2024,Hyp,Hypoxic,2,Hypoxic02,Warm,Warm,5,Warm05,B,52,T,Hypoxic2_Warm5_B52_T,2024_Hyp02_Warm05_B52_T,3/24 SKM ended with this one today,314,NA
+163,12,0.2,NA,-6.9,15.1,NA,NA,NA,2024,Hyp,Hypoxic,6,Hypoxic06,Warm,Warm,5,Warm05,B,59,S,Hypoxic6_Warm5_B59_S,2024_Hyp06_Warm05_B59_S,3/26 SC started with this one today,315,NA
+164,11.9,0.3,NA,-8.9,15.6,NA,Y,Y,2024,Warm,Warm,1,Warm01,Warm,Warm,5,Warm05,G,49,S,Warm1_Warm5_G49_S,2024_Warm01_Warm05_G49_S,NA,317,NA
+165,12.6,0.4,NA,-7.5,15.6,NA,NA,NA,2024,Cont,Control,5,Control05,Warm,Warm,5,Warm05,W,57,S,Control5_Warm5_W57_S,2024_Cont05_Warm05_W57_S,NA,311,NA
+166,12.6,9.3,NA,-24.2,42.5,NA,NA,NA,2024,Hyp,Hypoxic,6,Hypoxic06,Warm,Warm,5,Warm05,B,59,T,Hypoxic6_Warm5_B59_T,2024_Hyp06_Warm05_B59_T,NA,316,NA
+167,11.9,6.7,NA,-24.3,37.9,NA,Y,Y,2024,Warm,Warm,1,Warm01,Warm,Warm,5,Warm05,G,49,T,Warm1_Warm5_G49_T,2024_Warm01_Warm05_G49_T,NA,318,NA
+168,12.4,9.7,NA,-24.5,40.8,NA,NA,NA,2024,Cont,Control,5,Control05,Warm,Warm,5,Warm05,W,57,T,Control5_Warm5_W57_T,2024_Cont05_Warm05_W57_T,NA,312,NA
+169,11.5,6.2,small peak - error on δ15N will be higher,-21.9,31.2,NA,NA,NA,2024,Both,Both,1,Both01,Warm,Warm,5,Warm05,O,49,T,Both1_Warm5_O49_T,2024_Both01_Warm05_O49_T,NA,306,NA
+170,14.5,0.1,small peak - error on δ15N will be higher,-8.1,16.1,NA,NA,NA,2024,Both,Both,1,Both01,Warm,Warm,5,Warm05,O,49,S,Both1_Warm5_O49_S,2024_Both01_Warm05_O49_S,3/26 SC ended with this one today,305,NA
+171,11.8,0.2,NA,-6.3,14.5,NA,NA,NA,2024,Both,Both,4,Both04,Warm,Warm,5,Warm05,O,55,S,Both4_Warm5_O55_S,2024_Both04_Warm05_O55_S,3/24/25 SKM was once a double but there is only one shell of the second oyster. likely fine to include in analysis because second shell likely already there when entering phase 2.3/28 SC Started with this one today,307,NA
+172,12.4,0.2,NA,-8.5,16.4,NA,NA,NA,2024,Warm,Warm,2,Warm02,Warm,Warm,5,Warm05,G,52,S,Warm2_Warm5_G52_S,2024_Warm02_Warm05_G52_S,NA,319,NA
+173,11.8,0.2,NA,-11.1,18.9,NA,NA,NA,2024,Cont,Control,3,Control03,Warm,Warm,5,Warm05,W,53,S,Control3_Warm5_W53_S,2024_Cont03_Warm05_W53_S,NA,309,NA
+174,12.2,8.9,NA,-24.1,39.2,NA,NA,NA,2024,Both,Both,4,Both04,Warm,Warm,5,Warm05,O,55,T,Both4_Warm5_O55_T,2024_Both04_Warm05_O55_T,NA,308,NA
+175,12.4,10.2,NA,-24.3,42.3,NA,NA,NA,2024,Warm,Warm,2,Warm02,Warm,Warm,5,Warm05,G,52,T,Warm2_Warm5_G52_T,2024_Warm02_Warm05_G52_T,NA,320,NA
+176,11.9,9.9,NA,-24,41.3,NA,NA,NA,2024,Cont,Control,3,Control03,Warm,Warm,5,Warm05,W,53,T,Control3_Warm5_W53_T,2024_Cont03_Warm05_W53_T,NA,310,NA
+177,11.3,0.2,NA,-6.6,14.8,NA,NA,NA,2024,Warm,Warm,2,Warm02,Both,Both,4,Both04,G,40,S,Warm2_Both4_G40_S,2024_Warm02_Both04_G40_S,NA,207,NA
+178,11.5,0.2,NA,-8.6,16.5,NA,NA,NA,2024,Cont,Control,4,Control04,Both,Both,4,Both04,W,44,S,Control4_Both4_W44_S,2024_Cont04_Both04_W44_S,NA,197,NA
+179,12.4,0.2,NA,-10.2,18,NA,NA,NA,2024,Warm,Warm,1,Warm01,Both,Both,4,Both04,G,38,S,Warm1_Both4_G38_S,2024_Warm01_Both04_G38_S,NA,205,NA
+180,12.5,9.6,NA,-24.4,44.3,NA,NA,NA,2024,Warm,Warm,2,Warm02,Both,Both,4,Both04,G,40,T,Warm2_Both4_G40_T,2024_Warm02_Both04_G40_T,NA,208,NA
+181,12.3,6.1,small peak - error on δ15N will be higher,-25.5,57.8,NA,NA,NA,2024,Cont,Control,4,Control04,Both,Both,4,Both04,W,44,T,Control4_Both4_W44_T,2024_Cont04_Both04_W44_T,NA,198,NA
+182,12.7,9.8,NA,-23.8,40.5,NA,NA,NA,2024,Warm,Warm,1,Warm01,Both,Both,4,Both04,G,38,T,Warm1_Both4_G38_T,2024_Warm01_Both04_G38_T,SC 3/28 Ended with this one today,206,NA
+183,14.6,0.2,NA,-7.6,15.8,NA,NA,NA,2024,Both,Both,2,Both02,Both,Both,4,Both04,O,40,S,Both2_Both4_O40_S,2024_Both02_Both04_O40_S,3/31 SKM started with this one todsy,193,NA
+184,5,0.4,NA,-8.4,16.7,NA,NA,NA,2024,Both,Both,6,Both06,Both,Both,4,Both04,O,47,S,Both6_Both4_O47_S,2024_Both06_Both04_O47_S,NA,195,NA
+185,12.2,0.3,NA,-9.5,17.3,NA,NA,NA,2024,Cont,Control,6,Control06,Both,Both,4,Both04,W,48,S,Control6_Both4_W48_S,2024_Cont06_Both04_W48_S,NA,199,NA
+186,12.4,9.6,NA,-23.8,40.7,NA,NA,NA,2024,Both,Both,2,Both02,Both,Both,4,Both04,O,40,T,Both2_Both4_O40_T,2024_Both02_Both04_O40_T,NA,194,NA
+187,11.5,7.1,NA,-23.6,41.5,NA,NA,NA,2024,Both,Both,6,Both06,Both,Both,4,Both04,O,47,T,Both6_Both4_O47_T,2024_Both06_Both04_O47_T,NA,196,NA
+188,11.7,3.9,small peak - error on δ15N will be higher,-22.6,33,NA,NA,NA,2024,Cont,Control,6,Control06,Both,Both,4,Both04,W,48,T,Control6_Both4_W48_T,2024_Cont06_Both04_W48_T,NA,200,NA
+189,8.6,0.3,NA,-9.5,17.5,NA,NA,NA,2024,Both,Both,5,Both05,Warm,Warm,2,Warm02,O,22,S,Both5_Warm2_O22_S,2024_Both05_Warm02_O22_S,NA,113,NA
+190,11.9,0.2,NA,-8.9,17.2,NA,Y,Y,2024,Warm,Warm,6,Warm06,Warm,Warm,2,Warm02,G,24,S,Warm6_Warm2_G24_S,2024_Warm06_Warm02_G24_S,NA,127,NA
+191,12.7,0.2,NA,-7.3,15.6,NA,NA,NA,2024,Warm,Warm,2,Warm02,Warm,Warm,2,Warm02,G,15,S,Warm2_Warm2_G15_S,2024_Warm02_Warm02_G15_S,3/31 SKM ended with this one today,125,NA
+192,12.5,9.3,NA,-23.4,39,NA,NA,NA,2024,Both,Both,5,Both05,Warm,Warm,2,Warm02,O,22,T,Both5_Warm2_O22_T,2024_Both05_Warm02_O22_T,SC 4/2 started with this one today,114,NA
+193,12.1,7.8,NA,-22.5,35.1,NA,Y,Y,2024,Warm,Warm,6,Warm06,Warm,Warm,2,Warm02,G,24,T,Warm6_Warm2_G24_T,2024_Warm06_Warm02_G24_T,NA,128,NA
+194,13,9.1,NA,-24.1,39.6,NA,NA,NA,2024,Warm,Warm,2,Warm02,Warm,Warm,2,Warm02,G,15,T,Warm2_Warm2_G15_T,2024_Warm02_Warm02_G15_T,NA,126,NA
+195,12.3,0.1,NA,-6.3,14.8,NA,NA,NA,2024,Hyp,Hypoxic,4,Hypoxic04,Both,Both,4,Both04,B,43,S,Hypoxic4_Both4_B43_S,2024_Hyp04_Both04_B43_S,NA,201,NA
+196,12.4,0.2,NA,-9.9,18,two samples in well B12 - possibly mixed up with 220,NA,NA,2024,Both,Both,6,Both06,Warm,Warm,2,Warm02,O,24,S,Both6_Warm2_O24_S,2024_Both06_Warm02_O24_S,NA,115,NA
+197,12.6,9.3,NA,-24.6,47,NA,NA,NA,2024,Hyp,Hypoxic,4,Hypoxic04,Both,Both,4,Both04,B,43,T,Hypoxic4_Both4_B43_T,2024_Hyp04_Both04_B43_T,NA,202,NA
+198,12.6,10.1,NA,-23.5,40,NA,NA,NA,2024,Both,Both,6,Both06,Warm,Warm,2,Warm02,O,24,T,Both6_Warm2_O24_T,2024_Both06_Warm02_O24_T,NA,116,NA
+199,12,0.2,NA,-8,16.2,NA,NA,NA,2024,Cont,Control,6,Control06,Warm,Warm,2,Warm02,W,24,S,Control6_Warm2_W24_S,2024_Cont06_Warm02_W24_S,NA,119,NA
+200,11.5,0.2,NA,-8.7,16.9,NA,NA,NA,2024,Cont,Control,3,Control03,Warm,Warm,2,Warm02,W,17,S,Control3_Warm2_W17_S,2024_Cont03_Warm02_W17_S,NA,117,NA
+201,11.8,0.2,NA,-9,17,NA,NA,NA,2024,Hyp,Hypoxic,1,Hypoxic01,Warm,Warm,2,Warm02,B,13,S,Hypoxic1_Warm2_B13_S,2024_Hyp01_Warm02_B13_S,SC 4/2 Ended with this one today,121,NA
+202,12.4,9.3,NA,-23.6,38.5,NA,NA,NA,2024,Cont,Control,6,Control06,Warm,Warm,2,Warm02,W,24,T,Control6_Warm2_W24_T,2024_Cont06_Warm02_W24_T,SC 4/4 started with this one today,120,NA
+203,12.7,9.2,NA,-23.9,41.6,NA,NA,NA,2024,Cont,Control,3,Control03,Warm,Warm,2,Warm02,W,17,T,Control3_Warm2_W17_T,2024_Cont03_Warm02_W17_T,NA,118,NA
+204,12.2,8.3,NA,-24,43.3,NA,NA,NA,2024,Hyp,Hypoxic,1,Hypoxic01,Warm,Warm,2,Warm02,B,13,T,Hypoxic1_Warm2_B13_T,2024_Hyp01_Warm02_B13_T,NA,122,NA
+205,12.2,0.2,NA,-8.5,16.8,NA,NA,NA,2024,Hyp,Hypoxic,4,Hypoxic04,Warm,Warm,2,Warm02,B,19,S,Hypoxic4_Warm2_B19_S,2024_Hyp04_Warm02_B19_S,NA,123,NA
+206,16.3,0.2,NA,-7.6,15.9,NA,NA,NA,2024,Cont,Control,2,Control02,Cont,Control,2,Control02,W,15,S,Control2_Control2_W15_S,2024_Cont02_Cont02_W15_S,NA,87,NA
+207,12.9,0.2,NA,-6,14.5,NA,NA,NA,2024,Both,Both,4,Both04,Cont,Control,2,Control02,O,19,S,Both4_Control2_O19_S,2024_Both04_Cont02_O19_S,NA,81,NA
+208,13.2,5.8,small peak - error on δ15N will be higher,-24.8,50.6,NA,NA,NA,2024,Hyp,Hypoxic,4,Hypoxic04,Warm,Warm,2,Warm02,B,19,T,Hypoxic4_Warm2_B19_T,2024_Hyp04_Warm02_B19_T,NA,124,NA
+209,13,9.9,NA,-24.3,41.9,NA,NA,NA,2024,Cont,Control,2,Control02,Cont,Control,2,Control02,W,15,T,Control2_Control2_W15_T,2024_Cont02_Cont02_W15_T,NA,88,NA
+210,12.8,9.8,NA,-24.1,40.5,NA,NA,NA,2024,Both,Both,4,Both04,Cont,Control,2,Control02,O,19,T,Both4_Control2_O19_T,2024_Both04_Cont02_O19_T,4/4 SC ended with this one today,82,NA
+211,12.7,9.9,NA,-24.1,40.3,NA,NA,NA,2024,Hyp,Hypoxic,6,Hypoxic06,Cont,Control,2,Control02,B,23,T,Hypoxic6_Control2_B23_T,2024_Hyp06_Cont02_B23_T,4/9 SC started with this one today,92,NA
+212,12.3,9.4,NA,-23.8,39.2,NA,NA,NA,2024,Hyp,Hypoxic,3,Hypoxic03,Cont,Control,2,Control02,B,18,T,Hypoxic3_Control2_B18_T,2024_Hyp03_Cont02_B18_T,NA,90,NA
+213,12.8,9.4,NA,-23.4,37.3,NA,NA,NA,2024,Warm,Warm,4,Warm04,Cont,Control,2,Control02,G,20,T,Warm4_Control2_G20_T,2024_Warm04_Cont02_G20_T,NA,96,NA
+214,13.3,0.2,NA,-9.3,16.9,NA,NA,NA,2024,Hyp,Hypoxic,6,Hypoxic06,Cont,Control,2,Control02,B,23,S,Hypoxic6_Control2_B23_S,2024_Hyp06_Cont02_B23_S,NA,91,NA
+215,12.9,0.3,NA,-8,16.1,NA,NA,NA,2024,Hyp,Hypoxic,3,Hypoxic03,Cont,Control,2,Control02,B,18,S,Hypoxic3_Control2_B18_S,2024_Hyp03_Cont02_B18_S,NA,89,NA
+216,12.4,0.3,NA,-9.3,17.1,NA,NA,NA,2024,Warm,Warm,4,Warm04,Cont,Control,2,Control02,G,20,S,Warm4_Control2_G20_S,2024_Warm04_Cont02_G20_S,4/9 SC ended with this one today,95,NA
+217,12,9,NA,-23.5,40.4,NA,NA,NA,2024,Cont,Control,6,Control06,Hyp,Hypoxic,5,Hypoxic05,W,60,T,Control6_Hypoxic5_W60_T,2024_Cont06_Hyp05_W60_T,4/16 SKM started w this one,296,NA
+218,12.5,9.3,NA,-24.2,40.9,NA,NA,NA,2024,Warm,Warm,3,Warm03,Hyp,Hypoxic,5,Hypoxic05,G,53,T,Warm3_Hypoxic5_G53_T,2024_Warm03_Hyp05_G53_T,NA,302,NA
+219,12.8,9.1,NA,-24.9,46,NA,NA,NA,2024,Warm,Warm,5,Warm05,Hyp,Hypoxic,5,Hypoxic05,G,57,T,Warm5_Hypoxic5_G57_T,2024_Warm05_Hyp05_G57_T,NA,304,NA
+220,10.4,0.2,NA,-7.3,15.7,two samples in well B12 - possibly mixed up with 196,NA,NA,2024,Cont,Control,6,Control06,Hyp,Hypoxic,5,Hypoxic05,W,60,S,Control6_Hypoxic5_W60_S,2024_Cont06_Hyp05_W60_S,NA,295,NA
+221,12.2,0.2,NA,-6.8,15,NA,NA,NA,2024,Warm,Warm,3,Warm03,Hyp,Hypoxic,5,Hypoxic05,G,53,S,Warm3_Hypoxic5_G53_S,2024_Warm03_Hyp05_G53_S,NA,301,NA
+222,12,0.2,NA,-6.8,15.3,NA,NA,NA,2024,Warm,Warm,5,Warm05,Hyp,Hypoxic,5,Hypoxic05,G,57,S,Warm5_Hypoxic5_G57_S,2024_Warm05_Hyp05_G57_S,NA,303,NA
+223,12.4,9.1,NA,-24.3,42.7,NA,NA,NA,2024,Both,Both,6,Both06,Hyp,Hypoxic,5,Hypoxic05,O,60,T,Both6_Hypoxic5_O60_T,2024_Both06_Hyp05_O60_T,NA,292,NA
+224,12.4,5.7,small peak - error on δ15N will be higher,-25.8,60,NA,NA,NA,2024,Cont,Control,5,Control05,Hyp,Hypoxic,5,Hypoxic05,W,57,T,Control5_Hypoxic5_W57_T,2024_Cont05_Hyp05_W57_T,dropped sample on counter,294,NA
+225,12.3,6.6,NA,-24.6,47.2,NA,NA,NA,2024,Hyp,Hypoxic,1,Hypoxic01,Hyp,Hypoxic,5,Hypoxic05,B,50,T,Hypoxic1_Hypoxic5_B50_T,2024_Hyp01_Hyp05_B50_T,NA,298,NA
+226,12,0.2,NA,-8.1,16.1,NA,NA,NA,2024,Both,Both,6,Both06,Hyp,Hypoxic,5,Hypoxic05,O,60,S,Both6_Hypoxic5_O60_S,2024_Both06_Hyp05_O60_S,NA,291,NA
+227,11.9,0.2,NA,-7,15.2,NA,NA,NA,2024,Cont,Control,5,Control05,Hyp,Hypoxic,5,Hypoxic05,W,57,S,Control5_Hypoxic5_W57_S,2024_Cont05_Hyp05_W57_S,bee tag may have flaked into sample,293,NA
+228,12.4,0.2,NA,-8.6,16.5,NA,NA,NA,2024,Hyp,Hypoxic,1,Hypoxic01,Hyp,Hypoxic,5,Hypoxic05,B,50,S,Hypoxic1_Hypoxic5_B50_S,2024_Hyp01_Hyp05_B50_S,4/16 SKM ended with this one,297,NA
+229,9.4,0.3,NA,-9.9,17.8,NA,NA,NA,2024,Both,Both,1,Both01,Hyp,Hypoxic,5,Hypoxic05,O,49,S,Both1_Hypoxic5_O49_S,2024_Both01_Hyp05_O49_S,4/25/25 SC Started with this one today,289,NA
+230,14.5,0.2,NA,-10.1,18.1,NA,NA,NA,2024,Hyp,Hypoxic,3,Hypoxic03,Hyp,Hypoxic,5,Hypoxic05,B,54,S,Hypoxic3_Hypoxic5_B54_S,2024_Hyp03_Hyp05_B54_S,NA,299,NA
+231,12.8,8.5,NA,-24,40.3,NA,NA,NA,2024,Both,Both,1,Both01,Hyp,Hypoxic,5,Hypoxic05,O,49,T,Both1_Hypoxic5_O49_T,2024_Both01_Hyp05_O49_T,NA,290,NA
+232,12.6,8.4,NA,-24.7,50.4,NA,NA,NA,2024,Hyp,Hypoxic,3,Hypoxic03,Hyp,Hypoxic,5,Hypoxic05,B,54,T,Hypoxic3_Hypoxic5_B54_T,2024_Hyp03_Hyp05_B54_T,4/25/25 SC Ended with this one today,300,NA
+233,12.5,0.2,NA,-5.3,14.5,NA,NA,NA,2024,Cont,Control,1,Control01,Cont,Control,2,Control02,W,14,S,Control1_Control2_W14_S,2024_Cont01_Cont02_W14_S,5/12/2025 SC started with this one today,85,NA
+234,11.6,0.2,NA,-9.1,17,NA,NA,NA,2024,Warm,Warm,3,Warm03,Cont,Control,2,Control02,G,18,S,Warm3_Control2_G18_S,2024_Warm03_Cont02_G18_S,NA,93,NA
+235,4.4,0.3,NA,-9.1,17.3,NA,NA,NA,2024,Both,Both,5,Both05,Cont,Control,2,Control02,O,21,S,Both5_Control2_O21_S,2024_Both05_Cont02_O21_S,"5/9/25 SC dead oyster, had no tissue",83,NA
+236,12.7,10.1,NA,-23.7,39.4,NA,NA,NA,2024,Cont,Control,1,Control01,Cont,Control,2,Control02,W,14,T,Control1_Control2_W14_T,2024_Cont01_Cont02_W14_T,NA,86,NA
+237,12.1,9.7,NA,-23.9,40,NA,NA,NA,2024,Warm,Warm,3,Warm03,Cont,Control,2,Control02,G,18,T,Warm3_Control2_G18_T,2024_Warm03_Cont02_G18_T,NA,94,NA
+238,10.8,0.3,NA,-7.6,15.9,NA,NA,NA,2024,Hyp,Hypoxic,2,Hypoxic02,Cont,Control,3,Control03,B,27,S,Hypoxic2_Control3_B27_S,2024_Hyp02_Cont03_B27_S,NA,153,NA
+239,13,0.3,NA,-9.3,17.2,NA,NA,NA,2024,Warm,Warm,5,Warm05,Cont,Control,3,Control03,G,33,S,Warm5_Control3_G33_S,2024_Warm05_Cont03_G33_S,NA,159,NA
+240,12.5,0.2,NA,-6.1,14.8,NA,NA,NA,2024,Warm,Warm,2,Warm02,Cont,Control,3,Control03,G,28,S,Warm2_Control3_G28_S,2024_Warm02_Cont03_G28_S,NA,157,NA
+241,12.2,6.9,NA,-22.5,33,NA,NA,NA,2024,Hyp,Hypoxic,2,Hypoxic02,Cont,Control,3,Control03,B,27,T,Hypoxic2_Control3_B27_T,2024_Hyp02_Cont03_B27_T,NA,154,NA
+242,12.1,8.3,NA,-23.4,35.6,NA,NA,NA,2024,Warm,Warm,5,Warm05,Cont,Control,3,Control03,G,33,T,Warm5_Control3_G33_T,2024_Warm05_Cont03_G33_T,NA,160,NA
+243,12.2,8.3,NA,-23.9,35,NA,NA,NA,2024,Warm,Warm,2,Warm02,Cont,Control,3,Control03,G,28,T,Warm2_Control3_G28_T,2024_Warm02_Cont03_G28_T,NA,158,NA
+244,12.6,0.2,NA,-8.4,16.5,NA,NA,NA,2024,Cont,Control,3,Control03,Cont,Control,3,Control03,W,30,S,Control3_Control3_W30_S,2024_Cont03_Cont03_W30_S,NA,151,NA
+245,12.7,10.5,NA,-24.3,42.5,NA,NA,NA,2024,Cont,Control,3,Control03,Cont,Control,3,Control03,W,30,T,Control3_Control3_W30_T,2024_Cont03_Cont03_W30_T,5/12/2025 SC ended with this one today,152,NA
+246,12.5,0.2,NA,-8.2,16.2,NA,NA,NA,2024,Cont,Control,1,Control01,Cont,Control,3,Control03,W,26,S,Control1_Control3_W26_S,2024_Cont01_Cont03_W26_S,5/19 SKM started with this one today,149,NA
+247,11.8,0.2,NA,-7,15.4,NA,NA,NA,2024,Hyp,Hypoxic,5,Hypoxic05,Cont,Control,3,Control03,B,33,S,Hypoxic5_Control3_B33_S,2024_Hyp05_Cont03_B33_S,NA,155,NA
+248,12.5,0.3,NA,-7.1,15.2,NA,NA,NA,2024,Both,Both,6,Both06,Cont,Control,3,Control03,O,35,S,Both6_Control3_O35_S,2024_Both06_Cont03_O35_S,NA,147,NA
+249,12.2,10,NA,-24.4,45.5,NA,NA,NA,2024,Cont,Control,1,Control01,Cont,Control,3,Control03,W,26,T,Control1_Control3_W26_T,2024_Cont01_Cont03_W26_T,"clumped, put back in drying oven",150,NA
+250,12,7.1,small peak - error on δ15N will be higher,-22.9,35.4,NA,NA,NA,2024,Hyp,Hypoxic,5,Hypoxic05,Cont,Control,3,Control03,B,33,T,Hypoxic5_Control3_B33_T,2024_Hyp05_Cont03_B33_T,NA,156,NA
+251,12.3,10.3,NA,-24,42,NA,NA,NA,2024,Both,Both,6,Both06,Cont,Control,3,Control03,O,35,T,Both6_Control3_O35_T,2024_Both06_Cont03_O35_T,NA,148,NA
+252,12.3,0.2,NA,-7.3,15.5,NA,NA,NA,2024,Both,Both,2,Both02,Cont,Control,3,Control03,O,27,S,Both2_Control3_O27_S,2024_Both02_Cont03_O27_S,NA,145,NA
+253,12.6,8.1,NA,-24.8,46.7,NA,NA,NA,2024,Both,Both,2,Both02,Cont,Control,3,Control03,O,27,T,Both2_Control3_O27_T,2024_Both02_Cont03_O27_T,"5/19 AM ended with this one today; clumped, put back into drying oven",146,NA
+254,12.8,0.2,NA,-7.8,16.1,NA,NA,NA,2024,Cont,Control,2,Control02,Hyp,Hypoxic,4,Hypoxic04,W,40,S,Control2_Hypoxic4_W40_S,2024_Cont02_Hyp04_W40_S,5/21/2025 SC started with this one today,231,NA
+255,7,0.3,NA,-10,18.1,NA,NA,NA,2024,Hyp,Hypoxic,4,Hypoxic04,Hyp,Hypoxic,4,Hypoxic04,B,43,S,Hypoxic4_Hypoxic4_B43_S,2024_Hyp04_Hyp04_B43_S,NA,233,NA
+256,12.2,0.2,NA,-8,16.2,NA,NA,NA,2024,Warm,Warm,3,Warm03,Hyp,Hypoxic,4,Hypoxic04,G,41,S,Warm3_Hypoxic4_G41_S,2024_Warm03_Hyp04_G41_S,NA,237,NA
+257,13.3,7.4,small peak - error on δ15N will be higher,-25.1,51.5,NA,NA,NA,2024,Cont,Control,2,Control02,Hyp,Hypoxic,4,Hypoxic04,W,40,T,Control2_Hypoxic4_W40_T,2024_Cont02_Hyp04_W40_T,NA,232,NA
+258,12.3,9.1,NA,-24.3,43.3,NA,NA,NA,2024,Hyp,Hypoxic,4,Hypoxic04,Hyp,Hypoxic,4,Hypoxic04,B,43,T,Hypoxic4_Hypoxic4_B43_T,2024_Hyp04_Hyp04_B43_T,NA,234,NA
+259,12.2,8,NA,-22.6,34.8,NA,NA,NA,2024,Warm,Warm,3,Warm03,Hyp,Hypoxic,4,Hypoxic04,G,41,T,Warm3_Hypoxic4_G41_T,2024_Warm03_Hyp04_G41_T,NA,238,NA
+260,10.9,0.2,NA,-8,16.2,NA,NA,NA,2024,Cont,Control,1,Control01,Hyp,Hypoxic,4,Hypoxic04,W,38,S,Control1_Hypoxic4_W38_S,2024_Cont01_Hyp04_W38_S,NA,229,NA
+261,11.7,0.2,NA,-9.6,17.4,NA,NA,NA,2024,Both,Both,2,Both02,Hyp,Hypoxic,4,Hypoxic04,O,40,S,Both2_Hypoxic4_O40_S,2024_Both02_Hyp04_O40_S,NA,227,NA
+262,12.2,0.2,NA,-7.3,15.7,NA,NA,NA,2024,Hyp,Hypoxic,6,Hypoxic06,Hyp,Hypoxic,4,Hypoxic04,B,47,S,Hypoxic6_Hypoxic4_B47_S,2024_Hyp06_Hyp04_B47_S,NA,235,NA
+263,12.3,10,NA,-24.4,43.3,NA,NA,NA,2024,Cont,Control,1,Control01,Hyp,Hypoxic,4,Hypoxic04,W,38,T,Control1_Hypoxic4_W38_T,2024_Cont01_Hyp04_W38_T,NA,230,NA
+264,11.8,8.8,NA,-23.6,39.3,NA,NA,NA,2024,Both,Both,2,Both02,Hyp,Hypoxic,4,Hypoxic04,O,40,T,Both2_Hypoxic4_O40_T,2024_Both02_Hyp04_O40_T,NA,228,NA
+265,12,9.8,NA,-24.4,43.4,NA,NA,NA,2024,Hyp,Hypoxic,6,Hypoxic06,Hyp,Hypoxic,4,Hypoxic04,B,47,T,Hypoxic6_Hypoxic4_B47_T,2024_Hyp06_Hyp04_B47_T,NA,236,NA
+266,11.3,0.2,NA,-8,16.2,NA,NA,NA,2024,Hyp,Hypoxic,5,Hypoxic05,Cont,Control,5,Control05,B,58,S,Hypoxic5_Control5_B58_S,2024_Hyp05_Cont05_B58_S,NA,281,NA
+267,11.3,0.2,NA,-7.6,15.8,NA,NA,NA,2024,Cont,Control,3,Control03,Cont,Control,5,Control05,W,53,S,Control3_Control5_W53_S,2024_Cont03_Cont05_W53_S,NA,277,NA
+268,11.8,0.2,NA,-8.8,16.8,NA,NA,NA,2024,Warm,Warm,5,Warm05,Cont,Control,5,Control05,G,58,S,Warm5_Control5_G58_S,2024_Warm05_Cont05_G58_S,NA,287,NA
+269,12,8.7,NA,-23.8,40.6,NA,NA,NA,2024,Hyp,Hypoxic,5,Hypoxic05,Cont,Control,5,Control05,B,58,T,Hypoxic5_Control5_B58_T,2024_Hyp05_Cont05_B58_T,NA,282,NA
+270,12.3,9.6,NA,-24.1,40.7,NA,NA,NA,2024,Cont,Control,3,Control03,Cont,Control,5,Control05,W,53,T,Control3_Control5_W53_T,2024_Cont03_Cont05_W53_T,NA,278,NA
+271,12.2,10.5,NA,-24.4,43.8,NA,NA,NA,2024,Warm,Warm,5,Warm05,Cont,Control,5,Control05,G,58,T,Warm5_Control5_G58_T,2024_Warm05_Cont05_G58_T,NA,288,NA
+272,12.4,0.2,NA,-8.9,16.9,NA,NA,NA,2024,Warm,Warm,1,Warm01,Cont,Control,5,Control05,G,50,S,Warm1_Control5_G50_S,2024_Warm01_Cont05_G50_S,NA,285,NA
+273,12,10.1,NA,-24.2,43.2,NA,NA,NA,2024,Warm,Warm,1,Warm01,Cont,Control,5,Control05,G,50,T,Warm1_Control5_G50_T,2024_Warm01_Cont05_G50_T,5/21/2025 SC ended with this one today,286,NA
+274,12.5,0.2,NA,-8.5,16.5,NA,NA,NA,2024,Cont,Control,4,Control04,Cont,Control,5,Control05,W,55,S,Control4_Control5_W55_S,2024_Cont04_Cont05_W55_S,5/30/25 SC started with this one today,279,NA
+275,10.1,0.3,NA,-8.3,16.3,NA,NA,NA,2024,Hyp,Hypoxic,6,Hypoxic06,Cont,Control,5,Control05,B,60,S,Hypoxic6_Control5_B60_S,2024_Hyp06_Cont05_B60_S,NA,283,NA
+276,13.8,0.3,NA,-8.3,16.1,NA,NA,NA,2024,Both,Both,5,Both05,Cont,Control,5,Control05,O,57,S,Both5_Control5_O57_S,2024_Both05_Cont05_O57_S,NA,275,NA
+277,12.5,9.7,NA,-23.9,41.5,NA,NA,NA,2024,Cont,Control,4,Control04,Cont,Control,5,Control05,W,55,T,Control4_Control5_W55_T,2024_Cont04_Cont05_W55_T,NA,280,NA
+278,12.5,9.1,NA,-25,46.1,NA,NA,NA,2024,Hyp,Hypoxic,6,Hypoxic06,Cont,Control,5,Control05,B,60,T,Hypoxic6_Control5_B60_T,2024_Hyp06_Cont05_B60_T,NA,284,NA
+279,12.4,10.1,NA,-24.1,42.9,NA,NA,NA,2024,Both,Both,5,Both05,Cont,Control,5,Control05,O,57,T,Both5_Control5_O57_T,2024_Both05_Cont05_O57_T,"5/30/25 SC may be contaminated or weird results, touched table",276,NA
+280,3.2,0.6,NA,-10.9,19,NA,NA,NA,2024,Both,Both,3,Both03,Cont,Control,5,Control05,O,53,S,Both3_Control5_O53_S,2024_Both03_Cont05_O53_S,"5/21/2025 SC no tissue in shell, dead",273,NA
+281,13.2,0.3,NA,-9.6,17.5,NA,NA,NA,2024,Hyp,Hypoxic,5,Hypoxic05,Hyp,Hypoxic,2,Hypoxic02,B,22,S,Hypoxic5_Hypoxic2_B22_S,2024_Hyp05_Hyp02_B22_S,NA,107,NA
+282,12.8,0.2,NA,-8.3,16.5,NA,NA,NA,2024,Warm,Warm,5,Warm05,Hyp,Hypoxic,2,Hypoxic02,G,22,S,Warm5_Hypoxic2_G22_S,2024_Warm05_Hyp02_G22_S,NA,111,NA
+283,12.6,0.2,NA,-8.5,16.5,NA,NA,NA,2024,Cont,Control,2,Control02,Hyp,Hypoxic,2,Hypoxic02,W,16,S,Control2_Hypoxic2_W16_S,2024_Cont02_Hyp02_W16_S,NA,101,NA
+284,12.6,10,NA,-23.4,40.3,NA,NA,NA,2024,Hyp,Hypoxic,5,Hypoxic05,Hyp,Hypoxic,2,Hypoxic02,B,22,T,Hypoxic5_Hypoxic2_B22_T,2024_Hyp05_Hyp02_B22_T,NA,108,NA
+285,12.1,6.8,NA,-24.4,42.4,NA,NA,NA,2024,Warm,Warm,5,Warm05,Hyp,Hypoxic,2,Hypoxic02,G,22,T,Warm5_Hypoxic2_G22_T,2024_Warm05_Hyp02_G22_T,NA,112,NA
+286,12.5,9.7,NA,-23.6,40,NA,NA,NA,2024,Cont,Control,2,Control02,Hyp,Hypoxic,2,Hypoxic02,W,16,T,Control2_Hypoxic2_W16_T,2024_Cont02_Hyp02_W16_T,NA,102,NA
+287,12.3,0.2,NA,-7.1,15.3,NA,NA,NA,2024,Both,Both,3,Both03,Hyp,Hypoxic,2,Hypoxic02,O,18,S,Both3_Hypoxic2_O18_S,2024_Both03_Hyp02_O18_S,NA,97,NA
+288,13,0.2,NA,-9.3,17.2,NA,NA,NA,2024,Both,Both,6,Both06,Hyp,Hypoxic,2,Hypoxic02,O,24,S,Both6_Hypoxic2_O24_S,2024_Both06_Hyp02_O24_S,NA,99,NA
+289,12.4,0.3,NA,-8.6,16.6,NA,NA,NA,2024,Cont,Control,6,Control06,Hyp,Hypoxic,2,Hypoxic02,W,23,S,Control6_Hypoxic2_W23_S,2024_Cont06_Hyp02_W23_S,NA,103,NA
+290,12.2,9.4,NA,-23.8,41.7,NA,NA,NA,2024,Both,Both,3,Both03,Hyp,Hypoxic,2,Hypoxic02,O,18,T,Both3_Hypoxic2_O18_T,2024_Both03_Hyp02_O18_T,NA,98,NA
+291,12.2,9.2,NA,-24.6,48,NA,NA,NA,2024,Both,Both,6,Both06,Hyp,Hypoxic,2,Hypoxic02,O,24,T,Both6_Hypoxic2_O24_T,2024_Both06_Hyp02_O24_T,NA,100,NA
+292,12.3,9.7,NA,-23.2,39.2,NA,NA,NA,2024,Cont,Control,6,Control06,Hyp,Hypoxic,2,Hypoxic02,W,23,T,Control6_Hypoxic2_W23_T,2024_Cont06_Hyp02_W23_T,NA,104,NA
+293,10.3,0.2,NA,-8.6,16.6,NA,NA,NA,2024,Both,Both,1,Both01,Hyp,Hypoxic,4,Hypoxic04,O,37,S,Both1_Hypoxic4_O37_S,2024_Both01_Hyp04_O37_S,NA,225,NA
+294,12.2,0.2,NA,-8.6,16.8,NA,NA,NA,2024,Warm,Warm,4,Warm04,Hyp,Hypoxic,4,Hypoxic04,G,44,S,Warm4_Hypoxic4_G44_S,2024_Warm04_Hyp04_G44_S,NA,239,NA
+295,12.4,7.4,NA,-25.4,55.5,NA,NA,NA,2024,Both,Both,1,Both01,Hyp,Hypoxic,4,Hypoxic04,O,37,T,Both1_Hypoxic4_O37_T,2024_Both01_Hyp04_O37_T,NA,226,NA
+296,11.8,7.2,NA,-25.1,52.4,NA,NA,NA,2024,Warm,Warm,4,Warm04,Hyp,Hypoxic,4,Hypoxic04,G,44,T,Warm4_Hypoxic4_G44_T,2024_Warm04_Hyp04_G44_T,NA,240,NA
+297,9.8,0.3,NA,-7.9,15.9,NA,NA,NA,2024,Warm,Warm,1,Warm01,Hyp,Hypoxic,2,Hypoxic02,G,14,S,Warm1_Hypoxic2_G14_S,2024_Warm01_Hyp02_G14_S,NA,109,NA
+298,12,0.1,small peak - error on δ15N will be higher,-6.1,14.4,NA,NA,NA,2024,Hyp,Hypoxic,1,Hypoxic01,Hyp,Hypoxic,2,Hypoxic02,B,13,S,Hypoxic1_Hypoxic2_B13_S,2024_Hyp01_Hyp02_B13_S,NA,105,NA
+299,12.4,9.3,NA,-23.7,38.8,NA,NA,NA,2024,Warm,Warm,1,Warm01,Hyp,Hypoxic,2,Hypoxic02,G,14,T,Warm1_Hypoxic2_G14_T,2024_Warm01_Hyp02_G14_T,NA,110,NA
+300,12.6,9,NA,-23.4,37.3,NA,NA,NA,2024,Hyp,Hypoxic,1,Hypoxic01,Hyp,Hypoxic,2,Hypoxic02,B,13,T,Hypoxic1_Hypoxic2_B13_T,2024_Hyp01_Hyp02_B13_T,5/30/25 SC ended with this one today,106,NA
+301,14.7,0.2,NA,-5.5,14.3,NA,NA,NA,2024,Hyp,Hypoxic,5,Hypoxic05,Hyp,Hypoxic,1,Hypoxic01,B,9,S,Hypoxic5_Hypoxic1_B9_S,2024_Hyp05_Hyp01_B9_S,6/6/25 SC started with this one today,41,NA
+302,9.7,0.2,NA,-7.8,16.1,NA,NA,NA,2024,Cont,Control,1,Control01,Hyp,Hypoxic,1,Hypoxic01,W,1,S,Control1_Hypoxic1_W1_S,2024_Cont01_Hyp01_W1_S,NA,37,NA
+303,11.8,0.2,NA,-8.3,16.4,NA,NA,NA,2024,Hyp,Hypoxic,6,Hypoxic06,Hyp,Hypoxic,1,Hypoxic01,B,12,S,Hypoxic6_Hypoxic1_B12_S,2024_Hyp06_Hyp01_B12_S,NA,43,NA
+304,11.1,0.2,NA,-6.9,15.3,NA,NA,NA,2024,Warm,Warm,2,Warm02,Hyp,Hypoxic,1,Hypoxic01,G,4,S,Warm2_Hypoxic1_G4_S,2024_Warm02_Hyp01_G4_S,NA,45,NA
+305,11.6,0.2,NA,-7.6,16,NA,NA,NA,2024,Cont,Control,4,Control04,Hyp,Hypoxic,1,Hypoxic01,W,7,S,Control4_Hypoxic1_W7_S,2024_Cont04_Hyp01_W7_S,NA,39,NA
+306,12.1,0.2,NA,-8.6,16.6,NA,NA,NA,2024,Both,Both,5,Both05,Hyp,Hypoxic,1,Hypoxic01,O,10,S,Both5_Hypoxic1_O10_S,2024_Both05_Hyp01_O10_S,NA,35,NA
+307,11.8,0.2,NA,-10.5,18.1,NA,NA,NA,2024,Warm,Warm,6,Warm06,Hyp,Hypoxic,1,Hypoxic01,G,11,S,Warm6_Hypoxic1_G11_S,2024_Warm06_Hyp01_G11_S,NA,47,NA
+308,11.4,0.2,NA,-7.6,15.7,NA,NA,NA,2024,Both,Both,2,Both02,Hyp,Hypoxic,1,Hypoxic01,O,3,S,Both2_Hypoxic1_O3_S,2024_Both02_Hyp01_O3_S,6/6/25 SC ended with this one today,33,NA
+309,12,8.1,NA,-23.4,36.2,NA,NA,NA,2024,Hyp,Hypoxic,5,Hypoxic05,Hyp,Hypoxic,1,Hypoxic01,B,9,T,Hypoxic5_Hypoxic1_B9_T,2024_Hyp05_Hyp01_B9_T,6/9/25 SC started with this one today,42,NA
+310,13,7.5,NA,-25.6,50.7,NA,NA,NA,2024,Cont,Control,4,Control04,Hyp,Hypoxic,1,Hypoxic01,W,7,T,Control4_Hypoxic1_W7_T,2024_Cont04_Hyp01_W7_T,NA,40,NA
+311,12.2,6.2,small peak - error on δ15N will be higher,-25.1,46.2,NA,NA,NA,2024,Both,Both,5,Both05,Hyp,Hypoxic,1,Hypoxic01,O,10,T,Both5_Hypoxic1_O10_T,2024_Both05_Hyp01_O10_T,NA,36,NA
+312,12.4,8.6,NA,-24.7,42.9,NA,NA,NA,2024,Hyp,Hypoxic,6,Hypoxic06,Hyp,Hypoxic,1,Hypoxic01,B,12,T,Hypoxic6_Hypoxic1_B12_T,2024_Hyp06_Hyp01_B12_T,NA,44,NA
+313,12.3,8.8,NA,-25.4,50.7,NA,NA,NA,2024,Warm,Warm,6,Warm06,Hyp,Hypoxic,1,Hypoxic01,G,11,T,Warm6_Hypoxic1_G11_T,2024_Warm06_Hyp01_G11_T,NA,48,NA
+314,12.4,9.2,NA,-23.8,38.9,NA,NA,NA,2024,Cont,Control,1,Control01,Hyp,Hypoxic,1,Hypoxic01,W,1,T,Control1_Hypoxic1_W1_T,2024_Cont01_Hyp01_W1_T,NA,38,NA
+315,12.2,8.7,NA,-24.9,46.8,NA,NA,NA,2024,Warm,Warm,2,Warm02,Hyp,Hypoxic,1,Hypoxic01,G,4,T,Warm2_Hypoxic1_G4_T,2024_Warm02_Hyp01_G4_T,NA,46,NA
+316,12,5.6,small peak - error on δ15N will be higher,-25.2,45.8,NA,NA,NA,2024,Both,Both,2,Both02,Hyp,Hypoxic,1,Hypoxic01,O,3,T,Both2_Hypoxic1_O3_T,2024_Both02_Hyp01_O3_T,NA,34,NA
+317,11.1,0.2,NA,-7.7,15.7,NA,NA,NA,2024,Cont,Control,3,Control03,Hyp,Hypoxic,3,Hypoxic03,W,30,S,Control3_Hypoxic3_W30_S,2024_Cont03_Hyp03_W30_S,NA,165,NA
+318,11.2,0.2,NA,-9.4,17,NA,NA,NA,2024,Cont,Control,5,Control05,Hyp,Hypoxic,3,Hypoxic03,W,34,S,Control5_Hypoxic3_W34_S,2024_Cont05_Hyp03_W34_S,NA,167,NA
+319,11.3,0.2,NA,-6.9,15.1,NA,NA,NA,2024,Both,Both,5,Both05,Hyp,Hypoxic,3,Hypoxic03,O,32,S,Both5_Hypoxic3_O32_S,2024_Both05_Hyp03_O32_S,NA,161,NA
+320,12.2,8,NA,-24.4,39.9,NA,NA,NA,2024,Cont,Control,3,Control03,Hyp,Hypoxic,3,Hypoxic03,W,30,T,Control3_Hypoxic3_W30_T,2024_Cont03_Hyp03_W30_T,NA,166,NA
+321,12.3,8.8,NA,-24.7,42.8,NA,NA,NA,2024,Cont,Control,5,Control05,Hyp,Hypoxic,3,Hypoxic03,W,34,T,Control5_Hypoxic3_W34_T,2024_Cont05_Hyp03_W34_T,NA,168,NA
+322,11.9,6.1,small peak - error on δ15N will be higher,-24,39.1,NA,NA,NA,2024,Both,Both,5,Both05,Hyp,Hypoxic,3,Hypoxic03,O,32,T,Both5_Hypoxic3_O32_T,2024_Both05_Hyp03_O32_T,NA,162,NA
+323,11.2,0.2,NA,-9.8,17.3,NA,NA,NA,2024,Warm,Warm,4,Warm04,Hyp,Hypoxic,3,Hypoxic03,G,32,S,Warm4_Hypoxic3_G32_S,2024_Warm04_Hyp03_G32_S,NA,173,NA
+324,12,9,NA,-24.4,41.2,NA,NA,NA,2024,Warm,Warm,4,Warm04,Hyp,Hypoxic,3,Hypoxic03,G,32,T,Warm4_Hypoxic3_G32_T,2024_Warm04_Hyp03_G32_T,NA,174,NA
+325,13,0.2,NA,-7.6,15.8,NA,NA,NA,2024,Warm,Warm,1,Warm01,Cont,Control,4,Control04,G,37,S,Warm1_Control4_G37_S,2024_Warm01_Cont04_G37_S,NA,221,NA
+326,12.1,0.3,NA,-9,16.9,NA,NA,NA,2024,Hyp,Hypoxic,1,Hypoxic01,Cont,Control,4,Control04,B,38,S,Hypoxic1_Control4_B38_S,2024_Hyp01_Cont04_B38_S,NA,217,NA
+327,reduction column issues - peaks not usable,NA,NA,reduction column issues - peaks not usable,NA,NA,Y,Y,2024,Cont,Control,4,Control04,Cont,Control,4,Control04,W,43,S,Control4_Control4_W43_S,2024_Cont04_Cont04_W43_S,NA,213,NA
+328,12.2,8.5,NA,-24.4,44.8,NA,NA,NA,2024,Warm,Warm,1,Warm01,Cont,Control,4,Control04,G,37,T,Warm1_Control4_G37_T,2024_Warm01_Cont04_G37_T,NA,222,NA
+329,12.9,8.7,NA,-24,41.2,NA,NA,NA,2024,Hyp,Hypoxic,1,Hypoxic01,Cont,Control,4,Control04,B,38,T,Hypoxic1_Control4_B38_T,2024_Hyp01_Cont04_B38_T,NA,218,NA
+330,12.4,8,NA,-25.6,49.4,NA,NA,NA,2024,Cont,Control,4,Control04,Cont,Control,4,Control04,W,43,T,Control4_Control4_W43_T,2024_Cont04_Cont04_W43_T,NA,214,NA
+331,reduction column issues - peaks not usable,NA,NA,reduction column issues - peaks not usable,NA,NA,Y,Y,2024,Both,Both,6,Both06,Cont,Control,4,Control04,O,48,S,Both6_Control4_O48_S,2024_Both06_Cont04_O48_S,NA,211,NA
+332,12.7,10,NA,-24.2,43.1,NA,NA,NA,2024,Both,Both,6,Both06,Cont,Control,4,Control04,O,48,T,Both6_Control4_O48_T,2024_Both06_Cont04_O48_T,6/9/2025 SC ended with this one today,212,NA
+333,reduction column issues - peaks not usable,NA,NA,reduction column issues - peaks not usable,NA,NA,Y,Y,2024,Hyp,Hypoxic,2,Hypoxic02,Hyp,Hypoxic,3,Hypoxic03,B,28,S,Hypoxic2_Hypoxic3_B28_S,2024_Hyp02_Hyp03_B28_S,6/13/2025 SC started with this one today,169,NA
+334,reduction column issues - peaks not usable,NA,NA,reduction column issues - peaks not usable,NA,NA,Y,Y,2024,Hyp,Hypoxic,4,Hypoxic04,Hyp,Hypoxic,3,Hypoxic03,B,32,S,Hypoxic4_Hypoxic3_B32_S,2024_Hyp04_Hyp03_B32_S,NA,171,NA
+335,reduction column issues - peaks not usable,NA,NA,reduction column issues - peaks not usable,NA,NA,Y,Y,2024,Warm,Warm,6,Warm06,Hyp,Hypoxic,3,Hypoxic03,G,36,S,Warm6_Hypoxic3_G36_S,2024_Warm06_Hyp03_G36_S,NA,175,NA
+336,12.1,8.1,NA,-23.6,37.7,NA,NA,NA,2024,Hyp,Hypoxic,2,Hypoxic02,Hyp,Hypoxic,3,Hypoxic03,B,28,T,Hypoxic2_Hypoxic3_B28_T,2024_Hyp02_Hyp03_B28_T,NA,170,NA
+337,12.2,8.8,NA,-23.6,38.7,NA,NA,NA,2024,Hyp,Hypoxic,4,Hypoxic04,Hyp,Hypoxic,3,Hypoxic03,B,32,T,Hypoxic4_Hypoxic3_B32_T,2024_Hyp04_Hyp03_B32_T,NA,172,NA
+338,12.5,5.5,small peak - error on δ15N will be higher,-22.7,34.8,NA,NA,NA,2024,Warm,Warm,6,Warm06,Hyp,Hypoxic,3,Hypoxic03,G,36,T,Warm6_Hypoxic3_G36_T,2024_Warm06_Hyp03_G36_T,NA,176,NA
+339,reduction column issues - peaks not usable,NA,NA,reduction column issues - peaks not usable,NA,NA,Y,Y,2024,Hyp,Hypoxic,1,Hypoxic01,Cont,Control,1,Control01,B,2,S,Hypoxic1_Control1_B2_S,2024_Hyp01_Cont01_B2_S,NA,24,NA
+340,reduction column issues - peaks not usable,NA,NA,reduction column issues - peaks not usable,NA,NA,Y,Y,2024,Cont,Control,5,Control05,Cont,Control,1,Control01,W,9,S,Control5_Control1_W9_S,2024_Cont05_Cont01_W9_S,NA,21,NA
+341,reduction column issues - peaks not usable,NA,NA,reduction column issues - peaks not usable,NA,NA,Y,Y,2024,Cont,Control,6,Control06,Cont,Control,1,Control01,W,10,S,Control6_Control1_W10_S,2024_Cont06_Cont01_W10_S,NA,22,NA
+342,12.8,9.5,NA,-24.1,40.1,NA,NA,NA,2024,Hyp,Hypoxic,1,Hypoxic01,Cont,Control,1,Control01,B,2,T,Hypoxic1_Control1_B2_T,2024_Hyp01_Cont01_B2_T,NA,26,NA
+343,12.5,9.7,NA,-23.7,39.9,NA,NA,NA,2024,Cont,Control,5,Control05,Cont,Control,1,Control01,W,9,T,Warm3_Control1_G6_S,2024_Cont05_Cont01_W9_T,"6/13/25 Fixed this sample name to be correct, had the wrong sample name (G6) but the right information in the other columns. Fixed sample name from Warm3_Control1_G6_S",25,NA
+344,12.5,9.1,NA,-24.2,41.6,NA,NA,NA,2024,Cont,Control,6,Control06,Cont,Control,1,Control01,W,10,T,Control6_Control1_W10_T,2024_Cont06_Cont01_W10_T,NA,23,NA
+345,reduction column issues - peaks not usable,NA,NA,reduction column issues - peaks not usable,NA,NA,Y,Y,2024,Both,Both,6,Both06,Hyp,Hypoxic,3,Hypoxic03,O,34,S,Both6_Hypoxic3_O34_S,2024_Both06_Hyp03_O34_S,NA,163,NA
+346,reduction column issues - peaks not usable,NA,NA,reduction column issues - peaks not usable,NA,NA,Y,Y,2024,Both,Both,1,Both01,Cont,Control,1,Control01,O,1,S,Both1_Control1_O1_S,2024_Both01_Cont01_O1_S,NA,17,NA
+347,11.8,7.9,NA,-23.8,39.9,NA,NA,NA,2024,Both,Both,6,Both06,Hyp,Hypoxic,3,Hypoxic03,O,34,T,Both6_Hypoxic3_O34_T,2024_Both06_Hyp03_O34_T,NA,164,NA
+348,11.9,9.7,NA,-24.3,41.6,NA,NA,NA,2024,Both,Both,1,Both01,Cont,Control,1,Control01,O,1,T,Both1_Control1_O1_T,2024_Both01_Cont01_O1_T,6/13/25 SC ended with this one today,18,NA
+349,reduction column issues - peaks not usable,NA,NA,reduction column issues - peaks not usable,NA,NA,Y,Y,2024,Hyp,Hypoxic,2,Hypoxic02,Cont,Control,4,Control04,B,40,S,Hypoxic2_Control4_B40_S,2024_Hyp02_Cont04_B40_S,6/16/25 SC started with this one today,219,NA
+350,reduction column issues - peaks not usable,NA,NA,reduction column issues - peaks not usable,NA,NA,Y,Y,2024,Both,Both,1,Both01,Cont,Control,4,Control04,O,37,S,Both1_Control4_O37_S,2024_Both01_Cont04_O37_S,NA,209,NA
+351,reduction column issues - peaks not usable,NA,NA,reduction column issues - peaks not usable,NA,NA,Y,Y,2024,Cont,Control,5,Control05,Cont,Control,4,Control04,W,46,S,Control5_Control4_W46_S,2024_Cont05_Cont04_W46_S,NA,215,NA
+352,11.9,6.2,small peak - error on δ15N will be higher,-23.5,36.6,NA,NA,NA,2024,Hyp,Hypoxic,2,Hypoxic02,Cont,Control,4,Control04,B,40,T,Hypoxic2_Control4_B40_T,2024_Hyp02_Cont04_B40_T,NA,220,NA
+353,12.7,8.1,NA,-25.4,49,NA,NA,NA,2024,Both,Both,1,Both01,Cont,Control,4,Control04,O,37,T,Both1_Control4_O37_T,2024_Both01_Cont04_O37_T,NA,210,NA
+354,12.8,9,NA,-24.2,39.7,NA,NA,NA,2024,Cont,Control,5,Control05,Cont,Control,4,Control04,W,46,T,Control5_Control4_W46_T,2024_Cont05_Cont04_W46_T,NA,216,NA
+355,reduction column issues - peaks not usable,NA,NA,reduction column issues - peaks not usable,NA,NA,Y,Y,2024,Warm,Warm,6,Warm06,Cont,Control,4,Control04,G,47,S,Warm6_Control4_G47_S,2024_Warm06_Cont04_G47_S,NA,223,NA
+356,reduction column issues - peaks not usable,NA,NA,reduction column issues - peaks not usable,NA,NA,Y,Y,2024,Warm,Warm,6,Warm06,Cont,Control,1,Control01,G,12,S,Warm6_Control1_G12_S,2024_Warm06_Cont01_G12_S,NA,31,NA
+357,reduction column issues - peaks not usable,NA,NA,reduction column issues - peaks not usable,NA,NA,Y,Y,2024,Both,Both,3,Both03,Cont,Control,1,Control01,O,5,S,Both3_Control1_O5_S,2024_Both03_Cont01_O5_S,NA,19,NA
+358,12.3,6.8,small peak - error on δ15N will be higher,-24.7,48.8,NA,NA,NA,2024,Warm,Warm,6,Warm06,Cont,Control,4,Control04,G,47,T,Warm6_Control4_G47_T,2024_Warm06_Cont04_G47_T,NA,224,NA
+359,12,7.8,NA,-24.9,44.7,NA,NA,NA,2024,Warm,Warm,6,Warm06,Cont,Control,1,Control01,G,12,T,Warm6_Control1_G12_T,2024_Warm06_Cont01_G12_T,NA,32,NA
+360,14.4,0.2,NA,-7.7,15.6,NA,NA,NA,2024,Warm,Warm,3,Warm03,Cont,Control,1,Control01,G,6,S,Warm3_Control1_G6_S,2024_Warm03_Cont01_G6_S,NA,29,NA
+361,11.1,0.2,NA,-9.3,17,NA,NA,NA,2024,Hyp,Hypoxic,4,Hypoxic04,Cont,Control,1,Control01,B,8,S,Hypoxic4_Control1_B8_S,2024_Hyp04_Cont01_B8_S,NA,27,NA
+362,12.4,8.5,NA,-25,44.6,NA,NA,NA,2024,Warm,Warm,3,Warm03,Cont,Control,1,Control01,G,6,T,Warm3_Control1_G6_T,2024_Warm03_Cont01_G6_T,NA,30,NA
+363,11.8,5.7,small peak - error on δ15N will be higher,-25.7,60.8,NA,NA,NA,2024,Hyp,Hypoxic,4,Hypoxic04,Cont,Control,1,Control01,B,8,T,Hypoxic4_Control1_B8_T,2024_Hyp04_Cont01_B8_T,NA,28,NA
+364,10.9,0.2,NA,-8.3,16.1,NA,NA,NA,2024,Both,Both,4,Both04,Hyp,Hypoxic,6,Hypoxic06,O,67,S,Both4_Hypoxic6_O67_S,2024_Both04_Hyp06_O67_S,NA,355,NA
+365,12.1,0.2,NA,-8.4,16.2,NA,NA,NA,2024,Hyp,Hypoxic,3,Hypoxic03,Hyp,Hypoxic,6,Hypoxic06,B,65,S,Hypoxic3_Hypoxic6_B65_S,2024_Hyp03_Hyp06_B65_S,NA,363,NA
+366,12,0.2,NA,-7.5,15.6,NA,NA,NA,2024,Warm,Warm,1,Warm01,Hyp,Hypoxic,6,Hypoxic06,G,62,S,Warm1_Hypoxic6_G62_S,2024_Warm01_Hyp06_G62_S,NA,365,NA
+367,12.2,8.2,NA,-24.2,43.7,NA,NA,NA,2024,Both,Both,4,Both04,Hyp,Hypoxic,6,Hypoxic06,O,67,T,Both4_Hypoxic6_O67_T,2024_Both04_Hyp06_O67_T,NA,356,NA
+368,12.5,8.5,NA,-24.2,44,NA,NA,NA,2024,Hyp,Hypoxic,3,Hypoxic03,Hyp,Hypoxic,6,Hypoxic06,B,65,T,Hypoxic3_Hypoxic6_B65_T,2024_Hyp03_Hyp06_B65_T,NA,364,NA
+369,12.6,8,NA,-24.3,42.1,NA,NA,NA,2024,Warm,Warm,1,Warm01,Hyp,Hypoxic,6,Hypoxic06,G,62,T,Warm1_Hypoxic6_G62_T,2024_Warm01_Hyp06_G62_T,NA,366,NA
+370,11.3,0.3,NA,-8,15.9,NA,NA,NA,2024,Cont,Control,4,Control04,Hyp,Hypoxic,6,Hypoxic06,W,67,S,Control4_Hypoxic6_W67_S,2024_Cont04_Hyp06_W67_S,NA,359,NA
+371,10.4,0.2,NA,-7.4,15.4,NA,NA,NA,2024,Both,Both,3,Both03,Hyp,Hypoxic,6,Hypoxic06,O,66,S,Both3_Hypoxic6_O66_S,2024_Both03_Hyp06_O66_S,NA,353,NA
+372,10,0.2,NA,-8.3,16.1,NA,NA,NA,2024,Hyp,Hypoxic,2,Hypoxic02,Hyp,Hypoxic,6,Hypoxic06,B,63,S,Hypoxic2_Hypoxic6_B63_S,2024_Hyp02_Hyp06_B63_S,6/16/25 SC ended with this one today,361,NA
+373,12.4,8.5,NA,-23.9,42.8,NA,NA,NA,2024,Cont,Control,4,Control04,Hyp,Hypoxic,6,Hypoxic06,W,67,T,Control4_Hypoxic6_W67_T,2024_Cont04_Hyp06_W67_T,6/23/25 SC started with this one today,360,NA
+374,12.2,7.5,NA,-24.9,51.9,NA,NA,NA,2024,Both,Both,3,Both03,Hyp,Hypoxic,6,Hypoxic06,O,66,T,Both3_Hypoxic6_O66_T,2024_Both03_Hyp06_O66_T,NA,354,NA
+375,12.8,7.4,NA,-23.9,44.6,NA,NA,NA,2024,Hyp,Hypoxic,2,Hypoxic02,Hyp,Hypoxic,6,Hypoxic06,B,63,T,Hypoxic2_Hypoxic6_B63_T,2024_Hyp02_Hyp06_B63_T,NA,362,NA
+376,9.4,0.2,NA,-9,16.7,NA,NA,NA,2024,Cont,Control,3,Control03,Hyp,Hypoxic,6,Hypoxic06,W,65,S,Control3_Hypoxic6_W65_S,2024_Cont03_Hyp06_W65_S,NA,357,NA
+377,10.7,0.2,NA,-8.3,16.3,NA,NA,NA,2024,Warm,Warm,2,Warm02,Hyp,Hypoxic,6,Hypoxic06,G,64,S,Warm2_Hypoxic6_G64_S,2024_Warm02_Hyp06_G64_S,NA,367,NA
+378,11.7,5.7,small peak - error on δ15N will be higher,-25.4,60.1,NA,NA,NA,2024,Cont,Control,3,Control03,Hyp,Hypoxic,6,Hypoxic06,W,65,T,Control3_Hypoxic6_W65_T,2024_Cont03_Hyp06_W65_T,NA,358,NA
+379,13.2,7.9,NA,-24.3,44,NA,NA,NA,2024,Warm,Warm,2,Warm02,Hyp,Hypoxic,6,Hypoxic06,G,64,T,Warm2_Hypoxic6_G64_T,2024_Warm02_Hyp06_G64_T,6/23/25 SC ended with this one today,368,NA
+100B,10.6,0.2,NA,-8.6,16.1,"The other replicate of this sample is unusable, only using this one.",NA,NA,2024,Both,Both,6,Both06,Both,Both,2,Both02,O,24,S,Both6_Both2_O24_S,2024_Both06_Both02_O24_S,NA,67,NA
+104B,12.1,7.5,NA,-24,40,using average,Y,Y,2024,Both,Both,6,Both06,Both,Both,2,Both02,O,24,T,Both6_Both2_O24_T,2024_Both06_Both02_O24_T,NA,68,NA
+164B,11.4,0.3,NA,-8.8,16.3,NA,Y,Y,2024,Warm,Warm,1,Warm01,Warm,Warm,5,Warm05,G,49,S,Warm1_Warm5_G49_S,2024_Warm01_Warm05_G49_S,NA,317,NA
+167B,12.1,6.6,NA,-24.3,39.2,NA,Y,Y,2024,Warm,Warm,1,Warm01,Warm,Warm,5,Warm05,G,49,T,Warm1_Warm5_G49_T,2024_Warm01_Warm05_G49_T,NA,318,NA
+190B,11.4,0.2,NA,-9.1,16.8,NA,Y,Y,2024,Warm,Warm,6,Warm06,Warm,Warm,2,Warm02,G,24,S,Warm6_Warm2_G24_S,2024_Warm06_Warm02_G24_S,NA,127,NA
+193B,12,7.8,NA,-22.5,35.4,NA,Y,Y,2024,Warm,Warm,6,Warm06,Warm,Warm,2,Warm02,G,24,T,Warm6_Warm2_G24_T,2024_Warm06_Warm02_G24_T,NA,128,NA
+218B,12.6,9.3,NA,-24.3,41.1,NA,NA,NA,NA,NA,NA,NA,,NA,NA,NA,,NA,NA,NA,NA,NA,NA,NA,NA
+221B,11.6,0.2,NA,-6.7,14.9,NA,NA,NA,NA,NA,NA,NA,,NA,NA,NA,,NA,NA,NA,NA,NA,NA,NA,NA
+NA,NA,NA,NA,NA,NA,NA,NA,NA,2024,Both,Both,3,Both03,Cont,Control,1,Control01,O,5,T,Both3_Control1_O5_T,2024_Both03_Cont01_O5_T,"6/9/2025 SC no tissue inside shell, dead",20,Y
+120,NA,NA,NA,NA,NA,NA,NA,NA,2024,Both,Both,1,Both01,Warm,Warm,1,Warm01,O,2,T,Both1_Warm1_O2_T,2024_Both01_Warm01_O2_T,2/28/25 This is one of the samples that the vial number doesn't match up to the weigh boat/ there were four weigh boats and 3 vials DISCOUNT,50,Y
+122,NA,NA,NA,NA,NA,NA,NA,NA,2024,Hyp,Hypoxic,5,Hypoxic05,Warm,Warm,1,Warm01,B,10,T,Hypoxic5_Warm1_B10_T,2024_Hyp05_Warm01_B10_T,2/28/25 This is one of the samples that the vial number doesn't match up to the weigh boat/ there were four weigh boats and 3 vials DISCOUNT,60,Y
+NA,NA,NA,NA,NA,NA,NA,NA,NA,2024,Warm,Warm,4,Warm04,Warm,Warm,1,Warm01,G,7,T,Warm4_Warm1_G7_T,2024_Warm04_Warm01_G7_T,"2/28/25 SKM this one was labelled 119 but thought that was an error based on the order and the appearance of the contents of the vial, DISCOUNT",62,Y
+121,NA,NA,NA,NA,NA,NA,NA,NA,2024,Warm,Warm,5,Warm05,Warm,Warm,1,Warm01,G,9,T,Warm5_Warm1_G9_T,2024_Warm05_Warm01_G9_T,2/28/25 This is one of the samples that the vial number doesn't match up to the weigh boat/ there were four weigh boats and 3 vials DISCOUNT,64,Y
+NA,NA,NA,NA,NA,NA,NA,NA,NA,2024,Cont,Control,1,Control01,Both,Both,2,Both02,W,14,T,Control1_Both2_W14_T,2024_Cont01_Both02_W14_T,"2/14 SC Basically no tissue, might've been dead before frozen",70,Y
+NA,NA,NA,NA,NA,NA,NA,NA,NA,2024,Both,Both,5,Both05,Cont,Control,2,Control02,O,21,T,Both5_Control2_O21_T,2024_Both05_Cont02_O21_T,"5/9/25 SC dead oyster, had no tissue",84,Y
+NA,NA,NA,NA,NA,NA,NA,NA,NA,2024,Both,Both,3,Both03,Cont,Control,5,Control05,O,53,T,Both3_Control5_O53_T,2024_Both03_Cont05_O53_T,"5/21/2025 SC no tissue in shell, dead",274,Y
+104_avg,11.95,7.35,NA,-23.9,39.1,NA,NA,NA,2024,Both,Both,6,Both06,Both,Both,2,Both02,O,24,T,Both6_Both2_O24_T,2024_Both06_Both02_O24_T,NA,68,NA
+164_avg,11.65,0.3,NA,-8.85,15.95,NA,NA,NA,2024,Warm,Warm,1,Warm01,Warm,Warm,5,Warm05,G,49,S,Warm1_Warm5_G49_S,2024_Warm01_Warm05_G49_S,NA,317,NA
+167_avg,12,6.65,NA,-24.3,38.55,NA,NA,NA,2024,Warm,Warm,1,Warm01,Warm,Warm,5,Warm05,G,49,T,Warm1_Warm5_G49_T,2024_Warm01_Warm05_G49_T,NA,318,NA
+190_avg,11.65,0.2,NA,-9,17,NA,NA,NA,2024,Warm,Warm,6,Warm06,Warm,Warm,2,Warm02,G,24,S,Warm6_Warm2_G24_S,2024_Warm06_Warm02_G24_S,NA,127,NA
+193_avg,12.05,7.8,,-22.5,35.25,NA,NA,NA,2024,Warm,Warm,6,Warm06,Warm,Warm,2,Warm02,G,24,T,Warm6_Warm2_G24_T,2024_Warm06_Warm02_G24_T,NA,128,NA
