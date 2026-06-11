@@ -53,6 +53,9 @@ T1 <- joined%>%
 
 View(S1)
 
+repack <- S1 %>%
+  filter(filt_out == "Y" | n_exclude == "Y")
+
 
 
 
