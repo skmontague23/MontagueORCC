@@ -14,7 +14,7 @@ library(lmtest) #another option than levene test for variance
 
 #Read in dataset, set column types
 getwd()
-setwd("/Users/sophiemontague/Desktop/MontagueORCC_repo/MontagueORCC/Oyster_Nutrient_Data")
+setwd("/Users/sophiemontague/Desktop/MontagueORCC_repo/MontagueORCC/Oyster_Nutrient_Data/Phase1_Nutrient")
 
 
 #### Tissue N and C ####
