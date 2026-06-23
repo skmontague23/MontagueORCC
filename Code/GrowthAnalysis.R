@@ -55,7 +55,7 @@ nrow(Cont02)
 unique(Growth_Data_forR$Tag_color)
 
 #set contrasts ALWAYS RUN
-options(contrasts = c("contr.sum","contr.sum")) #could also be contr.treatment for unequal groups sum
+options(contrasts = c("contr.sum","contr.poly")) #could also be contr.treatment for unequal groups sum
 getOption("contrasts") 
 
 options("contrasts")
@@ -124,7 +124,7 @@ Sm1 <- lmer(Actual_shell_pre_mg~ Phase_1_DO*Phase_1_temp +
                 (1|Phase_1_rep_R), data = Growth_Data_forR_pre, REML=TRUE)
 Anova(Sm1, test="F", type="III")
 
-  #diagnostics
+#diagnostics
 leveneTest(Actual_shell_pre_mg~Phase_1_treat, Growth_Data_forR_pre)
 m1.e <- residuals(Sm1) 
 qqnorm(m1.e)

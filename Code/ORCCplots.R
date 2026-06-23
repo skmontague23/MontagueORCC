@@ -215,8 +215,7 @@ summary_stats_t_s <-Growth_Data_forR_full %>%
     scale_x_discrete(labels = c("Hyp" = "Hypoxic", "Cont" = "Control", "Warm" = "Warm", "Both" = "Both")) +
     ylim(0.35,0.55)+
     theme(
-      plot.title = element_text(size = 18, hjust = 0.5)  # <-- title font size here
-    )
+      plot.title = element_text(size = 18, hjust = 0.5))
 
   
 #standardize initial size, T:S
