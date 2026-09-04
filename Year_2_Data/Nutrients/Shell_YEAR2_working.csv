@@ -1,0 +1,188 @@
+﻿Sample_Name_Nutrients,Linear corr d15N,wt %N,N_Notes,Linear corr d13C,wt %C
+Cont01 B12 S,15,0.1,small peak - error on δ15N will be higher,-7.4,15.9
+Cont02 G23 S,13.5,0.1,small peak - error on δ15N will be higher,-7.3,15.7
+Cont02 W22 S,13.2,0.1,small peak - error on δ15N will be higher,-5.8,14.8
+Cont02 O22 S,13.2,0.1,small peak - error on δ15N will be higher,-8.9,17.2
+Cont02 O18 S,12.8,0.1,small peak - error on δ15N will be higher,-4.8,14.1
+Cont02 G13 S,13.9,0.4,,-8.7,17
+Cont02 G17 S,13,0.1,small peak - error on δ15N will be higher,-5.8,14.8
+Cont02 W23 S,12.5,0.1,small peak - error on δ15N will be higher,-8.6,17.1
+Cont02 B19 S,12.2,0.2,small peak - error on δ15N will be higher,-9.6,17.9
+Cont02 B15 S,12,0.1,small peak - error on δ15N will be higher,-6.9,15.8
+Cont03 B29 S,13,0.1,small peak - error on δ15N will be higher,-7.3,15.8
+Cont03 W31 S,11.8,0.1,small peak - error on δ15N will be higher,-7.2,15.8
+Cont03 W28 S,10.7,0.3,,-7.7,16.3
+Cont03 W29 S,11.5,0.2,,-9.2,17.4
+Cont03 G27 S,13.2,0.1,small peak - error on δ15N will be higher,-6.9,15.3
+Cont03 G34 S,12.6,0.1,small peak - error on δ15N will be higher,-5.2,14.5
+Cont03 O36 S,11.9,0.2,,-7.2,15.7
+Cont03 O34 S,12.9,0.1,small peak - error on δ15N will be higher,-9.5,17.5
+Cont03 B34 S,12.6,0.2,,-7.1,15.4
+Cont03 B25 S,12.2,0.1,small peak - error on δ15N will be higher,-8.1,16.2
+Cont03 G26 S,11.5,0.2,small peak - error on δ15N will be higher,-10.4,18.4
+Cont04 W39 S,11.7,0.2,small peak - error on δ15N will be higher,-8.6,16.7
+Cont04 O42 S,11.6,0.1,small peak - error on δ15N will be higher,-6.9,15.5
+Cont04 O44 S,11.2,0.2,small peak - error on δ15N will be higher,-6.8,15.2
+Cont04 G39 S,15.9,0.2,,-6.8,15.1
+Cont04 B43 S,13.7,0.2,,-9.2,17.1
+Cont04 G43 S,12.9,0.2,small peak - error on δ15N will be higher,-8,16.5
+Cont04 B39 S,11.8,0.2,,-9.2,17.3
+Cont04 W47 S,12,0.1,small peak - error on δ15N will be higher,-10.1,18.4
+Cont05 W56 S,12.1,0.2,,-6.9,15.7
+Cont05 G59 S,9,0.2,,-8.4,17.1
+Cont05 O60 S,11.5,0.2,small peak - error on δ15N will be higher,-8.6,17.4
+Cont05 G53 S,11.5,0.2,small peak - error on δ15N will be higher,-5.8,14.9
+Cont05 W49 S,12.3,0.2,,-9.1,17.6
+Cont05 B51 S,11.3,0.1,small peak - error on δ15N will be higher,-5.8,15
+Cont05 O52 S,7.2,0.3,,-8.5,17.1
+Cont05 W58 S,15.6,0.2,small peak - error on δ15N will be higher,-9.9,18.2
+Cont05 B49 S,10.7,0.2,,-6.8,15.6
+Cont06 W61 S,13,0.1,small peak - error on δ15N will be higher,-7.3,16.2
+Cont06 W65 S,13.6,0.2,,-8.8,17.2
+Cont06 B69 S,13.2,0.1,small peak - error on δ15N will be higher,-9.6,18
+Cont06 G65 S,11.6,0.1,small peak - error on δ15N will be higher,-7.8,16.3
+Cont06 O61 S,11.7,0.1,small peak - error on δ15N will be higher,-11.9,20.4
+Cont06 G70 S,11.4,0.1,small peak - error on δ15N will be higher,-12.3,21
+Cont06 B71 S,9.4,0.2,,-9.2,17.5
+Cont06 O68 S,12,0.1,small peak - error on δ15N will be higher,-8.9,16.9
+Cont06 O62 S,12.1,0.1,small peak - error on δ15N will be higher,-8,16.4
+Cont06 O64 S,11.7,0.1,small peak - error on δ15N will be higher,-8.7,17
+Warm01 B11 S,16.1,0.1,small peak - error on δ15N will be higher,-8.3,16.3
+Warm01 G5 S,11.7,0.2,small peak - error on δ15N will be higher,-7.7,15.9
+Warm01 W4 S,12.2,0.1,small peak - error on δ15N will be higher,-9.2,17.3
+Warm01 B3 S,12.4,0.2,small peak - error on δ15N will be higher,-9.6,17.8
+Warm01 G11 S,11.9,0.1,small peak - error on δ15N will be higher,-7.2,15.7
+Warm01 O11 S,12.3,0.2,,-8.2,16.2
+Warm01 W11 S,12.7,0.2,,-6.9,15.4
+Warm02 W19 S,12.4,0.1,small peak - error on δ15N will be higher,-9,17.1
+Warm02 W23 S,12.3,0.2,,-7.6,15.9
+Warm02 O13 S,11,0.2,small peak - error on δ15N will be higher,-10,18.4
+Warm02 G17 S,12.2,0.2,small peak - error on δ15N will be higher,-7,15.5
+Warm02 O15 S,11.2,0.1,small peak - error on δ15N will be higher,-10.1,18.1
+Warm02 B17 S,14.1,0.2,,-9.5,17.4
+Warm02 B18 S,12.5,0.1,small peak - error on δ15N will be higher,-10.8,19
+Warm03 G27 S,12,0.1,small peak - error on δ15N will be higher,-11.2,19.1
+Warm03 B27 S,12.3,0.1,small peak - error on δ15N will be higher,-9.5,17.4
+Warm03 O30 S,11.3,0.2,small peak - error on δ15N will be higher,-8.1,16.2
+Warm03 B31 S,11.4,0.2,,-9.4,17.5
+Warm03 W26 S,12.6,0.1,small peak - error on δ15N will be higher,-10.4,18.3
+Warm03 G34 S,11.8,0.1,small peak - error on δ15N will be higher,-9.7,17.4
+Warm03 O32 S,12.6,0.1,small peak - error on δ15N will be higher,-8.7,16.6
+Warm04 G40 S,11.6,0.1,small peak - error on δ15N will be higher,-7.4,15.8
+Warm04 O43 S,12.3,0.2,small peak - error on δ15N will be higher,-10.7,18.3
+Warm04 B41 S,12.2,0.2,,-9.9,17.7
+Hyp01 O12 S,17.7,0.1,small peak - error on δ15N will be higher,-7.3,15.6
+Hyp01 B8 S,13.4,0.2,,-8.1,16.3
+Hyp01 G5 S,12.1,0.2,,-8,16.1
+Hyp02 W17 S,12.9,0.2,,-8.9,16.6
+Hyp02 B14 S,13,0.2,,-7.8,15.9
+Hyp02 G19 S,12.8,0.2,small peak - error on δ15N will be higher,-9.3,17.2
+Hyp02 G21 S,12,0.2,small peak - error on δ15N will be higher,-9.2,17.4
+Hyp02 O19 S,12.8,0.2,,-9.2,16.9
+Hyp02 B23 S,11.8,0.2,small peak - error on δ15N will be higher,-8.4,16.5
+Hyp02 O13 S,11.7,0.1,small peak - error on δ15N will be higher,-8.3,16.5
+Hyp02 W19 S,10.5,0.1,small peak - error on δ15N will be higher,-7.5,15.8
+Hyp03 G35 S,12.3,0.2,small peak - error on δ15N will be higher,-9.8,17.6
+Hyp03 W27 S,17.4,0.2,small peak - error on δ15N will be higher,-9.2,17
+Hyp03 O28 S,11.7,0.2,small peak - error on δ15N will be higher,-9.1,17.3
+Hyp03 O25 S,11.8,0.1,small peak - error on δ15N will be higher,-8.1,16.2
+Hyp03 B29 S,11.2,0.2,small peak - error on δ15N will be higher,-8.2,16.8
+Hyp03 B25 S,12.1,0.2,,-8.7,16.2
+Hyp03 W25 S,12.1,0.1,small peak - error on δ15N will be higher,-7.6,16
+Hyp03 G27 S,11.7,0.1,small peak - error on δ15N will be higher,-8.7,16.6
+Hyp04 G47 S,11.1,0.1,small peak - error on δ15N will be higher,-10.5,18.2
+Hyp04 W41 S,10.6,0.1,small peak - error on δ15N will be higher,-8,16.3
+Hyp04 W43 S,11.6,0.2,,-8.5,16.4
+Hyp04 O43 S,12.2,0.1,small peak - error on δ15N will be higher,-7.1,15.5
+Hyp04 B45 S,12.8,0.2,,-9.1,17.3
+Hyp04 G39 S,12.9,0.2,,-6.5,15
+Hyp04 O47 S,12.5,0.1,small peak - error on δ15N will be higher,-6.5,15.2
+Hyp04 B39 S,11.6,0.2,small peak - error on δ15N will be higher,-8.6,16.6
+Hyp05 O57 S,11.7,0.2,,-8.9,16.8
+Hyp05 O53 S,11.7,0.2,,-7.6,15.9
+Hyp05 B55 S,12.1,0.2,,-8.2,16.3
+Hyp05 W51 S,11.6,0.2,,-7.4,15.8
+Hyp05 B57 S,12.2,0.2,,-10.3,17.5
+Hyp05 G54 S,11.9,0.2,,-6.1,14.9
+Hyp05 G58 S,11.6,0.1,small peak - error on δ15N will be higher,-9.4,17.1
+Hyp05 W49 S,11.6,0.1,small peak - error on δ15N will be higher,-8,16.3
+Hyp06 W71 S,10,0.2,,-7,15.4
+Hyp06 B62 S,13.9,0.1,small peak - error on δ15N will be higher,-6,14.7
+Hyp06 G67 S,12.8,0.1,small peak - error on δ15N will be higher,-8.8,16.5
+Hyp06 O65 S,11,0.2,,-8.7,16.5
+Hyp06 O63 S,11.1,0.2,,-10.1,17.7
+Hyp06 B72 S,10.2,0.2,small peak - error on δ15N will be higher,-6.6,14.9
+Hyp06 W69 S,10.7,0.1,small peak - error on δ15N will be higher,-7.7,15.6
+Hyp06 G70 S,12.1,0.2,,-7.1,15.4
+Both01 B11 S,11.5,0.2,,-7.2,15.5
+Both01 G12 S,11.3,0.1,small peak - error on δ15N will be higher,-6.8,15.2
+Both01 W9 S,11.6,0.2,,-7.3,15.4
+Both01 W5 S,11.6,0.2,small peak - error on δ15N will be higher,-7.2,15.4
+Both01 B1 S,12.1,0.2,,-8.4,16.2
+Both01 G2 S,15.4,0.2,,-9.5,17
+Both01 O9 S,12.4,0.2,small peak - error on δ15N will be higher,-8.6,16.3
+Both01 O11 S,11.3,0.1,small peak - error on δ15N will be higher,-6.7,15
+Both02 O15 S,11.8,0.2,small peak - error on δ15N will be higher,-8.3,16.5
+Both02 W13 S,12.4,0.2,,-9.8,17.4
+Both02 W20 S,11.9,0.2,,-12.2,19.6
+Both02 G19 S,9.7,0.1,small peak - error on δ15N will be higher,-7.8,15.7
+Both02 B17 S,11.7,0.1,small peak - error on δ15N will be higher,-6.6,14.9
+Both02 B15 S,11.3,0.1,small peak - error on δ15N will be higher,-7.8,15.8
+Both02 G13 S,12.5,0.1,small peak - error on δ15N will be higher,-8.6,16.4
+Both03 W27 S,12.5,0.2,,-10,17.5
+Both03 O29 S,11.3,0.1,small peak - error on δ15N will be higher,-7.6,15.8
+Both03 B27 S,14.2,0.2,,-9.4,17.2
+Both03 O33 S,11.7,0.2,small peak - error on δ15N will be higher,-6.9,15.1
+Both03 B31 S,12.9,0.2,,-11.7,18.9
+Both03 G31 S,11.8,0.1,small peak - error on δ15N will be higher,-10.6,18.2
+Both03 G33 S,12.2,0.2,,-8.4,15.9
+Both03 W35 S,12.4,0.2,,-7.6,15.8
+Both04 B37 S,12,0.2,small peak - error on δ15N will be higher,-9.6,17.2
+Both04 G41 S,11.9,0.2,,-8.3,16.2
+Both04 W39 S,11.6,0.2,small peak - error on δ15N will be higher,-7.2,15.4
+Both04 W41 S,13.2,0.4,,-7,15.5
+Both04 O43 S,12.9,0.2,small peak - error on δ15N will be higher,-9.4,17.3
+Both04 O39 S,9.7,0.1,small peak - error on δ15N will be higher,-9.9,18
+Warm04 G37 S,14.8,0.1,small peak - error on δ15N will be higher,-11.1,19.5
+Warm04 B43 S,13,0.2,,-9.9,18.5
+Warm04 W39 S,10.2,0.2,,-10.4,19
+Warm04 O47 S,12.6,0.2,,-10.2,18.5
+Warm04 W37 S,13.2,0.1,small peak - error on δ15N will be higher,-9.3,17.7
+Warm05 O57 S,12,0.2,,-7.9,16.8
+Warm05 B60 S,13.1,0.2,,-8.6,17.2
+Warm05 O53 S,12.6,0.2,,-8.3,17.3
+Warm05 W49 S,11.8,0.2,small peak - error on δ15N will be higher,-9.4,18.5
+Warm05 W59 S,12.4,0.1,small peak - error on δ15N will be higher,-7.2,16.3
+Warm05 B58 S,12.9,0.2,small peak - error on δ15N will be higher,-7.8,16.8
+Warm05 G59 S,12.7,0.2,small peak - error on δ15N will be higher,-8.6,17.4
+Warm05 G57 S,12.5,0.1,small peak - error on δ15N will be higher,-6.3,15.8
+Warm06 O61 S,16.4,0.2,,-9.2,17.6
+Warm06 O64 S,13.3,0.1,small peak - error on δ15N will be higher,-7.2,16.1
+Warm06 B70 S,12.4,0.2,small peak - error on δ15N will be higher,-9.9,18.9
+Warm06 B62 S,13.1,0.2,,-7.7,16.5
+Warm06 G65 S,12.5,0.2,,-7.3,16.2
+Warm06 G67 S,11.5,0.2,,-9,17.6
+Warm06 W65 S,12.9,0.1,small peak - error on δ15N will be higher,-8.9,18.1
+Warm06 W69 S,12.1,0.1,small peak - error on δ15N will be higher,-8.8,17.6
+Hyp01 G1 S,12.6,0.1,small peak - error on δ15N will be higher,-8,16.5
+Hyp01 W8 S,13.5,0.1,small peak - error on δ15N will be higher,-10.9,19.9
+Hyp01 O5 S,12.6,0.2,,-7.6,16.6
+Hyp01 W9 S,12.8,0.1,small peak - error on δ15N will be higher,-10.8,19.9
+Hyp01 B5 S,10,0.2,,-8,17
+Both04 G43 S,16.4,0.2,,-7,15.7
+Both04 B44 S,13.5,0.1,small peak - error on δ15N will be higher,-9.5,17.8
+Both05 B57 S,13.2,0.1,small peak - error on δ15N will be higher,-9.2,17.7
+Both05 G59 S,12.7,0.2,small peak - error on δ15N will be higher,-8.4,16.8
+Both05 O53 S,9.1,0.2,,-10.8,18.8
+Both05 O55 S,8.5,0.2,,-10.2,18.1
+Both05 W53 S,11.8,0.1,small peak - error on δ15N will be higher,-6.6,15.6
+Both05 G51 S,13.2,0.2,,-8.4,16.7
+Both05 W57 S,12.5,0.2,,-7.7,15.8
+Both06 B65 S,11.6,0.2,,-7,15.7
+Both06 G69 S,12.1,0.1,small peak - error on δ15N will be higher,-9.5,17.9
+Both06 W63 S,11.6,0.2,small peak - error on δ15N will be higher,-9.8,17.9
+Both06 B69 S,11.3,0.2,small peak - error on δ15N will be higher,-9.1,17.6
+Both06 O72 S,15,0.2,small peak - error on δ15N will be higher,-6.2,15
+Both06 G66 S,9,0.2,,-9.8,18
+Both06 O63 S,13,0.1,small peak - error on δ15N will be higher,-10.5,18.6
+Both06 W67 S,12.1,0.1,small peak - error on δ15N will be higher,-9.6,17.8
