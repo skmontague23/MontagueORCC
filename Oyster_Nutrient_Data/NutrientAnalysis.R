@@ -332,19 +332,20 @@ N_C_bytissueweight <- NCmerged %>%
 View(NCmerged_recalc)
 
 ##trying new summary stats
-options(contrasts = c("contr.sum", "contr.sum"))
+#options(contrasts = c("contr.sum", "contr.sum"))
 
 
 #read in nutrient data
 N_C_bytissueweight <- read_csv("Phase1_nutrient_merged.csv")
 
 ## mg N in tissue
-Nm1 <- lmer(log(Phase1N_tissue) ~ Phase_1_DO*Phase_1_temp +
+Nm1 <- lmer(Phase1N_tissue ~ Phase_1_DO*Phase_1_temp +
               (1|Phase_1_rep_R), data = N_C_bytissueweight, REML=TRUE)
 Anova(Nm1, test="F", type="III")
 
 #post hocs
 emmeans(Nm1,specs = pairwise ~ Phase_1_DO, adjust = "none")
+(18.8-16.6)/18.8
 emmeans(Nm1,specs = pairwise ~ Phase_1_temp, adjust = "none")
 
 exp(2.66) #hyp
@@ -352,7 +353,7 @@ exp(2.81) #norm
 (16.60992-14.29629)/16.60992 #14 percent less nitrogen stored in oyster tissue under hypoxia
 
 #diagnostics
-leveneTest(log(Phase1N_tissue)~Phase_1_DO*Phase_1_temp, N_C_bytissueweight)
+leveneTest((Phase1N_tissue)~Phase_1_DO*Phase_1_temp, N_C_bytissueweight)
 m1.e <- residuals(Nm1) 
 qqnorm(m1.e)
 qqline(m1.e)
@@ -386,7 +387,7 @@ ggplot(summary_stats, aes(x = Phase_1_DO, y = mean_growth, color = Phase_1_DO)) 
 
 
 ## % C by weight
-Cm1 <- lmer(log(Phase1C_tissue) ~ Phase_1_DO*Phase_1_temp +
+Cm1 <- lmer((Phase1C_tissue) ~ Phase_1_DO*Phase_1_temp +
               (1|Phase_1_rep_R), data = N_C_bytissueweight, REML=TRUE)
 Anova(Cm1, test="F", type="III")
 
@@ -394,7 +395,7 @@ Anova(Cm1, test="F", type="III")
 emmeans(Cm1,specs = pairwise ~ Phase_1_DO, adjust = "none")
 
 #diagnostics
-leveneTest(log(Phase1C_tissue)~Phase_1_DO*Phase_1_temp, N_C_bytissueweight)
+leveneTest((Phase1C_tissue)~Phase_1_DO*Phase_1_temp, N_C_bytissueweight)
 m1.e <- residuals(Cm1) 
 qqnorm(m1.e)
 qqline(m1.e)
@@ -420,8 +421,9 @@ ggplot(summary_stats, aes(x = Phase_1_DO, y = mean_growth, color = Phase_1_DO)) 
   theme(panel.background = element_rect(fill = "aliceblue")) + #fill background light grey
   guides(color = "none") + # Remove legend for color
   scale_color_manual(values = c("Hyp" = "darkmagenta", "Norm" = "seagreen")) +
-  labs(x = "Phase 1 Treatment", y = "Carbon in Tissue (mg)") +
+  labs(x = "Phase 1 DO", y = "Carbon in Tissue (mg)") +
   scale_x_discrete(labels = c("Hyp" = "Hypoxic", "Norm" = "Normoxic")) +
+  ylim(80,100)+
   theme(legend.position = "none") # Remove legend
 
 #plot with mean and SD, WARMING ON TISSUE NITROGEN
@@ -440,9 +442,9 @@ summary_stats$Phase_1_temp <- factor(summary_stats$Phase_1_temp,
 ggplot(summary_stats, aes(x = Phase_1_temp, y = mean_growth, color = Phase_1_temp)) +
   geom_point(size = 4, position = position_dodge(0.9)) + # Plot means as points
   geom_errorbar(aes(ymin = mean_growth - se_growth, ymax = mean_growth + se_growth), 
-                width = 0.2, position = position_dodge(0.9)) + # Error bars for SD
+                width = 0.1, position = position_dodge(0.9)) + # Error bars for SD
   theme_classic(base_size = 20) +
-  theme(panel.background = element_rect(fill = "#E5E5E5")) + #fill background light grey
+  theme(panel.background = element_rect(fill = "aliceblue")) + #fill background light grey
   guides(color = "none") + # Remove legend for color
   scale_color_manual(values = c("Ambient" = "darkblue", "Warm" = "#B00149")) +
   labs(x = "Phase 1 Treatment", y = "Carbon in Tissue (%mg)") +
@@ -475,6 +477,8 @@ ggplot(summary_stats, aes(x = Phase_1_treat, y = mean_growth, color = Phase_1_tr
   theme(legend.position = "none") # Remove legend
 
 
+#post hocs
+emmeans(Cm1,specs = pairwise ~ Phase_1_DO, adjust = "none")
 
 
 
@@ -810,7 +814,7 @@ ggplot(summary_stats, aes(x = Phase_1_DO, y = mean_growth, color = Phase_1_DO)) 
   geom_errorbar(aes(ymin = mean_growth - se_growth, ymax = mean_growth + se_growth), 
                 width = 0.08, position = position_dodge(0.9)) + # Error bars for SD
   theme_classic(base_size = 20) +
-  theme(panel.background = element_rect(fill = "#E5E5E5")) + #fill background light grey
+  theme(panel.background = element_rect(fill = "aliceblue")) + #fill background light grey
   guides(color = "none") + # Remove legend for color
   scale_color_manual(values = c("Hyp" = "darkmagenta", "Norm" = "seagreen")) +
   labs(x = "Phase 1 Treatment", y = "Carbon in Shell (mg)") +
